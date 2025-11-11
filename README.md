@@ -1,7 +1,11 @@
-# JsonVersionManager
-Test Json
-
-- Create application to handle json versions
+# metadata version manager.
+- Create CRUD in java 21
+- Store metadata in json with son attributes like, name, type, version.
+- Audit changes
+- brainstorming on json management and validation
+- Create application to handle json versions. 
 - Implement a lab using spec-kit
 - Implewment a lab using github copilot roles
-- CommmandPrecommit that modify the README 
+- Github copilot prompt to create spikes with a template prompt
+- Github copilot prompt to review pr based on knowledge base, desition threes.
+- Precommit that modify README.md, CHANGELOG.md

@@ -1,5 +1,6 @@
 # metadata version manager.
 - Create CRUD in java 21
+- Spring Boot 3(review version)
 - Store metadata in json with son attributes like, name, type, version.
 - Audit changes
 - brainstorming on json management and validation
@@ -9,3 +10,8 @@
 - Github copilot prompt to create spikes with a template prompt
 - Github copilot prompt to review pr based on knowledge base, desition threes.
 - Precommit that modify README.md, CHANGELOG.md
+- Plan:
+  - Create the solution using Java and Spring aligned to the client infrastructure
+  - Show Speckit and the process to develop
+  - Migrate to Java 25 and Spring Boot 4 using Speckit - Agents
+  - Show a No-AI First project using Speckit - Angents

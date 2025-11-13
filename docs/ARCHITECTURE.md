@@ -1,8 +1,8 @@
-# JsonVersionManager - Architecture
+# MetadataVersioning - Architecture
 
 ## Overview
 
-JsonVersionManager follows **Hexagonal Architecture** (Ports & Adapters) to keep the core domain independent from delivery technology. This architectural style ensures that business logic remains testable, maintainable, and adaptable to changing infrastructure requirements.
+MetadataVersioning follows **Hexagonal Architecture** (Ports & Adapters) to keep the core domain independent from delivery technology. This architectural style ensures that business logic remains testable, maintainable, and adaptable to changing infrastructure requirements.
 
 ## Technology Stack
 

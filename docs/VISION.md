@@ -1,4 +1,4 @@
-# JsonVersionManager - Product Vision
+# MetadataVersioning - Product Vision
 
 ## Audience & Purpose
 
@@ -119,7 +119,7 @@ Users can diff any two versions of the same topic to understand structural and v
 - **Testing utilities**: Mock services and test data generators
 - **Documentation portal**: Interactive API explorer and code samples
 
-## What JsonVersionManager is NOT
+## What MetadataVersioning is NOT
 
 To clarify boundaries and set expectations:
 

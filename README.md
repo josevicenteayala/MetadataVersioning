@@ -1,12 +1,12 @@
-# JsonVersionManager# JsonVersionManager
+# MetadataVersioning# MetadataVersioning
 
 
 
-> A versioned metadata management platform for business-configurable JSON documentsJsonVersionManager is a platform that helps non-technical business users describe and evolve metadata for topics such as loyalty programs, retail campaigns, offers, and coupons. Each metadata document is stored as JSON, validated against a schema that defines the stable structure, and remains open to custom properties that stakeholders may need for their specific scenarios. Every change to a JSON document is versioned, so customers can view history, compare revisions, and confidently publish updates.
+> A versioned metadata management platform for business-configurable JSON documentsMetadataVersioning is a platform that helps non-technical business users describe and evolve metadata for topics such as loyalty programs, retail campaigns, offers, and coupons. Each metadata document is stored as JSON, validated against a schema that defines the stable structure, and remains open to custom properties that stakeholders may need for their specific scenarios. Every change to a JSON document is versioned, so customers can view history, compare revisions, and confidently publish updates.
 
 
 
-JsonVersionManager empowers non-technical business users to create and evolve metadata for topics such as loyalty programs, retail campaigns, offers, and coupons—without writing code. Every change is versioned, validated against schemas, and traceable through a complete audit history.## Audience & Purpose
+MetadataVersioning empowers non-technical business users to create and evolve metadata for topics such as loyalty programs, retail campaigns, offers, and coupons—without writing code. Every change is versioned, validated against schemas, and traceable through a complete audit history.## Audience & Purpose
 
 - **Business owners / customer teams** need a safe way to describe business rules without touching code.
 
@@ -52,15 +52,15 @@ JsonVersionManager empowers non-technical business users to create and evolve me
 
 # Clone the repository- Version browser with timeline, side-by-side diff, and rollback/promote actions.
 
-git clone https://github.com/josevicenteayala/JsonVersionManager.git- Guided templates for new topics (e.g., “Create Loyalty Offer”) with contextual hints.
+git clone https://github.com/josevicenteayala/MetadataVersioning.git- Guided templates for new topics (e.g., “Create Loyalty Offer”) with contextual hints.
 
-cd JsonVersionManager- Role-based views so non-technical users see simplified forms while power users can edit raw JSON when needed.
+cd MetadataVersioning- Role-based views so non-technical users see simplified forms while power users can edit raw JSON when needed.
 
 
 
 # Install dependencies (TBD based on tech stack)## Architecture Approach
 
-# npm install  OR  pip install -r requirements.txt  OR  mvn installJsonVersionManager follows Hexagonal (Ports & Adapters) Architecture to keep the core domain independent from delivery technology.
+# npm install  OR  pip install -r requirements.txt  OR  mvn installMetadataVersioning follows Hexagonal (Ports & Adapters) Architecture to keep the core domain independent from delivery technology.
 
 
 
@@ -165,7 +165,7 @@ Comprehensive documentation is organized into focused guides:
 
 **API request:**
 ```bash
-curl -X POST https://api.jsonversionmanager.com/v1/topics/loyalty/documents \
+curl -X POST https://api.MetadataVersioning.com/v1/topics/loyalty/documents \
   -H "Authorization: Bearer YOUR_TOKEN" \
   -H "Content-Type: application/json" \
   -d @loyalty-offer.json
@@ -186,8 +186,8 @@ See [API_REFERENCE.md](docs/API_REFERENCE.md) for complete API documentation.
 
 ```bash
 # Clone the repository
-git clone https://github.com/josevicenteayala/JsonVersionManager.git
-cd JsonVersionManager/backend
+git clone https://github.com/josevicenteayala/MetadataVersioning.git
+cd MetadataVersioning/backend
 
 # Configure database
 cp src/main/resources/application.yml.example src/main/resources/application.yml
@@ -208,7 +208,7 @@ mvn spring-boot:run
 ### Frontend Setup
 
 ```bash
-cd JsonVersionManager/frontend
+cd MetadataVersioning/frontend
 
 # Install dependencies
 npm install
@@ -239,7 +239,7 @@ docker-compose up -d
 
 ## Architecture Overview
 
-JsonVersionManager follows **Hexagonal Architecture** (Ports & Adapters):
+MetadataVersioning follows **Hexagonal Architecture** (Ports & Adapters):
 
 - **Domain Layer**: Core business logic (versioning, validation, diff computation)
 - **Application Layer**: Use cases orchestrating domain entities
@@ -316,8 +316,8 @@ This project is licensed under the [MIT License](LICENSE) (TBD).
 ## Support
 
 - **Documentation**: [docs/](docs/)
-- **Issues**: [GitHub Issues](https://github.com/josevicenteayala/JsonVersionManager/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/josevicenteayala/JsonVersionManager/discussions)
+- **Issues**: [GitHub Issues](https://github.com/josevicenteayala/MetadataVersioning/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/josevicenteayala/MetadataVersioning/discussions)
 
 ## Acknowledgments
 

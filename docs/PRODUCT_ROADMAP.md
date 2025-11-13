@@ -1,8 +1,8 @@
-# JsonVersionManager - Product Roadmap
+# MetadataVersioning - Product Roadmap
 
 ## Overview
 
-This roadmap outlines the phased delivery of JsonVersionManager, starting with core API functionality and progressing to a full-featured user interface. The approach prioritizes early value delivery to integrators while building toward a comprehensive solution for business users.
+This roadmap outlines the phased delivery of MetadataVersioning, starting with core API functionality and progressing to a full-featured user interface. The approach prioritizes early value delivery to integrators while building toward a comprehensive solution for business users.
 
 ## Release Strategy
 

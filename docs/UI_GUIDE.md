@@ -1,8 +1,8 @@
-# JsonVersionManager - UI Guide
+# MetadataVersioning - UI Guide
 
 ## Overview
 
-The JsonVersionManager user interface provides business users with an intuitive way to manage metadata documents without requiring technical expertise. The UI bridges the gap between structured schemas and flexible custom properties, offering both guided form controls and raw JSON editing for power users.
+The MetadataVersioning user interface provides business users with an intuitive way to manage metadata documents without requiring technical expertise. The UI bridges the gap between structured schemas and flexible custom properties, offering both guided form controls and raw JSON editing for power users.
 
 ## UI Architecture
 

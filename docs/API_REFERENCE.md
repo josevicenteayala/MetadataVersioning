@@ -1,11 +1,11 @@
-# JsonVersionManager - API Reference
+# MetadataVersioning - API Reference
 
 ## Overview
 
-The JsonVersionManager REST API provides programmatic access to metadata document management, versioning, and comparison capabilities. All endpoints follow RESTful conventions and return JSON responses.
+The MetadataVersioning REST API provides programmatic access to metadata document management, versioning, and comparison capabilities. All endpoints follow RESTful conventions and return JSON responses.
 
 **Implementation**: Spring Boot 3.3 with Java 21  
-**Base URL**: `https://api.jsonversionmanager.com/v1` (TBD)  
+**Base URL**: `https://api.MetadataVersioning.com/v1` (TBD)  
 **API Version**: v1 (Current)  
 **Content Type**: `application/json`  
 **Rate Limits**: TBD (likely 1000 requests/hour per user)
@@ -32,7 +32,7 @@ The API is built using:
 
 ### OAuth 2.0 Flow
 
-JsonVersionManager uses OAuth 2.0 for authentication with JWT bearer tokens.
+MetadataVersioning uses OAuth 2.0 for authentication with JWT bearer tokens.
 
 #### 1. Obtain Access Token
 
@@ -883,7 +883,7 @@ X-RateLimit-Reset: 1699876800
 
 **Create Document**:
 ```bash
-curl -X POST https://api.jsonversionmanager.com/v1/topics/loyalty/documents \
+curl -X POST https://api.MetadataVersioning.com/v1/topics/loyalty/documents \
   -H "Authorization: Bearer YOUR_TOKEN" \
   -H "Content-Type: application/json" \
   -d '{
@@ -901,7 +901,7 @@ curl -X POST https://api.jsonversionmanager.com/v1/topics/loyalty/documents \
 ```python
 import requests
 
-url = "https://api.jsonversionmanager.com/v1/documents/doc_a1b2c3d4e5f6"
+url = "https://api.MetadataVersioning.com/v1/documents/doc_a1b2c3d4e5f6"
 headers = {
     "Authorization": "Bearer YOUR_TOKEN"
 }
@@ -920,7 +920,7 @@ print(f"Version: {document['current_version']}")
 const axios = require('axios');
 
 async function compareVersions(docId, fromVer, toVer) {
-  const url = `https://api.jsonversionmanager.com/v1/documents/${docId}/compare`;
+  const url = `https://api.MetadataVersioning.com/v1/documents/${docId}/compare`;
   const params = { from: fromVer, to: toVer };
   const headers = { Authorization: `Bearer ${process.env.API_TOKEN}` };
   
@@ -943,11 +943,11 @@ compareVersions('doc_a1b2c3d4e5f6', 2, 4)
 import java.net.http.*;
 import java.net.URI;
 
-public class JsonVersionManagerClient {
-    private static final String BASE_URL = "https://api.jsonversionmanager.com/v1";
+public class MetadataVersioningClient {
+    private static final String BASE_URL = "https://api.MetadataVersioning.com/v1";
     private final String token;
     
-    public JsonVersionManagerClient(String token) {
+    public MetadataVersioningClient(String token) {
         this.token = token;
     }
     
@@ -980,12 +980,12 @@ import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
 @Service
-public class JsonVersionManagerClient {
+public class MetadataVersioningClient {
     private final WebClient webClient;
     
-    public JsonVersionManagerClient(WebClient.Builder webClientBuilder) {
+    public MetadataVersioningClient(WebClient.Builder webClientBuilder) {
         this.webClient = webClientBuilder
-            .baseUrl("https://api.jsonversionmanager.com/v1")
+            .baseUrl("https://api.MetadataVersioning.com/v1")
             .defaultHeader("Content-Type", "application/json")
             .build();
     }
@@ -1035,11 +1035,11 @@ import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 
 @Service
-public class JsonVersionManagerRestClient {
-    private static final String BASE_URL = "https://api.jsonversionmanager.com/v1";
+public class MetadataVersioningRestClient {
+    private static final String BASE_URL = "https://api.MetadataVersioning.com/v1";
     private final RestTemplate restTemplate;
     
-    public JsonVersionManagerRestClient(RestTemplate restTemplate) {
+    public MetadataVersioningRestClient(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
     }
     
@@ -1123,7 +1123,7 @@ public record DiffResponse(
 
 A complete Postman collection with all endpoints and examples is available:
 
-**Download**: [JsonVersionManager.postman_collection.json](#) (TBD)
+**Download**: [MetadataVersioning.postman_collection.json](#) (TBD)
 
 **Collection includes**:
 - All API endpoints
@@ -1138,9 +1138,9 @@ A complete Postman collection with all endpoints and examples is available:
 
 Full OpenAPI 3.0 specification available at:
 
-**URL**: `https://api.jsonversionmanager.com/v1/openapi.json` (TBD)
+**URL**: `https://api.MetadataVersioning.com/v1/openapi.json` (TBD)
 
-**Interactive Explorer**: `https://api.jsonversionmanager.com/docs` (TBD)
+**Interactive Explorer**: `https://api.MetadataVersioning.com/docs` (TBD)
 
 ---
 

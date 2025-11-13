@@ -23,7 +23,7 @@ Follow-up TODOs: None - all placeholders resolved
 ===================
 -->
 
-# JsonVersionManager Constitution
+# MetadataVersioning Constitution
 
 ## Core Principles
 

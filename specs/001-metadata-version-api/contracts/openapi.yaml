@@ -1,0 +1,811 @@
+openapi: 3.1.0
+info:
+  title: Metadata Versioning API
+  version: 1.0.0
+  description: |
+    RESTful API for comprehensive metadata management with version control capabilities.
+    
+    ## Features
+    - Create and manage versioned JSON metadata documents
+    - Activate specific versions for consumption
+    - Compare versions to understand changes
+    - Schema validation with flexible extensions
+    - Publishing workflow (draft → approved → published → archived)
+    - Complete audit trail
+    
+    ## Authentication
+    - **Read operations** (GET): No authentication required (public access)
+    - **Write operations** (POST, PUT, PATCH, DELETE): HTTP Basic Authentication required
+  contact:
+    name: API Support
+    email: api-support@metadata-versioning.com
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+
+servers:
+  - url: http://localhost:8080/api/v1
+    description: Local development server
+  - url: https://api.metadata-versioning.com/v1
+    description: Production server
+
+security:
+  - {} # Public access for GET
+  - BasicAuth: [] # Required for mutations
+
+tags:
+  - name: Metadata Documents
+    description: Operations on metadata documents and versions
+  - name: Version Management
+    description: Version lifecycle and activation
+  - name: Version Comparison
+    description: Compare versions to understand changes
+  - name: Schema Management
+    description: Define and manage schemas for metadata types
+
+paths:
+  /metadata:
+    get:
+      tags:
+        - Metadata Documents
+      summary: List all metadata documents
+      description: |
+        Retrieve list of metadata documents grouped by active status.
+        Returns active documents first, then inactive ones.
+      parameters:
+        - name: type
+          in: query
+          description: Filter by metadata type
+          schema:
+            type: string
+            example: loyalty-program
+        - name: limit
+          in: query
+          description: Maximum number of results
+          schema:
+            type: integer
+            default: 50
+            maximum: 500
+        - name: cursor
+          in: query
+          description: Cursor for pagination
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MetadataDocumentList'
+    
+    post:
+      tags:
+        - Metadata Documents
+      summary: Create new metadata document
+      description: Create first version (v1) of a new metadata document
+      security:
+        - BasicAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateMetadataRequest'
+      responses:
+        '201':
+          description: Metadata document created
+          headers:
+            Location:
+              description: URL of created resource
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VersionResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '409':
+          $ref: '#/components/responses/Conflict'
+
+  /metadata/{type}/{name}:
+    get:
+      tags:
+        - Metadata Documents
+      summary: Get metadata document details
+      description: Retrieve document info without version content
+      parameters:
+        - $ref: '#/components/parameters/TypeParam'
+        - $ref: '#/components/parameters/NameParam'
+      responses:
+        '200':
+          description: Document details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MetadataDocumentResponse'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  /metadata/{type}/{name}/active:
+    get:
+      tags:
+        - Metadata Documents
+      summary: Get active version
+      description: Retrieve currently active version content for consumption
+      parameters:
+        - $ref: '#/components/parameters/TypeParam'
+        - $ref: '#/components/parameters/NameParam'
+      responses:
+        '200':
+          description: Active version content
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VersionResponse'
+        '404':
+          description: No active version exists
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                error: "NOT_FOUND"
+                message: "No active version for loyalty-program:spring-bonus"
+
+  /metadata/{type}/{name}/versions:
+    get:
+      tags:
+        - Version Management
+      summary: List all versions
+      description: Get version history ordered by version number
+      parameters:
+        - $ref: '#/components/parameters/TypeParam'
+        - $ref: '#/components/parameters/NameParam'
+        - name: state
+          in: query
+          description: Filter by publishing state
+          schema:
+            type: string
+            enum: [DRAFT, APPROVED, PUBLISHED, ARCHIVED]
+      responses:
+        '200':
+          description: Version list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VersionList'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    
+    post:
+      tags:
+        - Version Management
+      summary: Create new version
+      description: Create next version (increment version number)
+      security:
+        - BasicAuth: []
+      parameters:
+        - $ref: '#/components/parameters/TypeParam'
+        - $ref: '#/components/parameters/NameParam'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateVersionRequest'
+      responses:
+        '201':
+          description: New version created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VersionResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  /metadata/{type}/{name}/versions/{versionNumber}:
+    get:
+      tags:
+        - Version Management
+      summary: Get specific version
+      description: Retrieve specific version by number
+      parameters:
+        - $ref: '#/components/parameters/TypeParam'
+        - $ref: '#/components/parameters/NameParam'
+        - $ref: '#/components/parameters/VersionNumberParam'
+      responses:
+        '200':
+          description: Version details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VersionResponse'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  /metadata/{type}/{name}/versions/{versionNumber}/activate:
+    post:
+      tags:
+        - Version Management
+      summary: Activate version
+      description: |
+        Set this version as active (deactivates current active version).
+        Only PUBLISHED versions can be activated.
+      security:
+        - BasicAuth: []
+      parameters:
+        - $ref: '#/components/parameters/TypeParam'
+        - $ref: '#/components/parameters/NameParam'
+        - $ref: '#/components/parameters/VersionNumberParam'
+      responses:
+        '200':
+          description: Version activated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VersionResponse'
+        '400':
+          description: Version not in PUBLISHED state
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  /metadata/{type}/{name}/versions/{versionNumber}/publish:
+    post:
+      tags:
+        - Version Management
+      summary: Transition publishing state
+      description: |
+        Transition version through publishing workflow:
+        - DRAFT → APPROVED
+        - APPROVED → PUBLISHED or APPROVED → DRAFT
+        - PUBLISHED → ARCHIVED
+      security:
+        - BasicAuth: []
+      parameters:
+        - $ref: '#/components/parameters/TypeParam'
+        - $ref: '#/components/parameters/NameParam'
+        - $ref: '#/components/parameters/VersionNumberParam'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PublishStateRequest'
+      responses:
+        '200':
+          description: State transitioned
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VersionResponse'
+        '400':
+          description: Invalid state transition
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  /metadata/{type}/{name}/compare:
+    get:
+      tags:
+        - Version Comparison
+      summary: Compare two versions
+      description: |
+        Generate detailed comparison showing structural and value differences.
+        Identifies breaking vs additive changes.
+      parameters:
+        - $ref: '#/components/parameters/TypeParam'
+        - $ref: '#/components/parameters/NameParam'
+        - name: from
+          in: query
+          required: true
+          description: Source version number
+          schema:
+            type: integer
+            minimum: 1
+          example: 1
+        - name: to
+          in: query
+          required: true
+          description: Target version number
+          schema:
+            type: integer
+            minimum: 1
+          example: 2
+      responses:
+        '200':
+          description: Comparison result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ComparisonResponse'
+        '400':
+          description: Invalid version numbers
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  /schemas:
+    get:
+      tags:
+        - Schema Management
+      summary: List all schemas
+      description: Get all schema definitions
+      responses:
+        '200':
+          description: Schema list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SchemaResponse'
+    
+    post:
+      tags:
+        - Schema Management
+      summary: Create schema definition
+      description: Define validation rules for a metadata type
+      security:
+        - BasicAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateSchemaRequest'
+      responses:
+        '201':
+          description: Schema created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SchemaResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '409':
+          description: Schema already exists for type
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /schemas/{type}:
+    get:
+      tags:
+        - Schema Management
+      summary: Get schema for type
+      description: Retrieve schema definition for metadata type
+      parameters:
+        - name: type
+          in: path
+          required: true
+          description: Metadata type
+          schema:
+            type: string
+          example: loyalty-program
+      responses:
+        '200':
+          description: Schema details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SchemaResponse'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+components:
+  securitySchemes:
+    BasicAuth:
+      type: http
+      scheme: basic
+      description: HTTP Basic Authentication for write operations
+
+  parameters:
+    TypeParam:
+      name: type
+      in: path
+      required: true
+      description: Metadata type (kebab-case)
+      schema:
+        type: string
+        pattern: '^[a-z]+(-[a-z]+)*$'
+      example: loyalty-program
+    
+    NameParam:
+      name: name
+      in: path
+      required: true
+      description: Metadata name (kebab-case with numbers)
+      schema:
+        type: string
+        pattern: '^[a-z0-9]+(-[a-z0-9]+)*$'
+      example: spring-bonus
+    
+    VersionNumberParam:
+      name: versionNumber
+      in: path
+      required: true
+      description: Version number (1-indexed)
+      schema:
+        type: integer
+        minimum: 1
+      example: 2
+
+  schemas:
+    CreateMetadataRequest:
+      type: object
+      required:
+        - type
+        - name
+        - content
+      properties:
+        type:
+          type: string
+          pattern: '^[a-z]+(-[a-z]+)*$'
+          description: Metadata type (kebab-case)
+          example: loyalty-program
+        name:
+          type: string
+          pattern: '^[a-z0-9]+(-[a-z0-9]+)*$'
+          description: Unique name within type
+          example: spring-bonus
+        content:
+          type: object
+          description: JSON metadata content
+          additionalProperties: true
+          example:
+            programId: "SPRING2025"
+            startDate: "2025-03-01"
+            endDate: "2025-05-31"
+            maxReward: 1000
+            eligibleTiers: ["gold", "platinum"]
+    
+    CreateVersionRequest:
+      type: object
+      required:
+        - content
+      properties:
+        content:
+          type: object
+          description: Updated JSON metadata content
+          additionalProperties: true
+        changeSummary:
+          type: string
+          description: Human-readable description of changes
+          maxLength: 500
+          example: "Increased maxReward from 500 to 1000"
+    
+    PublishStateRequest:
+      type: object
+      required:
+        - state
+      properties:
+        state:
+          type: string
+          enum: [DRAFT, APPROVED, PUBLISHED, ARCHIVED]
+          description: Target publishing state
+          example: PUBLISHED
+    
+    VersionResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 123
+        documentId:
+          type: integer
+          format: int64
+          example: 45
+        type:
+          type: string
+          example: loyalty-program
+        name:
+          type: string
+          example: spring-bonus
+        versionNumber:
+          type: integer
+          example: 2
+        content:
+          type: object
+          additionalProperties: true
+        author:
+          type: string
+          description: User who created this version
+          example: "alice@example.com"
+        createdAt:
+          type: string
+          format: date-time
+          example: "2025-11-14T10:30:00Z"
+        changeSummary:
+          type: string
+          example: "Increased maxReward"
+        publishingState:
+          type: string
+          enum: [DRAFT, APPROVED, PUBLISHED, ARCHIVED]
+          example: PUBLISHED
+        isActive:
+          type: boolean
+          example: true
+        schemaWarning:
+          type: boolean
+          description: Whether version violates current schema
+          example: false
+        schemaWarningTimestamp:
+          type: string
+          format: date-time
+          nullable: true
+          example: null
+    
+    MetadataDocumentResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        type:
+          type: string
+        name:
+          type: string
+        versionCount:
+          type: integer
+          description: Total number of versions
+        activeVersion:
+          type: integer
+          nullable: true
+          description: Active version number (null if none)
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    
+    MetadataDocumentList:
+      type: object
+      properties:
+        documents:
+          type: array
+          items:
+            $ref: '#/components/schemas/MetadataDocumentResponse'
+        cursor:
+          type: string
+          nullable: true
+          description: Cursor for next page
+        hasMore:
+          type: boolean
+          description: Whether more results exist
+    
+    VersionList:
+      type: object
+      properties:
+        versions:
+          type: array
+          items:
+            $ref: '#/components/schemas/VersionResponse'
+    
+    ComparisonResponse:
+      type: object
+      properties:
+        fromVersion:
+          type: integer
+          example: 1
+        toVersion:
+          type: integer
+          example: 2
+        changes:
+          type: array
+          items:
+            $ref: '#/components/schemas/Change'
+        hasBreakingChanges:
+          type: boolean
+          example: false
+        summary:
+          type: string
+          example: "3 change(s): 0 breaking, 2 additive, 1 non-breaking"
+        comparedAt:
+          type: string
+          format: date-time
+    
+    Change:
+      type: object
+      properties:
+        operation:
+          type: string
+          enum: [add, remove, replace]
+          example: replace
+        path:
+          type: string
+          description: JSON path
+          example: "/maxReward"
+        oldValue:
+          nullable: true
+          example: 500
+        newValue:
+          nullable: true
+          example: 1000
+        type:
+          type: string
+          enum: [BREAKING_REMOVE, BREAKING_MODIFY, ADDITIVE, NON_BREAKING]
+          example: NON_BREAKING
+    
+    CreateSchemaRequest:
+      type: object
+      required:
+        - type
+        - schema
+      properties:
+        type:
+          type: string
+          pattern: '^[a-z]+(-[a-z]+)*$'
+          description: Metadata type this schema applies to
+          example: loyalty-program
+        schema:
+          type: object
+          description: JSON Schema (Draft 2020-12)
+          additionalProperties: true
+          example:
+            $schema: "https://json-schema.org/draft/2020-12/schema"
+            type: object
+            required: ["programId", "startDate", "endDate"]
+            properties:
+              programId:
+                type: string
+              startDate:
+                type: string
+                format: date
+              endDate:
+                type: string
+                format: date
+              maxReward:
+                type: number
+        allowsExtensions:
+          type: boolean
+          default: true
+          description: Whether custom properties are allowed
+        extensionRules:
+          $ref: '#/components/schemas/ExtensionRules'
+    
+    ExtensionRules:
+      type: object
+      properties:
+        maxDepth:
+          type: integer
+          default: 10
+          description: Maximum nesting depth
+        allowedTypes:
+          type: array
+          items:
+            type: string
+          default: ["string", "number", "boolean", "object", "array"]
+        namingPattern:
+          type: string
+          default: "^[a-zA-Z][a-zA-Z0-9]*$"
+          description: Regex for property names
+        reservedWords:
+          type: array
+          items:
+            type: string
+          default: ["id", "type", "version", "schema"]
+    
+    SchemaResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        type:
+          type: string
+        schema:
+          type: object
+          additionalProperties: true
+        version:
+          type: integer
+          description: Schema version number
+        allowsExtensions:
+          type: boolean
+        extensionRules:
+          $ref: '#/components/schemas/ExtensionRules'
+        createdAt:
+          type: string
+          format: date-time
+        createdBy:
+          type: string
+    
+    Error:
+      type: object
+      required:
+        - error
+        - message
+      properties:
+        error:
+          type: string
+          description: Error code
+          example: VALIDATION_ERROR
+        message:
+          type: string
+          description: Human-readable error message
+          example: "Content violates schema: missing required field 'programId'"
+        details:
+          type: array
+          items:
+            type: object
+            properties:
+              field:
+                type: string
+              constraint:
+                type: string
+              value:
+                nullable: true
+        path:
+          type: string
+          description: Request path
+          example: "/api/v1/metadata/loyalty-program/spring-bonus"
+        timestamp:
+          type: string
+          format: date-time
+
+  responses:
+    BadRequest:
+      description: Invalid request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            error: "VALIDATION_ERROR"
+            message: "Invalid metadata type format"
+    
+    Unauthorized:
+      description: Authentication required
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            error: "UNAUTHORIZED"
+            message: "Authentication required for write operations"
+    
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            error: "NOT_FOUND"
+            message: "Metadata document not found: loyalty-program:spring-bonus"
+    
+    Conflict:
+      description: Resource already exists
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            error: "CONFLICT"
+            message: "Metadata document already exists: loyalty-program:spring-bonus"

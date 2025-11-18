@@ -55,7 +55,7 @@ Within each phase, tasks marked `[P]` can execute in parallel:
 - [x] T007 Configure Jackson for JSONB serialization in `src/main/java/com/metadata/versioning/adapter/out/config/JacksonConfig.java`
 - [x] T008 Configure Spring Security for public read/authenticated write in `src/main/java/com/metadata/versioning/adapter/out/config/SecurityConfig.java`
 - [x] T009 Create Docker Compose file with PostgreSQL 17 in `docker-compose.yml`
-- [ ] T010 Add OpenAPI/SpringDoc configuration in `src/main/java/com/metadata/versioning/adapter/out/config/OpenApiConfig.java`
+- [x] T010 Add OpenAPI/SpringDoc configuration in `src/main/java/com/metadata/versioning/adapter/out/config/OpenApiConfig.java`
 
 ---
 
@@ -63,8 +63,8 @@ Within each phase, tasks marked `[P]` can execute in parallel:
 
 **Purpose**: Core infrastructure needed by all user stories
 
-- [ ] T011 [P] Create base exception hierarchy in `src/main/java/com/metadata/versioning/domain/exception/DomainException.java`
-- [ ] T012 [P] Create common validators for JSON structure in `src/main/java/com/metadata/versioning/domain/validator/JsonStructureValidator.java`
+- [x] T011 [P] Create base exception hierarchy in `src/main/java/com/metadata/versioning/domain/exception/DomainException.java`
+- [x] T012 [P] Create common validators for JSON structure in `src/main/java/com/metadata/versioning/domain/validator/JsonStructureValidator.java`
 
 ---
 
@@ -78,27 +78,27 @@ Within each phase, tasks marked `[P]` can execute in parallel:
 
 ### Domain Layer (US1)
 
-- [ ] T013 [P] [US1] Create MetadataDocument entity with invariants in `src/main/java/com/metadata/versioning/domain/model/MetadataDocument.java`
-- [ ] T014 [P] [US1] Create Version value object with immutability in `src/main/java/com/metadata/versioning/domain/model/Version.java`
-- [ ] T015 [P] [US1] Create VersionNotFoundException in `src/main/java/com/metadata/versioning/domain/exception/VersionNotFoundException.java`
-- [ ] T016 [P] [US1] Create DocumentAlreadyExistsException in `src/main/java/com/metadata/versioning/domain/exception/DocumentAlreadyExistsException.java`
+- [x] T013 [P] [US1] Create MetadataDocument entity with invariants in `src/main/java/com/metadata/versioning/domain/model/MetadataDocument.java`
+- [x] T014 [P] [US1] Create Version value object with immutability in `src/main/java/com/metadata/versioning/domain/model/Version.java`
+- [x] T015 [P] [US1] Create VersionNotFoundException in `src/main/java/com/metadata/versioning/domain/exception/VersionNotFoundException.java`
+- [x] T016 [P] [US1] Create DocumentAlreadyExistsException in `src/main/java/com/metadata/versioning/domain/exception/DocumentAlreadyExistsException.java`
 
 ### Application Layer (US1)
 
-- [ ] T017 [US1] Define CreateVersionUseCase port in `src/main/java/com/metadata/versioning/application/port/in/CreateVersionUseCase.java`
-- [ ] T018 [US1] Define GetVersionHistoryUseCase port in `src/main/java/com/metadata/versioning/application/port/in/GetVersionHistoryUseCase.java`
-- [ ] T019 [US1] Define MetadataDocumentRepository outbound port in `src/main/java/com/metadata/versioning/application/port/out/MetadataDocumentRepository.java`
-- [ ] T020 [US1] Implement VersionManagementService with create and history logic in `src/main/java/com/metadata/versioning/application/service/VersionManagementService.java`
+- [x] T017 [US1] Define CreateVersionUseCase port in `src/main/java/com/metadata/versioning/application/port/in/CreateVersionUseCase.java`
+- [x] T018 [US1] Define GetVersionHistoryUseCase port in `src/main/java/com/metadata/versioning/application/port/in/GetVersionHistoryUseCase.java`
+- [x] T019 [US1] Define MetadataDocumentRepository outbound port in `src/main/java/com/metadata/versioning/application/port/out/MetadataDocumentRepository.java`
+- [x] T020 [US1] Implement VersionManagementService with create and history logic in `src/main/java/com/metadata/versioning/application/service/VersionManagementService.java`
 
 ### Adapter Layer (US1)
 
-- [ ] T021 [P] [US1] Create MetadataDocumentEntity JPA entity in `src/main/java/com/metadata/versioning/adapter/out/persistence/entity/MetadataDocumentEntity.java`
-- [ ] T022 [P] [US1] Create VersionEntity JPA entity with JSONB mapping in `src/main/java/com/metadata/versioning/adapter/out/persistence/entity/VersionEntity.java`
-- [ ] T023 [US1] Create JpaMetadataDocumentRepository Spring Data interface in `src/main/java/com/metadata/versioning/adapter/out/persistence/repository/JpaMetadataDocumentRepository.java`
-- [ ] T024 [US1] Implement MetadataDocumentPersistenceAdapter in `src/main/java/com/metadata/versioning/adapter/out/persistence/adapter/MetadataDocumentPersistenceAdapter.java`
-- [ ] T025 [US1] Create CreateMetadataRequest DTO using Java Record in `src/main/java/com/metadata/versioning/adapter/in/rest/dto/CreateMetadataRequest.java`
-- [ ] T026 [US1] Create VersionResponse DTO using Java Record in `src/main/java/com/metadata/versioning/adapter/in/rest/dto/VersionResponse.java`
-- [ ] T027 [US1] Create MetadataController with POST /metadata and GET /metadata/{type}/{name}/versions endpoints in `src/main/java/com/metadata/versioning/adapter/in/rest/MetadataController.java`
+- [x] T021 [P] [US1] Create MetadataDocumentEntity JPA entity in `src/main/java/com/metadata/versioning/adapter/out/persistence/entity/MetadataDocumentEntity.java`
+- [x] T022 [P] [US1] Create VersionEntity JPA entity with JSONB mapping in `src/main/java/com/metadata/versioning/adapter/out/persistence/entity/VersionEntity.java`
+- [x] T023 [US1] Create JpaMetadataDocumentRepository Spring Data interface in `src/main/java/com/metadata/versioning/adapter/out/persistence/repository/JpaMetadataDocumentRepository.java`
+- [x] T024 [US1] Implement MetadataDocumentPersistenceAdapter in `src/main/java/com/metadata/versioning/adapter/out/persistence/adapter/MetadataDocumentPersistenceAdapter.java`
+- [x] T025 [US1] Create CreateMetadataRequest DTO using Java Record in `src/main/java/com/metadata/versioning/adapter/in/rest/dto/CreateMetadataRequest.java`
+- [x] T026 [US1] Create VersionResponse DTO using Java Record in `src/main/java/com/metadata/versioning/adapter/in/rest/dto/VersionResponse.java`
+- [x] T027 [US1] Create MetadataController with POST /metadata and GET /metadata/{type}/{name}/versions endpoints in `src/main/java/com/metadata/versioning/adapter/in/rest/MetadataController.java`
 
 ### Integration (US1)
 

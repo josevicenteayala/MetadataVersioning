@@ -91,9 +91,13 @@ public class MetadataDocumentPersistenceAdapter implements MetadataDocumentRepos
     private void updateEntity(MetadataDocumentEntity entity, MetadataDocument document) {
         entity.setUpdatedAt(document.getUpdatedAt());
 
-        // Clear and rebuild versions
-        entity.getVersions().clear();
-        for (Version version : document.getAllVersions()) {
+        // Only add new versions (don't clear existing ones)
+        int existingVersionCount = entity.getVersions().size();
+        List<Version> allVersions = document.getAllVersions();
+        
+        // Add only new versions
+        for (int i = existingVersionCount; i < allVersions.size(); i++) {
+            Version version = allVersions.get(i);
             VersionEntity versionEntity = toVersionEntity(version);
             entity.addVersion(versionEntity);
         }

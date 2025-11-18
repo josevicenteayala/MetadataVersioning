@@ -68,7 +68,12 @@ public class MetadataController {
         Version version = createVersionUseCase.createFirstVersion(command);
         VersionResponse response = VersionResponse.fromDomain(version, request.type(), request.name());
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        String locationUri = String.format("/api/v1/metadata/%s/%s/versions/%d",
+                request.type(), request.name(), version.versionNumber());
+        
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .header("Location", locationUri)
+                .body(response);
     }
 
     /**

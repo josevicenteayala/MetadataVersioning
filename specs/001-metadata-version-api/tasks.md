@@ -50,7 +50,7 @@ Within each phase, tasks marked `[P]` can execute in parallel:
 - [x] T002 Add dependencies: Spring Web, Spring Data JPA, PostgreSQL driver, Jackson, Hibernate Validator in `pom.xml`
 - [x] T003 Add test dependencies: JUnit 5, TestContainers, REST Assured, ArchUnit in `pom.xml`
 - [x] T004 Configure PostgreSQL datasource in `src/main/resources/application.yaml`
-- [x] T005 Create Flyway migration V1__create_metadata_tables.sql in `src/main/resources/db/migration/`
+- [x] T005 Create Flyway migration V1__create_metadata_tables.sql with unique constraint on (type, name, version_number) in `src/main/resources/db/migration/`
 - [x] T006 Create package structure: domain, application, adapter following plan.md in `src/main/java/com/metadata/versioning/`
 - [x] T007 Configure Jackson for JSONB serialization in `src/main/java/com/metadata/versioning/adapter/out/config/JacksonConfig.java`
 - [x] T008 Configure Spring Security for public read/authenticated write in `src/main/java/com/metadata/versioning/adapter/out/config/SecurityConfig.java`
@@ -122,7 +122,7 @@ Within each phase, tasks marked `[P]` can execute in parallel:
 ### Domain Layer (US2)
 
 - [ ] T032 [P] [US2] Add activate/deactivate methods to Version in `src/main/java/com/metadata/versioning/domain/model/Version.java`
-- [ ] T033 [P] [US2] Add activateVersion method to MetadataDocument in `src/main/java/com/metadata/versioning/domain/model/MetadataDocument.java`
+- [ ] T033 [US2] Add activateVersion method to MetadataDocument with FR-023 enforcement (only published versions) in `src/main/java/com/metadata/versioning/domain/model/MetadataDocument.java` (depends on T072-T074 for PublishingState)
 - [ ] T034 [P] [US2] Create InvalidActivationException in `src/main/java/com/metadata/versioning/domain/exception/InvalidActivationException.java`
 
 ### Application Layer (US2)
@@ -131,17 +131,21 @@ Within each phase, tasks marked `[P]` can execute in parallel:
 - [ ] T036 [US2] Define GetActiveVersionUseCase port in `src/main/java/com/metadata/versioning/application/port/in/GetActiveVersionUseCase.java`
 - [ ] T037 [US2] Implement activation logic in VersionManagementService in `src/main/java/com/metadata/versioning/application/service/VersionManagementService.java`
 - [ ] T038 [US2] Implement MetadataQueryService for active version retrieval in `src/main/java/com/metadata/versioning/application/service/MetadataQueryService.java`
+- [ ] T038a [US2] Implement ListMetadataDocumentsUseCase in MetadataQueryService (FR-015) in `src/main/java/com/metadata/versioning/application/service/MetadataQueryService.java`
 
 ### Adapter Layer (US2)
 
 - [ ] T039 [P] [US2] Add activation query methods to JpaMetadataDocumentRepository in `src/main/java/com/metadata/versioning/adapter/out/persistence/repository/JpaMetadataDocumentRepository.java`
 - [ ] T040 [US2] Create VersionController with activation endpoints in `src/main/java/com/metadata/versioning/adapter/in/rest/VersionController.java`
 - [ ] T041 [US2] Add GET /metadata/{type}/{name}/active endpoint to MetadataController in `src/main/java/com/metadata/versioning/adapter/in/rest/MetadataController.java`
+- [ ] T041a [US2] Add GET /metadata endpoint to list all documents with pagination (FR-015) in `src/main/java/com/metadata/versioning/adapter/in/rest/MetadataController.java`
 
 ### Integration (US2)
 
 - [ ] T042 [US2] Write integration test for version activation in `src/test/java/com/metadata/versioning/adapter/in/rest/VersionControllerTest.java`
+- [ ] T042a [US2] Write integration test for FR-023 enforcement (reject non-published activation) in `src/test/java/com/metadata/versioning/adapter/in/rest/VersionControllerTest.java`
 - [ ] T043 [US2] Write integration test for active version retrieval in `src/test/java/com/metadata/versioning/adapter/in/rest/MetadataControllerTest.java`
+- [ ] T043a [US2] Write integration test for listing metadata documents with pagination (FR-015) in `src/test/java/com/metadata/versioning/adapter/in/rest/MetadataControllerTest.java`
 - [ ] T044 [US2] Write E2E test for activation workflow in `src/test/java/com/metadata/versioning/e2e/MetadataVersioningE2ETest.java`
 
 ---
@@ -271,6 +275,7 @@ Within each phase, tasks marked `[P]` can execute in parallel:
 - [ ] T091 Write performance test for version creation (<500ms) in `src/test/java/com/metadata/versioning/performance/VersionCreationPerformanceTest.java`
 - [ ] T092 Write performance test for active version retrieval (<200ms) in `src/test/java/com/metadata/versioning/performance/ActiveVersionQueryPerformanceTest.java`
 - [ ] T093 Write performance test for version comparison (<3s) in `src/test/java/com/metadata/versioning/performance/VersionComparisonPerformanceTest.java`
+- [ ] T093a Write concurrency test for 50 concurrent requests (SC-005) in `src/test/java/com/metadata/versioning/performance/ConcurrencyPerformanceTest.java`
 - [ ] T094 Add custom error responses with field paths in `src/main/java/com/metadata/versioning/adapter/in/rest/exception/GlobalExceptionHandler.java`
 - [ ] T095 Update OpenAPI specification with all endpoints in `specs/001-metadata-version-api/contracts/openapi.yaml`
 - [ ] T096 Add API examples to OpenAPI spec in `specs/001-metadata-version-api/contracts/openapi.yaml`
@@ -280,21 +285,23 @@ Within each phase, tasks marked `[P]` can execute in parallel:
 
 ## Summary
 
-**Total Tasks**: 97
+**Total Tasks**: 102
 
 **Task Count by User Story**:
 - Setup: 10 tasks
 - Foundational: 2 tasks
 - US1 (Create and Version): 19 tasks (including 4 tests)
-- US2 (Activate and Consume): 13 tasks (including 3 tests)
+- US2 (Activate and Consume): 17 tasks (including 5 tests) - added T038a, T041a, T042a, T043a
 - US3 (Compare Versions): 10 tasks (including 3 tests)
 - US4 (Manage Schemas): 17 tasks (including 4 tests)
 - US5 (Publishing Lifecycle): 11 tasks (including 3 tests)
-- Polish: 15 tasks
+- Polish: 16 tasks (added T093a)
 
 **Parallel Opportunities**: 32 tasks marked [P] can execute in parallel within their phase
 
-**MVP Scope**: Setup (T001-T010) + Foundational (T011-T012) + US1 (T013-T031) + US2 (T032-T044) = 44 tasks
+**MVP Scope**: Setup (T001-T010) + Foundational (T011-T012) + US1 (T013-T031) + US2 (T032-T044, T038a, T041a, T042a, T043a) = 48 tasks
+
+**Note on Dependencies**: T033 (activation logic) has a soft dependency on T072-T074 (PublishingState) to enforce FR-023. Consider implementing basic activation first, then add publishing state enforcement when US5 is implemented.
 
 **Independent Test Criteria**:
 - **US1**: Can create documents, make updates, retrieve history independently

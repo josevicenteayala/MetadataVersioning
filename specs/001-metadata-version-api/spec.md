@@ -96,7 +96,7 @@ Business teams collaborate on metadata through workflow stages (draft, approved,
 
 **Acceptance Scenarios**:
 
-1. **Given** newly created metadata version, **When** system creates version, **Then** version starts in "draft" state
+1. **Given** newly created metadata version, **When** system creates version, **Then** version starts in "draft" state by default (user may optionally specify initial state)
 2. **Given** version in draft state, **When** approver marks version as approved, **Then** version transitions to "approved" state and records approver
 3. **Given** version in approved state, **When** user publishes version, **Then** version transitions to "published" and becomes eligible for activation
 4. **Given** outdated published version, **When** user archives version, **Then** version transitions to "archived" and cannot be activated
@@ -124,26 +124,26 @@ Business teams collaborate on metadata through workflow stages (draft, approved,
 - **FR-003**: System MUST record complete audit information for each version including author identifier, timestamp, and human-readable change summary
 - **FR-004**: System MUST ensure all versions are immutable after creation - no modifications to existing version content or metadata
 - **FR-005**: System MUST enforce unique constraint per (type, name, version) combination to prevent duplicate versions
-- **FR-006**: System MUST allow exactly one active version per (type, name) combination at any time
+- **FR-006**: System MUST allow at most one active version per (type, name) combination at any time (zero or one active version)
 - **FR-007**: System MUST provide API endpoint to retrieve active version by type and name for consumer applications
 - **FR-008**: System MUST provide API endpoint to retrieve specific version by type, name, and version number
 - **FR-009**: System MUST provide API endpoint to list all versions for given type and name, ordered by version number
-- **FR-010**: System MUST generate comparison output showing structural and value differences between any two versions of same metadata
-- **FR-011**: System MUST validate JSON structure and reject malformed content before creating version
-- **FR-012**: System MUST support schema definitions that specify required fields, optional fields, and validation rules
+- **FR-010**: System MUST generate comparison output showing structural and value differences between any two versions of same metadata (format: JSON response with addedFields[], removedFields[], modifiedFields[{path, oldValue, newValue}], unchangedFields[])
+- **FR-011**: System MUST validate JSON structure and reject malformed content before creating version (validates: well-formed JSON syntax, maximum nesting depth of 50 levels, see FR-025 for size limits)
+- **FR-012**: System MUST support schema definitions that specify required fields, optional fields, and validation rules (format: JSON Schema Draft 7 or later)
 - **FR-013**: System MUST validate metadata content against schema when schema is defined for the type
-- **FR-014**: System MUST allow custom properties in designated extension sections while validating against generic rules
-- **FR-015**: System MUST provide API endpoint to list all metadata documents grouped by active status (active versions first, then inactive)
+- **FR-014**: System MUST allow custom properties in designated extension sections while validating against generic rules (custom properties may appear in any location not constrained by schema)
+- **FR-015**: System MUST provide API endpoint to list all metadata documents grouped by active status (active versions first, then inactive) with pagination support (default page size: 50, max: 200)
 - **FR-016**: System MUST track publishing state (draft, approved, published, archived) for each version
-- **FR-017**: System MUST return appropriate HTTP status codes and error messages following REST conventions
+- **FR-017**: System MUST return appropriate HTTP status codes and error messages following REST conventions (4xx for client errors, 5xx for server errors, including field paths in validation errors)
 - **FR-018**: System MUST support filtering version lists by publishing state
 - **FR-019**: System MUST allow schema updates even when existing versions would become non-compliant
-- **FR-020**: System MUST mark existing versions with schema compliance warning flag when schema changes make them non-compliant
+- **FR-020**: System MUST mark existing versions with schema compliance warning flag when schema changes make them non-compliant (detection: asynchronous background job triggered on schema update)
 - **FR-021**: System MUST record timestamp when schema compliance warning is applied to a version
 - **FR-022**: System MUST include schema compliance warning indicator in API responses when retrieving flagged versions
-- **FR-023**: System MUST prevent activation of versions not in "published" state
-- **FR-024**: System MUST record state transitions with timestamps when publishing state changes
-- **FR-025**: System MUST enforce maximum JSON document size limit to prevent resource exhaustion
+- **FR-023**: System MUST prevent activation of versions not in "published" state (only versions in "published" state are eligible for activation)
+- **FR-024**: System MUST record state transitions with timestamps when publishing state changes (includes: old state, new state, timestamp, actor)
+- **FR-025**: System MUST enforce maximum JSON document size limit of 1 MB to prevent resource exhaustion (referenced by FR-011 for validation)
 - **FR-026**: System MUST allow unauthenticated read access to retrieve active versions and version history
 - **FR-027**: System MUST require authentication for all write operations (create, update, activate, publish, schema management)
 - **FR-028**: System MUST record authenticated user identity in audit trail for all write operations
@@ -152,7 +152,7 @@ Business teams collaborate on metadata through workflow stages (draft, approved,
 
 - **Metadata Document**: Represents a named configuration for a specific type (e.g., loyalty program, campaign, offer). Identified by unique combination of type and name. Contains multiple versions over its lifecycle.
 
-- **Version**: Immutable snapshot of metadata content at a specific point in time. Attributes include version number (v1, v2, etc.), JSON content, author (string identifier from authentication system such as username, email, or service account name), creation timestamp, change summary, publishing state, and active flag. Belongs to exactly one metadata document.
+- **Version**: Immutable snapshot of metadata content at a specific point in time. Attributes include version number (v1, v2, etc.), JSON content, author (string identifier from authentication system such as username, email, or service account name - max length 255 characters), creation timestamp, change summary (optional, max length 500 characters), publishing state, and active flag. Belongs to exactly one metadata document.
 
 - **Schema Definition**: Template that specifies structure and validation rules for a metadata type. Defines required fields, optional fields, data types, and locations for custom extensions. One schema applies to all metadata documents of that type.
 

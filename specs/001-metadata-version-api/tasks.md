@@ -46,15 +46,15 @@ Within each phase, tasks marked `[P]` can execute in parallel:
 
 **Purpose**: Project initialization and basic structure
 
-- [ ] T001 Initialize Spring Boot 3.3 project with Java 21 in `pom.xml`
-- [ ] T002 Add dependencies: Spring Web, Spring Data JPA, PostgreSQL driver, Jackson, Hibernate Validator in `pom.xml`
-- [ ] T003 Add test dependencies: JUnit 5, TestContainers, REST Assured, ArchUnit in `pom.xml`
-- [ ] T004 Configure PostgreSQL datasource in `src/main/resources/application.yaml`
-- [ ] T005 Create Flyway migration V1__create_metadata_tables.sql in `src/main/resources/db/migration/`
-- [ ] T006 Create package structure: domain, application, adapter following plan.md in `src/main/java/com/metadata/versioning/`
-- [ ] T007 Configure Jackson for JSONB serialization in `src/main/java/com/metadata/versioning/adapter/out/config/JacksonConfig.java`
-- [ ] T008 Configure Spring Security for public read/authenticated write in `src/main/java/com/metadata/versioning/adapter/out/config/SecurityConfig.java`
-- [ ] T009 Create Docker Compose file with PostgreSQL 17 in `docker-compose.yml`
+- [x] T001 Initialize Spring Boot 3.3 project with Java 21 in `pom.xml`
+- [x] T002 Add dependencies: Spring Web, Spring Data JPA, PostgreSQL driver, Jackson, Hibernate Validator in `pom.xml`
+- [x] T003 Add test dependencies: JUnit 5, TestContainers, REST Assured, ArchUnit in `pom.xml`
+- [x] T004 Configure PostgreSQL datasource in `src/main/resources/application.yaml`
+- [x] T005 Create Flyway migration V1__create_metadata_tables.sql in `src/main/resources/db/migration/`
+- [x] T006 Create package structure: domain, application, adapter following plan.md in `src/main/java/com/metadata/versioning/`
+- [x] T007 Configure Jackson for JSONB serialization in `src/main/java/com/metadata/versioning/adapter/out/config/JacksonConfig.java`
+- [x] T008 Configure Spring Security for public read/authenticated write in `src/main/java/com/metadata/versioning/adapter/out/config/SecurityConfig.java`
+- [x] T009 Create Docker Compose file with PostgreSQL 17 in `docker-compose.yml`
 - [ ] T010 Add OpenAPI/SpringDoc configuration in `src/main/java/com/metadata/versioning/adapter/out/config/OpenApiConfig.java`
 
 ---

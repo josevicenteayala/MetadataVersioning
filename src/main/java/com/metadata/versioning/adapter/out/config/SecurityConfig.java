@@ -1,0 +1,70 @@
+package com.metadata.versioning.adapter.out.config;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.web.SecurityFilterChain;
+
+import static org.springframework.security.config.Customizer.withDefaults;
+
+/**
+ * Security configuration implementing public read / authenticated write pattern.
+ * - GET requests: No authentication required
+ * - POST, PUT, PATCH, DELETE: HTTP Basic Authentication required
+ */
+@Configuration
+@EnableWebSecurity
+public class SecurityConfig {
+
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http
+            .csrf(AbstractHttpConfigurer::disable)
+            .authorizeHttpRequests(auth -> auth
+                // Public read access
+                .requestMatchers("GET", "/api/**").permitAll()
+                // Actuator endpoints public
+                .requestMatchers("/actuator/**").permitAll()
+                // Write operations require authentication
+                .requestMatchers("POST", "/api/**").authenticated()
+                .requestMatchers("PUT", "/api/**").authenticated()
+                .requestMatchers("PATCH", "/api/**").authenticated()
+                .requestMatchers("DELETE", "/api/**").authenticated()
+                .anyRequest().authenticated()
+            )
+            .httpBasic(withDefaults());
+        
+        return http.build();
+    }
+
+    @Bean
+    public UserDetailsService userDetailsService() {
+        // In-memory users for demo (replace with database/LDAP in production)
+        UserDetails admin = User.builder()
+            .username("admin")
+            .password(passwordEncoder().encode("admin"))
+            .roles("ADMIN")
+            .build();
+        
+        UserDetails user = User.builder()
+            .username("user")
+            .password(passwordEncoder().encode("user"))
+            .roles("USER")
+            .build();
+        
+        return new InMemoryUserDetailsManager(admin, user);
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+}

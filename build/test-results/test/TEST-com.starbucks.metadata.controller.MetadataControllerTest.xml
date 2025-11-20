@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="MetadataController Tests" tests="0" skipped="0" failures="0" errors="0" timestamp="1970-01-01T00:00:00" hostname="MacBook-Pro.local" time="0.0">
-  <properties/>
-  <system-out><![CDATA[2025-11-20T09:16:06.278-05:00  INFO 39013 --- [metadata-versioning] [    Test worker] t.c.s.AnnotationConfigContextLoaderUtils : Could not detect default configuration classes for test class [com.starbucks.metadata.controller.MetadataControllerTest]: MetadataControllerTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
-2025-11-20T09:16:06.291-05:00  INFO 39013 --- [metadata-versioning] [    Test worker] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration com.starbucks.metadata.MetadataVersioningApplication for test class com.starbucks.metadata.controller.MetadataControllerTest
-]]></system-out>
-  <system-err><![CDATA[]]></system-err>
-</testsuite>

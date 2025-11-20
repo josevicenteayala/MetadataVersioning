@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="Create Metadata Tests" tests="6" skipped="0" failures="0" errors="0" timestamp="2025-11-20T14:16:07" hostname="MacBook-Pro.local" time="0.036">
+  <properties/>
+  <testcase name="Should return 400 for invalid request - blank name" classname="com.starbucks.metadata.controller.MetadataControllerTest$CreateMetadataTests" time="0.012"/>
+  <testcase name="Should return 400 for invalid request - blank type" classname="com.starbucks.metadata.controller.MetadataControllerTest$CreateMetadataTests" time="0.003"/>
+  <testcase name="Should create metadata successfully" classname="com.starbucks.metadata.controller.MetadataControllerTest$CreateMetadataTests" time="0.005"/>
+  <testcase name="Should return 409 when metadata already exists" classname="com.starbucks.metadata.controller.MetadataControllerTest$CreateMetadataTests" time="0.004"/>
+  <testcase name="Should return 400 for type exceeding max length" classname="com.starbucks.metadata.controller.MetadataControllerTest$CreateMetadataTests" time="0.002"/>
+  <testcase name="Should return 400 for null JSON content" classname="com.starbucks.metadata.controller.MetadataControllerTest$CreateMetadataTests" time="0.004"/>
+  <system-out><![CDATA[2025-11-20T09:16:07.116-05:00  INFO 39013 --- [metadata-versioning] [    Test worker] t.c.s.AnnotationConfigContextLoaderUtils : Could not detect default configuration classes for test class [com.starbucks.metadata.controller.MetadataControllerTest$CreateMetadataTests]: CreateMetadataTests does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2025-11-20T09:16:07.123-05:00  INFO 39013 --- [metadata-versioning] [    Test worker] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration com.starbucks.metadata.MetadataVersioningApplication for test class com.starbucks.metadata.controller.MetadataControllerTest$CreateMetadataTests
+2025-11-20T09:16:07.144-05:00  INFO 39013 --- [metadata-versioning] [    Test worker] c.s.m.controller.MetadataController      : Creating metadata with type: configuration and name: app-settings
+2025-11-20T09:16:07.150-05:00  INFO 39013 --- [metadata-versioning] [    Test worker] c.s.m.controller.MetadataController      : Creating metadata with type: configuration and name: app-settings
+2025-11-20T09:16:07.150-05:00 ERROR 39013 --- [metadata-versioning] [    Test worker] c.s.m.exception.GlobalExceptionHandler   : Metadata already exists: Metadata already exists
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

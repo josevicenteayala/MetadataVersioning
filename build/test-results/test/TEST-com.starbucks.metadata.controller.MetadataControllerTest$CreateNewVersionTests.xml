@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="Create New Version Tests" tests="3" skipped="0" failures="0" errors="0" timestamp="2025-11-20T14:16:07" hostname="MacBook-Pro.local" time="0.075">
+  <properties/>
+  <testcase name="Should create new version successfully" classname="com.starbucks.metadata.controller.MetadataControllerTest$CreateNewVersionTests" time="0.043"/>
+  <testcase name="Should return 404 when metadata not found" classname="com.starbucks.metadata.controller.MetadataControllerTest$CreateNewVersionTests" time="0.022"/>
+  <testcase name="Should return 400 for null JSON content" classname="com.starbucks.metadata.controller.MetadataControllerTest$CreateNewVersionTests" time="0.006"/>
+  <system-out><![CDATA[2025-11-20T09:16:07.032-05:00  INFO 39013 --- [metadata-versioning] [    Test worker] t.c.s.AnnotationConfigContextLoaderUtils : Could not detect default configuration classes for test class [com.starbucks.metadata.controller.MetadataControllerTest$CreateNewVersionTests]: CreateNewVersionTests does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2025-11-20T09:16:07.037-05:00  INFO 39013 --- [metadata-versioning] [    Test worker] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration com.starbucks.metadata.MetadataVersioningApplication for test class com.starbucks.metadata.controller.MetadataControllerTest$CreateNewVersionTests
+2025-11-20T09:16:07.076-05:00  INFO 39013 --- [metadata-versioning] [    Test worker] c.s.m.controller.MetadataController      : Creating new version for type: configuration and name: app-settings
+2025-11-20T09:16:07.101-05:00  INFO 39013 --- [metadata-versioning] [    Test worker] c.s.m.controller.MetadataController      : Creating new version for type: configuration and name: app-settings
+2025-11-20T09:16:07.104-05:00 ERROR 39013 --- [metadata-versioning] [    Test worker] c.s.m.exception.GlobalExceptionHandler   : Metadata not found: Metadata not found
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

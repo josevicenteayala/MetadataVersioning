@@ -60,7 +60,7 @@ cd JsonVersionManager- Role-based views so non-technical users see simplified fo
 
 # Install dependencies (TBD based on tech stack)## Architecture Approach
 
-# npm install  OR  pip install -r requirements.txt  OR  mvn installJsonVersionManager follows Hexagonal (Ports & Adapters) Architecture to keep the core domain independent from delivery technology.
+# npm install  OR  pip install -r requirements.txt  OR  ./gradlew buildJsonVersionManager follows Hexagonal (Ports & Adapters) Architecture to keep the core domain independent from delivery technology.
 
 
 
@@ -177,7 +177,7 @@ See [API_REFERENCE.md](docs/API_REFERENCE.md) for complete API documentation.
 
 ### Prerequisites
 - **Java 21** (OpenJDK or Oracle JDK)
-- **Maven 3.9+** or **Gradle 8+**
+- **Gradle 8+**
 - **PostgreSQL 15+**
 - **Node.js 18+** and **npm/yarn** (for frontend)
 - **Docker** (optional, for containerized development)
@@ -194,12 +194,10 @@ cp src/main/resources/application.yml.example src/main/resources/application.yml
 # Edit application.yml with your PostgreSQL credentials
 
 # Build the project
-mvn clean install
-# Or with Gradle: ./gradlew build
+./gradlew build
 
 # Run the application
-mvn spring-boot:run
-# Or with Gradle: ./gradlew bootRun
+./gradlew bootRun
 
 # API available at: http://localhost:8080
 # Swagger UI at: http://localhost:8080/swagger-ui.html
@@ -262,7 +260,7 @@ For details, see [ARCHITECTURE.md](docs/ARCHITECTURE.md).
 - **Spring Data JPA** - Database abstraction and ORM
 - **Spring Security** - OAuth2/JWT authentication and authorization
 - **JSON Schema Validator** - Schema validation for metadata documents
-- **Maven/Gradle** - Build and dependency management
+- **Gradle** - Build and dependency management
 
 ### Frontend
 - **React 18+** with **TypeScript** - Type-safe, modern UI framework

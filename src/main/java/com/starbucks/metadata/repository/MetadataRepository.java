@@ -40,10 +40,8 @@ public interface MetadataRepository extends JpaRepository<MetadataEntry, UUID> {
 
     @Query("SELECT m FROM MetadataEntry m WHERE " +
            "(:type IS NULL OR m.type = :type) AND " +
-           "(:name IS NULL OR LOWER(m.name) LIKE LOWER(CONCAT('%', :name, '%'))) AND " +
            "(:activeOnly = false OR m.isActive = true)")
     Page<MetadataEntry> findWithFilters(@Param("type") String type,
-                                        @Param("name") String name,
                                         @Param("activeOnly") boolean activeOnly,
                                         Pageable pageable);
 

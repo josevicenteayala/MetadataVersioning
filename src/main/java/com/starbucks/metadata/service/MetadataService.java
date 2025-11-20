@@ -167,7 +167,7 @@ public class MetadataService {
             type, name, activeOnly);
         
         Page<MetadataEntry> entries = metadataRepository.findWithFilters(
-            type, name, activeOnly != null ? activeOnly : false, pageable
+            type, activeOnly != null ? activeOnly : false, pageable
         );
         
         return entries.map(this::toResponseDto);

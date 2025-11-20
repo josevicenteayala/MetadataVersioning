@@ -1,0 +1,229 @@
+{
+	"info": {
+		"_postman_id": "12345678-1234-1234-1234-123456789abc",
+		"name": "JsonVersionManager API",
+		"description": "Collection for JsonVersionManager Spring Boot application API endpoints",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Create New Metadata",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"type\": \"config\",\n  \"name\": \"database-settings\",\n  \"json\": {\n    \"host\": \"localhost\",\n    \"port\": 5432,\n    \"database\": \"mydb\",\n    \"ssl\": true\n  }\n}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/metadata",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"metadata"
+					]
+				},
+				"description": "Create new metadata entry (version 1, active)"
+			}
+		},
+		{
+			"name": "Create New Version",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"json\": {\n    \"host\": \"prod-server\",\n    \"port\": 5433,\n    \"database\": \"prod_db\",\n    \"ssl\": true,\n    \"connection_pool\": 20\n  }\n}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/metadata/{{type}}/{{name}}/versions",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"metadata",
+						"{{type}}",
+						"{{name}}",
+						"versions"
+					]
+				},
+				"description": "Create new version of existing metadata (inactive)"
+			}
+		},
+		{
+			"name": "Activate Version",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/metadata/{{type}}/{{name}}/versions/{{version}}/activate",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"metadata",
+						"{{type}}",
+						"{{name}}",
+						"versions",
+						"{{version}}",
+						"activate"
+					]
+				},
+				"description": "Activate a specific version (deactivates all other versions)"
+			}
+		},
+		{
+			"name": "List All Versions",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/metadata/{{type}}/{{name}}/versions",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"metadata",
+						"{{type}}",
+						"{{name}}",
+						"versions"
+					]
+				},
+				"description": "List all versions for a specific type and name"
+			}
+		},
+		{
+			"name": "Get Metadata by ID",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/metadata/{{id}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"metadata",
+						"{{id}}"
+					]
+				},
+				"description": "Get specific metadata version by UUID"
+			}
+		},
+		{
+			"name": "List Metadata with Filters",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/metadata?type={{type}}&name={{name}}&isActive={{isActive}}&page={{page}}&size={{size}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"metadata"
+					],
+					"query": [
+						{
+							"key": "type",
+							"value": "{{type}}",
+							"description": "Filter by metadata type"
+						},
+						{
+							"key": "name",
+							"value": "{{name}}",
+							"description": "Filter by metadata name"
+						},
+						{
+							"key": "isActive",
+							"value": "{{isActive}}",
+							"description": "Filter by active status (true/false)"
+						},
+						{
+							"key": "page",
+							"value": "{{page}}",
+							"description": "Page number (0-based)"
+						},
+						{
+							"key": "size",
+							"value": "{{size}}",
+							"description": "Page size"
+						}
+					]
+				},
+				"description": "List metadata with optional filters and pagination"
+			}
+		},
+		{
+			"name": "Delete Metadata Version",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/metadata/{{id}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"metadata",
+						"{{id}}"
+					]
+				},
+				"description": "Delete a metadata version (cannot delete active versions)"
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:8081",
+			"description": "Base URL for JsonVersionManager API"
+		},
+		{
+			"key": "type",
+			"value": "config",
+			"description": "Metadata type (e.g., config, schema, template)"
+		},
+		{
+			"key": "name",
+			"value": "database-settings",
+			"description": "Metadata name"
+		},
+		{
+			"key": "version",
+			"value": "2",
+			"description": "Version number"
+		},
+		{
+			"key": "id",
+			"value": "",
+			"description": "UUID of metadata entry"
+		},
+		{
+			"key": "isActive",
+			"value": "true",
+			"description": "Active status filter"
+		},
+		{
+			"key": "page",
+			"value": "0",
+			"description": "Page number for pagination"
+		},
+		{
+			"key": "size",
+			"value": "10",
+			"description": "Page size for pagination"
+		}
+	]
+}

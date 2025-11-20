@@ -68,6 +68,13 @@ application-local.properties
 # MacOS
 .DS_Store
 
+# Gradle
+.gradle/
+build/
+gradle-app.setting
+!gradle-wrapper.jar
+.gradletasknamecache
+gradle.properties
+
 # Docker
 docker-compose.override.yml
-./build

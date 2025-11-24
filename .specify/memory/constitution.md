@@ -103,10 +103,12 @@ management demand reliability—untested code poses unacceptable risk.
 - Support both visual diff (UI) and machine-readable diff (API JSON)
 
 **MUST maintain consistent terminology**:
-- "Topic" (not "category", "type", or "domain")
+- "Type" for metadata classification (not "topic", "category", or "domain") - represents category like "loyalty-program"
 - "Version" (not "revision", "snapshot", or "iteration")
 - "Custom properties" (not "extensions", "attributes", or "metadata")
-- "Publish" (not "activate", "deploy", or "promote")
+- "Activate" for making a version current/consumable (technical operation)
+- "Publish" for workflow approval state (business process: draft → review → published → archived)
+- Distinction: A version must be "published" (approved) before it can be "activated" (made current)
 
 **Rationale**: Dual interfaces ensure accessibility for all user types. Clear validation 
 prevents frustration and reduces support burden. Intuitive diffs build user confidence 

@@ -80,7 +80,7 @@ curl http://localhost:8080/actuator/health
 ### 1. Create First Metadata Document
 
 ```bash
-# Create loyalty program metadata (no authentication required for demo)
+# Create loyalty program metadata (authentication required; demo credentials: admin:admin)
 curl -X POST http://localhost:8080/api/v1/metadata \
   -H "Content-Type: application/json" \
   -u "admin:admin" \

@@ -142,11 +142,11 @@ Within each phase, tasks marked `[P]` can execute in parallel:
 
 ### Integration (US2)
 
-- [ ] T042 [US2] Write integration test for version activation in `src/test/java/com/metadata/versioning/adapter/in/rest/VersionControllerTest.java`
-- [ ] T042a [US2] Write integration test for FR-023 enforcement (reject non-published activation) in `src/test/java/com/metadata/versioning/adapter/in/rest/VersionControllerTest.java`
-- [ ] T043 [US2] Write integration test for active version retrieval in `src/test/java/com/metadata/versioning/adapter/in/rest/MetadataControllerTest.java`
-- [ ] T043a [US2] Write integration test for listing metadata documents with pagination (FR-015) in `src/test/java/com/metadata/versioning/adapter/in/rest/MetadataControllerTest.java`
-- [ ] T044 [US2] Write E2E test for activation workflow in `src/test/java/com/metadata/versioning/e2e/MetadataVersioningE2ETest.java`
+- [x] T042 [US2] Write integration test for version activation in `src/test/java/com/metadata/versioning/adapter/in/rest/VersionControllerTest.java`
+- [x] T042a [US2] Write integration test for FR-023 enforcement (reject non-published activation) in `src/test/java/com/metadata/versioning/adapter/in/rest/VersionControllerTest.java`
+- [x] T043 [US2] Write integration test for active version retrieval in `src/test/java/com/metadata/versioning/adapter/in/rest/MetadataControllerTest.java`
+- [x] T043a [US2] Write integration test for listing metadata documents with pagination (FR-015) in `src/test/java/com/metadata/versioning/adapter/in/rest/MetadataControllerTest.java`
+- [x] T044 [US2] Write E2E test for activation workflow in `src/test/java/com/metadata/versioning/e2e/MetadataVersioningE2ETest.java`
 
 ---
 

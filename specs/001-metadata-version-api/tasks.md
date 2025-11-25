@@ -264,22 +264,22 @@ Within each phase, tasks marked `[P]` can execute in parallel:
 
 **Purpose**: Performance, observability, security, and documentation
 
-- [ ] T083 [P] Create Flyway migration V3__create_audit_tables.sql for audit trail in `src/main/resources/db/migration/`
-- [ ] T084 [P] Create AuditEntryEntity JPA entity in `src/main/java/com/metadata/versioning/adapter/out/persistence/entity/AuditEntryEntity.java`
-- [ ] T085 [P] Implement AuditPersistenceAdapter with async logging in `src/main/java/com/metadata/versioning/adapter/out/persistence/adapter/AuditPersistenceAdapter.java`
-- [ ] T086 [P] Add GIN indexes for JSONB queries in migration in `src/main/resources/db/migration/V5__add_performance_indexes.sql`
-- [ ] T087 [P] Configure correlation ID filter for request tracing in `src/main/java/com/metadata/versioning/adapter/in/rest/filter/CorrelationIdFilter.java`
-- [ ] T088 [P] Configure Micrometer metrics for use case timing in `src/main/java/com/metadata/versioning/adapter/out/config/MetricsConfig.java`
-- [ ] T089 [P] Add Spring Boot Actuator health checks in `src/main/resources/application.yaml`
-- [ ] T090 Write ArchUnit test to enforce hexagonal boundaries in `src/test/java/com/metadata/versioning/architecture/HexagonalArchitectureTest.java`
-- [ ] T091 Write performance test for version creation (<500ms) in `src/test/java/com/metadata/versioning/performance/VersionCreationPerformanceTest.java`
-- [ ] T092 Write performance test for active version retrieval (<200ms) in `src/test/java/com/metadata/versioning/performance/ActiveVersionQueryPerformanceTest.java`
-- [ ] T093 Write performance test for version comparison (<3s) in `src/test/java/com/metadata/versioning/performance/VersionComparisonPerformanceTest.java`
-- [ ] T093a Write concurrency test for 50 concurrent requests (SC-005) in `src/test/java/com/metadata/versioning/performance/ConcurrencyPerformanceTest.java`
-- [ ] T094 Add custom error responses with field paths in `src/main/java/com/metadata/versioning/adapter/in/rest/exception/GlobalExceptionHandler.java`
-- [ ] T095 Update OpenAPI specification with all endpoints in `specs/001-metadata-version-api/contracts/openapi.yaml`
-- [ ] T096 Add API examples to OpenAPI spec in `specs/001-metadata-version-api/contracts/openapi.yaml`
-- [ ] T097 Create README with quickstart instructions in `README.md`
+- [x] T083 [P] Create Flyway migration V3__create_audit_tables.sql for audit trail in `src/main/resources/db/migration/`
+- [x] T084 [P] Create AuditEntryEntity JPA entity in `src/main/java/com/metadata/versioning/adapter/out/persistence/entity/AuditEntryEntity.java`
+- [x] T085 [P] Implement AuditPersistenceAdapter with async logging in `src/main/java/com/metadata/versioning/adapter/out/persistence/adapter/AuditPersistenceAdapter.java`
+- [x] T086 [P] Add GIN indexes for JSONB queries in migration in `src/main/resources/db/migration/V5__add_performance_indexes.sql`
+- [x] T087 [P] Configure correlation ID filter for request tracing in `src/main/java/com/metadata/versioning/adapter/in/rest/filter/CorrelationIdFilter.java`
+- [x] T088 [P] Configure Micrometer metrics for use case timing in `src/main/java/com/metadata/versioning/adapter/out/config/MetricsConfig.java`
+- [x] T089 [P] Add Spring Boot Actuator health checks in `src/main/resources/application.yaml`
+- [x] T090 Write ArchUnit test to enforce hexagonal boundaries in `src/test/java/com/metadata/versioning/architecture/HexagonalArchitectureTest.java`
+- [x] T091 Write performance test for version creation (<500ms) in `src/test/java/com/metadata/versioning/performance/VersionCreationPerformanceTest.java`
+- [x] T092 Write performance test for active version retrieval (<200ms) in `src/test/java/com/metadata/versioning/performance/ActiveVersionQueryPerformanceTest.java`
+- [x] T093 Write performance test for version comparison (<3s) in `src/test/java/com/metadata/versioning/performance/VersionComparisonPerformanceTest.java`
+- [x] T093a Write concurrency test for 50 concurrent requests (SC-005) in `src/test/java/com/metadata/versioning/performance/ConcurrencyPerformanceTest.java`
+- [x] T094 Add custom error responses with field paths in `src/main/java/com/metadata/versioning/adapter/in/rest/exception/GlobalExceptionHandler.java`
+- [x] T095 Update OpenAPI specification with all endpoints in `specs/001-metadata-version-api/contracts/openapi.yaml`
+- [x] T096 Add API examples to OpenAPI spec in `specs/001-metadata-version-api/contracts/openapi.yaml`
+- [x] T097 Create README with quickstart instructions in `README.md`
 
 ---
 

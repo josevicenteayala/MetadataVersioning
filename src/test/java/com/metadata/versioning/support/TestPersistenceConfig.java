@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.metadata.versioning.application.port.out.MetadataDocumentRepository;
 import com.metadata.versioning.application.port.out.SchemaDefinitionRepository;
 import com.metadata.versioning.domain.model.MetadataDocument;
+import com.metadata.versioning.domain.model.PublishingState;
 import com.metadata.versioning.domain.model.SchemaDefinition;
 import com.metadata.versioning.domain.model.Version;
 import org.springframework.boot.test.context.TestConfiguration;
@@ -97,6 +98,7 @@ public class TestPersistenceConfig {
                         version.author(),
                         version.createdAt(),
                         version.changeSummary(),
+                        version.publishingState(),
                         version.isActive()
                 ));
             }

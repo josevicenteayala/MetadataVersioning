@@ -8,10 +8,11 @@ import com.metadata.versioning.adapter.out.persistence.entity.VersionEntity;
 import com.metadata.versioning.adapter.out.persistence.repository.JpaMetadataDocumentRepository;
 import com.metadata.versioning.application.port.out.MetadataDocumentRepository;
 import com.metadata.versioning.domain.model.MetadataDocument;
+import com.metadata.versioning.domain.model.PublishingState;
 import com.metadata.versioning.domain.model.Version;
+import org.springframework.context.annotation.Profile;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -138,6 +139,7 @@ public class MetadataDocumentPersistenceAdapter implements MetadataDocumentRepos
             );
             entity.setCreatedAt(version.createdAt());
             entity.setActive(version.isActive());
+            entity.setPublishingState(version.publishingState().name());
             return entity;
         } catch (JsonProcessingException e) {
             throw new RuntimeException("Failed to serialize version content", e);
@@ -167,12 +169,15 @@ public class MetadataDocumentPersistenceAdapter implements MetadataDocumentRepos
     private Version toVersionDomain(VersionEntity entity) {
         try {
             JsonNode content = objectMapper.readTree(entity.getContent());
+            PublishingState state = PublishingState.fromString(entity.getPublishingState());
+            
             return new Version(
                     entity.getVersionNumber(),
                     content,
                     entity.getAuthor(),
                     entity.getCreatedAt(),
                     entity.getChangeSummary(),
+                    state,
                     entity.isActive()
             );
         } catch (JsonProcessingException e) {

@@ -1,10 +1,14 @@
 package com.metadata.versioning.adapter.in.rest;
 
 import com.metadata.versioning.adapter.in.rest.dto.ComparisonResponse;
+import com.metadata.versioning.adapter.in.rest.dto.VersionResponse;
 import com.metadata.versioning.application.port.in.ActivateVersionUseCase;
 import com.metadata.versioning.application.port.in.CompareVersionsUseCase;
+import com.metadata.versioning.application.service.VersionManagementService;
 import com.metadata.versioning.domain.exception.InvalidActivationException;
 import com.metadata.versioning.domain.exception.VersionNotFoundException;
+import com.metadata.versioning.domain.model.PublishingState;
+import com.metadata.versioning.domain.model.Version;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -25,11 +29,14 @@ public class VersionController {
 
     private final ActivateVersionUseCase activateVersionUseCase;
     private final CompareVersionsUseCase compareVersionsUseCase;
+    private final VersionManagementService versionManagementService;
 
     public VersionController(ActivateVersionUseCase activateVersionUseCase,
-                             CompareVersionsUseCase compareVersionsUseCase) {
+                             CompareVersionsUseCase compareVersionsUseCase,
+                             VersionManagementService versionManagementService) {
         this.activateVersionUseCase = activateVersionUseCase;
         this.compareVersionsUseCase = compareVersionsUseCase;
+        this.versionManagementService = versionManagementService;
     }
 
     /**
@@ -100,6 +107,44 @@ public class VersionController {
         
         var comparison = compareVersionsUseCase.compareVersions(type, name, from, to);
         return ResponseEntity.ok(ComparisonResponse.from(comparison));
+    }
+
+    /**
+     * Transition version publishing state (FR-024).
+     * 
+     * @param type Metadata type
+     * @param name Metadata name
+     * @param versionNumber Version number to transition
+     * @param state Target publishing state (DRAFT, APPROVED, PUBLISHED, ARCHIVED)
+     * @return Updated version with new publishing state
+     */
+    @PatchMapping("/{versionNumber}/state")
+    @Operation(
+        summary = "Transition version publishing state",
+        description = "Transitions a version to a new publishing state following state machine rules: DRAFT→APPROVED, APPROVED→PUBLISHED or DRAFT, PUBLISHED→ARCHIVED (FR-024)."
+    )
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "State transitioned successfully"),
+        @ApiResponse(responseCode = "400", description = "Invalid state transition"),
+        @ApiResponse(responseCode = "404", description = "Version not found")
+    })
+    public ResponseEntity<VersionResponse> transitionState(
+            @Parameter(description = "Metadata type", example = "loyalty-program")
+            @PathVariable String type,
+            
+            @Parameter(description = "Metadata name", example = "gold-tier")
+            @PathVariable String name,
+            
+            @Parameter(description = "Version number", example = "1")
+            @PathVariable Integer versionNumber,
+            
+            @Parameter(description = "Target publishing state", example = "APPROVED")
+            @RequestParam String state) {
+        
+        PublishingState targetState = PublishingState.fromString(state);
+        Version updatedVersion = versionManagementService.transitionVersionState(
+                type, name, versionNumber, targetState);
+        return ResponseEntity.ok(VersionResponse.from(updatedVersion));
     }
 }
 

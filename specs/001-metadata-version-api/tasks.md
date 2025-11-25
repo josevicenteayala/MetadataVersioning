@@ -237,26 +237,26 @@ Within each phase, tasks marked `[P]` can execute in parallel:
 
 ### Domain Layer (US5)
 
-- [ ] T072 [P] [US5] Create PublishingState sealed class with allowed transitions in `src/main/java/com/metadata/versioning/domain/model/PublishingState.java`
-- [ ] T073 [P] [US5] Create InvalidStateTransitionException in `src/main/java/com/metadata/versioning/domain/exception/InvalidStateTransitionException.java`
-- [ ] T074 [US5] Add publishing state and transition methods to Version in `src/main/java/com/metadata/versioning/domain/model/Version.java`
-- [ ] T075 [US5] Enforce published state requirement in activation logic in `src/main/java/com/metadata/versioning/domain/model/MetadataDocument.java`
+- [x] T072 [P] [US5] Create PublishingState sealed class with allowed transitions in `src/main/java/com/metadata/versioning/domain/model/PublishingState.java`
+- [x] T073 [P] [US5] Create InvalidStateTransitionException in `src/main/java/com/metadata/versioning/domain/exception/InvalidStateTransitionException.java`
+- [x] T074 [US5] Add publishing state and transition methods to Version in `src/main/java/com/metadata/versioning/domain/model/Version.java`
+- [x] T075 [US5] Enforce published state requirement in activation logic in `src/main/java/com/metadata/versioning/domain/model/MetadataDocument.java`
 
 ### Application Layer (US5)
 
-- [ ] T076 [US5] Add state transition methods to VersionManagementService in `src/main/java/com/metadata/versioning/application/service/VersionManagementService.java`
+- [x] T076 [US5] Add state transition methods to VersionManagementService in `src/main/java/com/metadata/versioning/application/service/VersionManagementService.java`
 
 ### Adapter Layer (US5)
 
-- [ ] T077 [P] [US5] Add publishing_state column to versions table via migration in `src/main/resources/db/migration/V4__add_publishing_state.sql`
+- [x] T077 [P] [US5] Add publishing_state column to versions table via migration in `src/main/resources/db/migration/V4__add_publishing_state.sql`
 - [ ] T078 [US5] Add state transition endpoints to VersionController in `src/main/java/com/metadata/versioning/adapter/in/rest/VersionController.java`
 - [ ] T079 [US5] Add state filtering to version list queries in `src/main/java/com/metadata/versioning/adapter/in/rest/MetadataController.java`
 
 ### Integration (US5)
 
-- [ ] T080 [US5] Write integration test for state transitions in `src/test/java/com/metadata/versioning/adapter/in/rest/VersionControllerTest.java`
-- [ ] T081 [US5] Write integration test for activation of non-published version rejection in `src/test/java/com/metadata/versioning/adapter/in/rest/VersionControllerTest.java`
-- [ ] T082 [US5] Write E2E test for publishing workflow in `src/test/java/com/metadata/versioning/e2e/MetadataVersioningE2ETest.java`
+- [x] T080 [US5] Write integration test for state transitions in `src/test/java/com/metadata/versioning/adapter/in/rest/VersionControllerTest.java`
+- [x] T081 [US5] Write integration test for activation of non-published version rejection in `src/test/java/com/metadata/versioning/adapter/in/rest/VersionControllerTest.java`
+- [x] T082 [US5] Write E2E test for publishing workflow in `src/test/java/com/metadata/versioning/e2e/MetadataVersioningE2ETest.java`
 
 ---
 

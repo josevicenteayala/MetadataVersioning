@@ -8,6 +8,7 @@ import com.metadata.versioning.application.port.out.SchemaDefinitionRepository;
 import com.metadata.versioning.domain.exception.DocumentAlreadyExistsException;
 import com.metadata.versioning.domain.exception.VersionNotFoundException;
 import com.metadata.versioning.domain.model.MetadataDocument;
+import com.metadata.versioning.domain.model.PublishingState;
 import com.metadata.versioning.domain.model.Version;
 import com.metadata.versioning.domain.validator.JsonStructureValidator;
 import com.metadata.versioning.domain.validator.SchemaValidator;
@@ -143,5 +144,46 @@ public class VersionManagementService implements CreateVersionUseCase, GetVersio
 
         // Persist the changes
         repository.update(document);
+    }
+
+    /**
+     * Transition version publishing state (FR-024).
+     * Validates state transitions using PublishingState rules.
+     */
+    public Version transitionVersionState(String type, String name, Integer versionNumber, PublishingState newState) {
+        // Find document
+        MetadataDocument document = repository.findByTypeAndName(type, name)
+                .orElseThrow(() -> new VersionNotFoundException(type, name));
+
+        // Get the version to transition
+        Version version = document.getVersion(versionNumber)
+                .orElseThrow(() -> new VersionNotFoundException(type, name, versionNumber));
+
+        // Transition to new state (validates transition rules)
+        Version updatedVersion = version.transitionTo(newState);
+
+        // Replace version in document
+        List<Version> updatedVersions = new java.util.ArrayList<>();
+        for (Version v : document.getAllVersions()) {
+            if (v.versionNumber().equals(versionNumber)) {
+                updatedVersions.add(updatedVersion);
+            } else {
+                updatedVersions.add(v);
+            }
+        }
+
+        // Create updated document with new version list
+        MetadataDocument updatedDocument = new MetadataDocument(
+                document.getType(),
+                document.getName(),
+                updatedVersions,
+                document.getCreatedAt(),
+                document.getUpdatedAt()
+        );
+
+        // Save and return
+        MetadataDocument savedDocument = repository.update(updatedDocument);
+        return savedDocument.getVersion(versionNumber)
+                .orElseThrow(() -> new IllegalStateException("Failed to retrieve updated version"));
     }
 }

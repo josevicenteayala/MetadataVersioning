@@ -4,6 +4,7 @@ import com.metadata.versioning.adapter.out.persistence.entity.SchemaDefinitionEn
 import com.metadata.versioning.adapter.out.persistence.repository.JpaSchemaRepository;
 import com.metadata.versioning.application.port.out.SchemaDefinitionRepository;
 import com.metadata.versioning.domain.model.SchemaDefinition;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,6 +16,7 @@ import java.util.stream.Collectors;
  * Adapter for schema definition persistence using JPA.
  */
 @Component
+@ConditionalOnProperty(name = "spring.autoconfigure.exclude", havingValue = "false", matchIfMissing = true)
 @Transactional
 public class SchemaDefinitionPersistenceAdapter implements SchemaDefinitionRepository {
 

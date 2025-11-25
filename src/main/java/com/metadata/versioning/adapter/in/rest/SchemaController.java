@@ -3,6 +3,7 @@ package com.metadata.versioning.adapter.in.rest;
 import com.metadata.versioning.adapter.in.rest.dto.SchemaDefinitionRequest;
 import com.metadata.versioning.adapter.in.rest.dto.SchemaDefinitionResponse;
 import com.metadata.versioning.application.port.in.ManageSchemaUseCase;
+import com.metadata.versioning.domain.exception.SchemaNotFoundException;
 import com.metadata.versioning.domain.model.SchemaDefinition;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -56,6 +57,7 @@ public class SchemaController {
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
+                .header("Location", "/api/schemas/" + created.type())
                 .body(SchemaDefinitionResponse.from(created));
     }
 
@@ -106,7 +108,7 @@ public class SchemaController {
         
         return manageSchemaUseCase.getSchema(type)
                 .map(schema -> ResponseEntity.ok(SchemaDefinitionResponse.from(schema)))
-                .orElse(ResponseEntity.notFound().build());
+                .orElseThrow(() -> new SchemaNotFoundException(type));
     }
 
     /**

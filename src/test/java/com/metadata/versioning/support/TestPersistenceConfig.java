@@ -164,6 +164,10 @@ public class TestPersistenceConfig {
             return store.containsKey(type);
         }
 
+        public void clear() {
+            store.clear();
+        }
+
         private SchemaDefinition deepCopy(SchemaDefinition schema) {
             try {
                 JsonNode schemaCopy = objectMapper.readTree(objectMapper.writeValueAsString(schema.schema()));

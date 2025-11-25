@@ -1,6 +1,7 @@
 package com.metadata.versioning.domain.model;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.metadata.versioning.domain.exception.InvalidSchemaException;
 
 import java.time.Instant;
 import java.util.Objects;
@@ -54,10 +55,10 @@ public class SchemaDefinition {
     private JsonNode validateSchema(JsonNode schema) {
         Objects.requireNonNull(schema, "Schema definition cannot be null");
         if (!schema.isObject()) {
-            throw new IllegalArgumentException("Schema must be a JSON object");
+            throw new InvalidSchemaException("Schema must be a JSON object");
         }
         if (!schema.has("type") || !"object".equals(schema.get("type").asText())) {
-            throw new IllegalArgumentException("Schema must define type as 'object'");
+            throw new InvalidSchemaException("Schema must define type: object");
         }
         return schema;
     }

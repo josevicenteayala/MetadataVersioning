@@ -196,32 +196,32 @@ Within each phase, tasks marked `[P]` can execute in parallel:
 
 ### Domain Layer (US4)
 
-- [ ] T055 [P] [US4] Create SchemaDefinition entity in `src/main/java/com/metadata/versioning/domain/model/SchemaDefinition.java`
-- [ ] T056 [P] [US4] Create SchemaValidator for JSON Schema validation in `src/main/java/com/metadata/versioning/domain/validator/SchemaValidator.java`
-- [ ] T057 [P] [US4] Create SchemaViolationException in `src/main/java/com/metadata/versioning/domain/exception/SchemaViolationException.java`
+- [x] T055 [P] [US4] Create SchemaDefinition entity in `src/main/java/com/metadata/versioning/domain/model/SchemaDefinition.java`
+- [x] T056 [P] [US4] Create SchemaValidator for JSON Schema validation in `src/main/java/com/metadata/versioning/domain/validator/SchemaValidator.java`
+- [x] T057 [P] [US4] Create SchemaViolationException in `src/main/java/com/metadata/versioning/domain/exception/SchemaViolationException.java`
 
 ### Application Layer (US4)
 
-- [ ] T058 [US4] Define ManageSchemaUseCase port in `src/main/java/com/metadata/versioning/application/port/in/ManageSchemaUseCase.java`
-- [ ] T059 [US4] Define SchemaDefinitionRepository outbound port in `src/main/java/com/metadata/versioning/application/port/out/SchemaDefinitionRepository.java`
-- [ ] T060 [US4] Implement SchemaManagementService in `src/main/java/com/metadata/versioning/application/service/SchemaManagementService.java`
-- [ ] T061 [US4] Integrate schema validation into VersionManagementService in `src/main/java/com/metadata/versioning/application/service/VersionManagementService.java`
+- [x] T058 [US4] Define ManageSchemaUseCase port in `src/main/java/com/metadata/versioning/application/port/in/ManageSchemaUseCase.java`
+- [x] T059 [US4] Define SchemaDefinitionRepository outbound port in `src/main/java/com/metadata/versioning/application/port/out/SchemaDefinitionRepository.java`
+- [x] T060 [US4] Implement SchemaManagementService in `src/main/java/com/metadata/versioning/application/service/SchemaManagementService.java`
+- [x] T061 [US4] Integrate schema validation into VersionManagementService in `src/main/java/com/metadata/versioning/application/service/VersionManagementService.java`
 
 ### Adapter Layer (US4)
 
-- [ ] T062 [P] [US4] Create Flyway migration V2__create_schema_tables.sql in `src/main/resources/db/migration/`
-- [ ] T063 [P] [US4] Create SchemaDefinitionEntity JPA entity in `src/main/java/com/metadata/versioning/adapter/out/persistence/entity/SchemaDefinitionEntity.java`
-- [ ] T064 [US4] Create JpaSchemaRepository Spring Data interface in `src/main/java/com/metadata/versioning/adapter/out/persistence/repository/JpaSchemaRepository.java`
-- [ ] T065 [US4] Implement SchemaDefinitionPersistenceAdapter in `src/main/java/com/metadata/versioning/adapter/out/persistence/adapter/SchemaDefinitionPersistenceAdapter.java`
-- [ ] T066 [US4] Create SchemaDefinitionRequest DTO using Java Record in `src/main/java/com/metadata/versioning/adapter/in/rest/dto/SchemaDefinitionRequest.java`
-- [ ] T067 [US4] Create SchemaController with POST /schemas and PUT /schemas/{type} endpoints in `src/main/java/com/metadata/versioning/adapter/in/rest/SchemaController.java`
+- [x] T062 [P] [US4] Create Flyway migration V2__create_schema_tables.sql in `src/main/resources/db/migration/`
+- [x] T063 [P] [US4] Create SchemaDefinitionEntity JPA entity in `src/main/java/com/metadata/versioning/adapter/out/persistence/entity/SchemaDefinitionEntity.java`
+- [x] T064 [US4] Create JpaSchemaRepository Spring Data interface in `src/main/java/com/metadata/versioning/adapter/out/persistence/repository/JpaSchemaRepository.java`
+- [x] T065 [US4] Implement SchemaDefinitionPersistenceAdapter in `src/main/java/com/metadata/versioning/adapter/out/persistence/adapter/SchemaDefinitionPersistenceAdapter.java`
+- [x] T066 [US4] Create SchemaDefinitionRequest DTO using Java Record in `src/main/java/com/metadata/versioning/adapter/in/rest/dto/SchemaDefinitionRequest.java`
+- [x] T067 [US4] Create SchemaController with POST /schemas and PUT /schemas/{type} endpoints in `src/main/java/com/metadata/versioning/adapter/in/rest/SchemaController.java`
 
 ### Integration (US4)
 
-- [ ] T068 [US4] Write integration test for schema definition creation in `src/test/java/com/metadata/versioning/adapter/in/rest/SchemaControllerTest.java`
-- [ ] T069 [US4] Write integration test for schema validation on version creation in `src/test/java/com/metadata/versioning/adapter/in/rest/MetadataControllerTest.java`
-- [ ] T070 [US4] Write integration test for schema update with compliance warnings in `src/test/java/com/metadata/versioning/adapter/in/rest/SchemaControllerTest.java`
-- [ ] T071 [US4] Write E2E test for schema management workflow in `src/test/java/com/metadata/versioning/e2e/SchemaManagementE2ETest.java`
+- [x] T068 [US4] Write integration test for schema definition creation in `src/test/java/com/metadata/versioning/adapter/in/rest/SchemaControllerTest.java`
+- [x] T069 [US4] Write integration test for schema validation on version creation in `src/test/java/com/metadata/versioning/adapter/in/rest/MetadataControllerTest.java`
+- [x] T070 [US4] Write integration test for schema update with compliance warnings in `src/test/java/com/metadata/versioning/adapter/in/rest/SchemaControllerTest.java`
+- [x] T071 [US4] Write E2E test for schema management workflow in `src/test/java/com/metadata/versioning/e2e/SchemaManagementE2ETest.java`
 
 ---
 

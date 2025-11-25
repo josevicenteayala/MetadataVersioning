@@ -11,6 +11,7 @@ import com.metadata.versioning.domain.model.MetadataDocument;
 import com.metadata.versioning.domain.model.Version;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -22,6 +23,7 @@ import java.util.stream.Collectors;
  * Translates between domain models and JPA entities.
  */
 @Component
+@Profile("!test")
 public class MetadataDocumentPersistenceAdapter implements MetadataDocumentRepository {
 
     private final JpaMetadataDocumentRepository jpaRepository;

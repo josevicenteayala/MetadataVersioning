@@ -10,7 +10,8 @@ target/
 hs_err_pid*
 
 # Maven
-.mvn/
+.mvn/wrapper/
+!.mvn/jvm.config
 mvnw
 mvnw.cmd
 

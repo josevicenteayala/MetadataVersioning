@@ -22,7 +22,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * Integration tests for MetadataController REST endpoints.
  * Tests US1 functionality: Create and Version Metadata Document
  */
-@SpringBootTest
 @SpringBootTest(properties = {
         "spring.autoconfigure.exclude=org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration," +
                 "org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration," +

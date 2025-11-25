@@ -3,11 +3,13 @@ package com.metadata.versioning.adapter.in.rest;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.metadata.versioning.adapter.in.rest.dto.CreateMetadataRequest;
+import com.metadata.versioning.support.TestPersistenceConfig;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
@@ -19,8 +21,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * Integration tests for VersionController REST endpoints.
  * Tests US2 functionality: Activate and Consume Metadata
  */
-@SpringBootTest
-@AutoConfigureMockMvc
+@SpringBootTest(properties = {
+        "spring.autoconfigure.exclude=org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration," +
+                "org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration," +
+                "org.springframework.boot.autoconfigure.flyway.FlywayAutoConfiguration",
+        "spring.testcontainers.enabled=false"
+})
+@AutoConfigureMockMvc(addFilters = false)
+@Import(TestPersistenceConfig.class)
 @ActiveProfiles("test")
 class VersionControllerTest {
 

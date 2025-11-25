@@ -21,7 +21,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * End-to-end tests for Metadata Versioning Service.
  * Tests complete user workflows across all components.
  */
-@SpringBootTest
 @SpringBootTest(properties = {
         "spring.autoconfigure.exclude=org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration," +
                 "org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration," +
@@ -420,13 +419,13 @@ class MetadataVersioningE2ETest {
         // Step 6: Verify v2 shows as active in version history
         mockMvc.perform(get("/api/v1/metadata/campaign/" + campaignName + "/versions"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.versions", hasSize(3)))
-                .andExpect(jsonPath("$.versions[0].versionNumber").value(1))
-                .andExpect(jsonPath("$.versions[0].isActive").value(false))
-                .andExpect(jsonPath("$.versions[1].versionNumber").value(2))
-                .andExpect(jsonPath("$.versions[1].isActive").value(true))
-                .andExpect(jsonPath("$.versions[2].versionNumber").value(3))
-                .andExpect(jsonPath("$.versions[2].isActive").value(false));
+                .andExpect(jsonPath("$", hasSize(3)))
+                .andExpect(jsonPath("$[0].versionNumber").value(1))
+                .andExpect(jsonPath("$[0].isActive").value(false))
+                .andExpect(jsonPath("$[1].versionNumber").value(2))
+                .andExpect(jsonPath("$[1].isActive").value(true))
+                .andExpect(jsonPath("$[2].versionNumber").value(3))
+                .andExpect(jsonPath("$[2].isActive").value(false));
 
         // Step 7: Switch activation to v3 (VIP campaign)
         mockMvc.perform(post("/api/metadata/campaign/" + campaignName + "/versions/3/activate"))
@@ -443,9 +442,9 @@ class MetadataVersioningE2ETest {
         // Step 9: Verify only one version is active in history
         mockMvc.perform(get("/api/v1/metadata/campaign/" + campaignName + "/versions"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.versions[0].isActive").value(false))
-                .andExpect(jsonPath("$.versions[1].isActive").value(false))
-                .andExpect(jsonPath("$.versions[2].isActive").value(true));
+                .andExpect(jsonPath("$[0].isActive").value(false))
+                .andExpect(jsonPath("$[1].isActive").value(false))
+                .andExpect(jsonPath("$[2].isActive").value(true));
 
         // Step 10: Verify downstream integration - list all campaigns with active version info
         mockMvc.perform(get("/api/v1/metadata")
@@ -457,4 +456,3 @@ class MetadataVersioningE2ETest {
                 .andExpect(jsonPath("$.content[?(@.name == '" + campaignName + "')].versionCount").value(3));
     }
 }
-

@@ -122,7 +122,7 @@ Within each phase, tasks marked `[P]` can execute in parallel:
 ### Domain Layer (US2)
 
 - [x] T032 [P] [US2] Add activate/deactivate methods to Version in `src/main/java/com/metadata/versioning/domain/model/Version.java`
-- [ ] T033 [US2] Add activateVersion method to MetadataDocument with FR-023 enforcement (only published versions) in `src/main/java/com/metadata/versioning/domain/model/MetadataDocument.java` (depends on T072-T074 for PublishingState)
+- [x] T033 [US2] Add activateVersion method to MetadataDocument with FR-023 enforcement (only published versions) in `src/main/java/com/metadata/versioning/domain/model/MetadataDocument.java` (depends on T072-T074 for PublishingState)
 - [x] T034 [P] [US2] Create InvalidActivationException in `src/main/java/com/metadata/versioning/domain/exception/InvalidActivationException.java`
 
 ### Application Layer (US2)
@@ -249,8 +249,8 @@ Within each phase, tasks marked `[P]` can execute in parallel:
 ### Adapter Layer (US5)
 
 - [x] T077 [P] [US5] Add publishing_state column to versions table via migration in `src/main/resources/db/migration/V4__add_publishing_state.sql`
-- [ ] T078 [US5] Add state transition endpoints to VersionController in `src/main/java/com/metadata/versioning/adapter/in/rest/VersionController.java`
-- [ ] T079 [US5] Add state filtering to version list queries in `src/main/java/com/metadata/versioning/adapter/in/rest/MetadataController.java`
+- [x] T078 [US5] Add state transition endpoints to VersionController in `src/main/java/com/metadata/versioning/adapter/in/rest/VersionController.java`
+- [x] T079 [US5] Add state filtering to version list queries in `src/main/java/com/metadata/versioning/adapter/in/rest/MetadataController.java`
 
 ### Integration (US5)
 

@@ -125,28 +125,51 @@ public class MetadataController {
     /**
      * Get all versions for a metadata document (FR-009).
      * Public access - no authentication required (FR-026).
+     * Supports filtering by publishing state (FR-024).
      */
     @GetMapping("/{type}/{name}/versions")
     @Operation(
         summary = "List all versions",
-        description = "Get version history ordered by version number"
+        description = "Get version history ordered by version number. Optionally filter by publishing state."
     )
     @ApiResponse(responseCode = "200", description = "Version list")
     @ApiResponse(responseCode = "404", description = "Document not found")
     public ResponseEntity<List<VersionResponse>> getVersionHistory(
             @PathVariable String type,
-            @PathVariable String name) {
+            @PathVariable String name,
+            @RequestParam(required = false) String state) {
 
         GetVersionHistoryUseCase.VersionHistoryQuery query =
                 new GetVersionHistoryUseCase.VersionHistoryQuery(type, name);
 
         List<Version> versions = getVersionHistoryUseCase.getVersionHistory(query);
 
+        // Apply state filter if provided
+        if (state != null && !state.isBlank()) {
+            String normalizedState = state.toUpperCase();
+            versions = versions.stream()
+                    .filter(v -> matchesPublishingState(v, normalizedState))
+                    .collect(Collectors.toList());
+        }
+
         List<VersionResponse> response = versions.stream()
                 .map(v -> VersionResponse.fromDomain(v, type, name))
                 .collect(Collectors.toList());
 
         return ResponseEntity.ok(response);
+    }
+
+    /**
+     * Check if version matches the requested publishing state filter.
+     */
+    private boolean matchesPublishingState(Version version, String stateFilter) {
+        return switch (stateFilter) {
+            case "DRAFT" -> version.publishingState() instanceof com.metadata.versioning.domain.model.PublishingState.Draft;
+            case "APPROVED" -> version.publishingState() instanceof com.metadata.versioning.domain.model.PublishingState.Approved;
+            case "PUBLISHED" -> version.publishingState() instanceof com.metadata.versioning.domain.model.PublishingState.Published;
+            case "ARCHIVED" -> version.publishingState() instanceof com.metadata.versioning.domain.model.PublishingState.Archived;
+            default -> true; // Unknown state filter - return all
+        };
     }
 
     /**

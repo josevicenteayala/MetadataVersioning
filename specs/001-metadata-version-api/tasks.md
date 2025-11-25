@@ -102,10 +102,10 @@ Within each phase, tasks marked `[P]` can execute in parallel:
 
 ### Integration (US1)
 
-- [ ] T028 [US1] Write integration test for create metadata document in `src/test/java/com/metadata/versioning/adapter/in/rest/MetadataControllerTest.java`
-- [ ] T029 [US1] Write integration test for create new version in `src/test/java/com/metadata/versioning/adapter/in/rest/MetadataControllerTest.java`
-- [ ] T030 [US1] Write integration test for version history retrieval in `src/test/java/com/metadata/versioning/adapter/in/rest/MetadataControllerTest.java`
-- [ ] T031 [US1] Write E2E test for complete create-update-history workflow in `src/test/java/com/metadata/versioning/e2e/MetadataVersioningE2ETest.java`
+- [x] T028 [US1] Write integration test for create metadata document in `src/test/java/com/metadata/versioning/adapter/in/rest/MetadataControllerTest.java`
+- [x] T029 [US1] Write integration test for create new version in `src/test/java/com/metadata/versioning/adapter/in/rest/MetadataControllerTest.java`
+- [x] T030 [US1] Write integration test for version history retrieval in `src/test/java/com/metadata/versioning/adapter/in/rest/MetadataControllerTest.java`
+- [x] T031 [US1] Write E2E test for complete create-update-history workflow in `src/test/java/com/metadata/versioning/e2e/MetadataVersioningE2ETest.java`
 
 ---
 

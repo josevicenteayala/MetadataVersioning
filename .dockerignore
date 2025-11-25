@@ -1,0 +1,55 @@
+# Build artifacts
+target/
+build/
+
+# Git
+.git/
+.gitignore
+
+# IDE
+.idea/
+.vscode/
+.settings/
+*.iml
+*.iws
+*.ipr
+.classpath
+.project
+
+# Documentation
+*.md
+docs/
+specs/
+.specify/
+.github/
+
+# Test
+src/test/
+coverage/
+test-results/
+
+# Dependencies
+.mvn/
+mvnw
+mvnw.cmd
+
+# Environment
+.env
+.env.*
+*.local
+
+# Logs
+*.log
+logs/
+
+# OS
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+
+# Docker
+docker-compose.yml
+Dockerfile*
+.dockerignore

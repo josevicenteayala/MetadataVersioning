@@ -455,4 +455,135 @@ class MetadataVersioningE2ETest {
                 .andExpect(jsonPath("$.content[?(@.name == '" + campaignName + "')].hasActiveVersion").value(true))
                 .andExpect(jsonPath("$.content[?(@.name == '" + campaignName + "')].versionCount").value(3));
     }
+
+    /**
+     * T054: Complete version comparison workflow (US3)
+     * 
+     * Business Scenario: A product manager needs to review changes between versions
+     * before activating a new configuration, ensuring no breaking changes are introduced.
+     * 
+     * Tests US3 complete workflow:
+     * 1. Create metadata with multiple versions
+     * 2. Compare versions with additive changes
+     * 3. Compare versions with breaking changes
+     * 4. Use comparison results to make activation decision
+     */
+    @Test
+    void testCompleteVersionComparisonWorkflow() throws Exception {
+        // Step 1: Create pricing configuration v1
+        String v1Content = """
+                {
+                    "basePrice": 99.99,
+                    "currency": "USD",
+                    "taxRate": 0.08,
+                    "discounts": {
+                        "member": 10,
+                        "seasonal": 5
+                    }
+                }
+                """;
+
+        CreateMetadataRequest createRequest = new CreateMetadataRequest(
+                "pricing-config",
+                "standard-plan",
+                objectMapper.readTree(v1Content)
+        );
+
+        mockMvc.perform(post("/api/v1/metadata")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(createRequest)))
+                .andExpect(status().isCreated());
+
+        // Step 2: Create v2 with additive changes (new field, value increase)
+        String v2Content = """
+                {
+                    "basePrice": 109.99,
+                    "currency": "USD",
+                    "taxRate": 0.08,
+                    "discounts": {
+                        "member": 10,
+                        "seasonal": 5,
+                        "earlyBird": 15
+                    },
+                    "features": ["basic", "standard"]
+                }
+                """;
+
+        CreateVersionRequest v2Request = new CreateVersionRequest(
+                objectMapper.readTree(v2Content),
+                "Added early bird discount and feature tracking"
+        );
+
+        mockMvc.perform(post("/api/v1/metadata/pricing-config/standard-plan/versions")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(v2Request)))
+                .andExpect(status().isCreated());
+
+        // Step 3: Compare v1 to v2 (additive changes - safe to activate)
+        mockMvc.perform(get("/api/metadata/pricing-config/standard-plan/versions/compare")
+                        .param("from", "1")
+                        .param("to", "2"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.fromVersion").value(1))
+                .andExpect(jsonPath("$.toVersion").value(2))
+                .andExpect(jsonPath("$.hasChanges").value(true))
+                .andExpect(jsonPath("$.hasBreakingChanges").value(false))
+                .andExpect(jsonPath("$.summary.added").value(greaterThan(0)))
+                .andExpect(jsonPath("$.summary.modified").value(greaterThan(0)))
+                .andExpect(jsonPath("$.changes[?(@.type == 'ADDED')]").exists())
+                .andExpect(jsonPath("$.changes[?(@.path =~ /.*earlyBird.*/)]").exists());
+
+        // Step 4: Create v3 with breaking changes (remove field)
+        String v3Content = """
+                {
+                    "basePrice": 109.99,
+                    "currency": "USD",
+                    "taxRate": 0.08,
+                    "discounts": {
+                        "member": 10,
+                        "earlyBird": 15
+                    },
+                    "features": ["basic", "standard"]
+                }
+                """;
+
+        CreateVersionRequest v3Request = new CreateVersionRequest(
+                objectMapper.readTree(v3Content),
+                "Removed seasonal discount"
+        );
+
+        mockMvc.perform(post("/api/v1/metadata/pricing-config/standard-plan/versions")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(v3Request)))
+                .andExpect(status().isCreated());
+
+        // Step 5: Compare v2 to v3 (breaking changes - removal detected)
+        mockMvc.perform(get("/api/metadata/pricing-config/standard-plan/versions/compare")
+                        .param("from", "2")
+                        .param("to", "3"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.hasChanges").value(true))
+                .andExpect(jsonPath("$.hasBreakingChanges").value(true))
+                .andExpect(jsonPath("$.summary.removed").value(greaterThan(0)))
+                .andExpect(jsonPath("$.changes[?(@.type == 'REMOVED')]").exists())
+                .andExpect(jsonPath("$.changes[?(@.path =~ /.*seasonal.*/)]").exists());
+
+        // Step 6: Based on comparison, activate v2 (safe changes)
+        mockMvc.perform(post("/api/metadata/pricing-config/standard-plan/versions/2/activate"))
+                .andExpect(status().isNoContent());
+
+        // Step 7: Verify v2 is active
+        mockMvc.perform(get("/api/v1/metadata/pricing-config/standard-plan/active"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.versionNumber").value(2))
+                .andExpect(jsonPath("$.isActive").value(true));
+
+        // Step 8: Compare identical versions (no changes)
+        mockMvc.perform(get("/api/metadata/pricing-config/standard-plan/versions/compare")
+                        .param("from", "2")
+                        .param("to", "2"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.hasChanges").value(false))
+                .andExpect(jsonPath("$.changeCount").value(0));
+    }
 }

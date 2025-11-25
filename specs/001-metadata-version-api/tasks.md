@@ -162,25 +162,25 @@ Within each phase, tasks marked `[P]` can execute in parallel:
 
 ### Domain Layer (US3)
 
-- [ ] T045 [P] [US3] Create VersionComparison value object in `src/main/java/com/metadata/versioning/domain/model/VersionComparison.java`
-- [ ] T046 [P] [US3] Create ChangeType sealed class hierarchy in `src/main/java/com/metadata/versioning/domain/model/ChangeType.java`
-- [ ] T047 [P] [US3] Create DiffEngine for JSON comparison in `src/main/java/com/metadata/versioning/domain/service/DiffEngine.java`
+- [x] T045 [P] [US3] Create VersionComparison value object in `src/main/java/com/metadata/versioning/domain/model/VersionComparison.java`
+- [x] T046 [P] [US3] Create ChangeType sealed class hierarchy in `src/main/java/com/metadata/versioning/domain/model/ChangeType.java`
+- [x] T047 [P] [US3] Create DiffEngine for JSON comparison in `src/main/java/com/metadata/versioning/domain/service/DiffEngine.java`
 
 ### Application Layer (US3)
 
-- [ ] T048 [US3] Define CompareVersionsUseCase port in `src/main/java/com/metadata/versioning/application/port/in/CompareVersionsUseCase.java`
-- [ ] T049 [US3] Implement VersionComparisonService using JSON Patch in `src/main/java/com/metadata/versioning/application/service/VersionComparisonService.java`
+- [x] T048 [US3] Define CompareVersionsUseCase port in `src/main/java/com/metadata/versioning/application/port/in/CompareVersionsUseCase.java`
+- [x] T049 [US3] Implement VersionComparisonService using JSON Patch in `src/main/java/com/metadata/versioning/application/service/VersionComparisonService.java`
 
 ### Adapter Layer (US3)
 
-- [ ] T050 [P] [US3] Create ComparisonResponse DTO using Java Record in `src/main/java/com/metadata/versioning/adapter/in/rest/dto/ComparisonResponse.java`
-- [ ] T051 [US3] Add GET /metadata/{type}/{name}/compare endpoint to VersionController in `src/main/java/com/metadata/versioning/adapter/in/rest/VersionController.java`
+- [x] T050 [P] [US3] Create ComparisonResponse DTO using Java Record in `src/main/java/com/metadata/versioning/adapter/in/rest/dto/ComparisonResponse.java`
+- [x] T051 [US3] Add GET /metadata/{type}/{name}/compare endpoint to VersionController in `src/main/java/com/metadata/versioning/adapter/in/rest/VersionController.java`
 
 ### Integration (US3)
 
-- [ ] T052 [US3] Write integration test for version comparison with field changes in `src/test/java/com/metadata/versioning/adapter/in/rest/VersionControllerTest.java`
-- [ ] T053 [US3] Write integration test for identifying breaking vs additive changes in `src/test/java/com/metadata/versioning/adapter/in/rest/VersionControllerTest.java`
-- [ ] T054 [US3] Write E2E test for comparison workflow in `src/test/java/com/metadata/versioning/e2e/MetadataVersioningE2ETest.java`
+- [x] T052 [US3] Write integration test for version comparison with field changes in `src/test/java/com/metadata/versioning/adapter/in/rest/VersionControllerTest.java`
+- [x] T053 [US3] Write integration test for identifying breaking vs additive changes in `src/test/java/com/metadata/versioning/adapter/in/rest/VersionControllerTest.java`
+- [x] T054 [US3] Write E2E test for comparison workflow in `src/test/java/com/metadata/versioning/e2e/MetadataVersioningE2ETest.java`
 
 ---
 

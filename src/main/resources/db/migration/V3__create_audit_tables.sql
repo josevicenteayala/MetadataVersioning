@@ -12,14 +12,13 @@ CREATE TABLE IF NOT EXISTS audit_entries (
     changes JSONB,
     correlation_id VARCHAR(100),
     ip_address VARCHAR(45),
-    user_agent TEXT,
-    
-    -- Indexes for common queries
-    INDEX idx_audit_entity (entity_type, entity_id),
-    INDEX idx_audit_timestamp (timestamp DESC),
-    INDEX idx_audit_user (user_id, timestamp DESC),
-    INDEX idx_audit_correlation (correlation_id)
+    user_agent TEXT
 );
+
+CREATE INDEX IF NOT EXISTS idx_audit_entity ON audit_entries (entity_type, entity_id);
+CREATE INDEX IF NOT EXISTS idx_audit_timestamp ON audit_entries (timestamp DESC);
+CREATE INDEX IF NOT EXISTS idx_audit_user ON audit_entries (user_id, timestamp DESC);
+CREATE INDEX IF NOT EXISTS idx_audit_correlation ON audit_entries (correlation_id);
 
 -- Add comments for documentation
 COMMENT ON TABLE audit_entries IS 'Audit trail for all mutations to metadata documents and versions';

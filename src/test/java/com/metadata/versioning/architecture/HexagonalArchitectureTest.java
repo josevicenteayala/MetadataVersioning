@@ -1,5 +1,7 @@
 package com.metadata.versioning.architecture;
 
+import com.tngtech.archunit.base.DescribedPredicate;
+import com.tngtech.archunit.core.domain.JavaClass;
 import com.tngtech.archunit.core.domain.JavaClasses;
 import com.tngtech.archunit.core.importer.ClassFileImporter;
 import com.tngtech.archunit.core.importer.ImportOption;
@@ -55,19 +57,22 @@ class HexagonalArchitectureTest {
 
     @Test
     void adaptersShouldOnlyAccessApplicationLayerThroughPorts() {
+        DescribedPredicate<JavaClass> allowedDependencies = DescribedPredicate.describe(
+                "depend only on domain, application ports, adapter or framework packages",
+                javaClass -> javaClass.getPackageName().contains("domain")
+                        || javaClass.getPackageName().contains("application.port")
+                        || javaClass.getPackageName().contains("adapter")
+                        || javaClass.getPackageName().startsWith("java")
+                        || javaClass.getPackageName().startsWith("org.springframework")
+                        || javaClass.getPackageName().startsWith("jakarta")
+                        || javaClass.getPackageName().startsWith("com.fasterxml")
+                        || javaClass.getPackageName().startsWith("io.swagger")
+        );
+
         ArchRule rule = classes()
                 .that().resideInAPackage("..adapter..")
                 .and().areNotAnnotatedWith(org.springframework.context.annotation.Configuration.class)
-                .should().onlyAccessClassesThat(
-                        javaClass -> javaClass.getPackageName().contains("domain")
-                                || javaClass.getPackageName().contains("application.port")
-                                || javaClass.getPackageName().contains("adapter")
-                                || javaClass.getPackageName().startsWith("java")
-                                || javaClass.getPackageName().startsWith("org.springframework")
-                                || javaClass.getPackageName().startsWith("jakarta")
-                                || javaClass.getPackageName().startsWith("com.fasterxml")
-                                || javaClass.getPackageName().startsWith("io.swagger")
-                );
+                .should().onlyAccessClassesThat(allowedDependencies);
 
         rule.check(importedClasses);
     }
@@ -116,18 +121,21 @@ class HexagonalArchitectureTest {
 
     @Test
     void controllersShouldOnlyCallUseCases() {
+        DescribedPredicate<JavaClass> allowedControllerAccess = DescribedPredicate.describe(
+                "depend only on use cases, controller layer or domain API",
+                javaClass -> javaClass.getPackageName().contains("application.port.in")
+                        || javaClass.getPackageName().contains("adapter.in.rest")
+                        || javaClass.getPackageName().contains("domain.model")
+                        || javaClass.getPackageName().contains("domain.exception")
+                        || javaClass.getPackageName().startsWith("java")
+                        || javaClass.getPackageName().startsWith("org.springframework")
+                        || javaClass.getPackageName().startsWith("io.swagger")
+        );
+
         ArchRule rule = classes()
                 .that().resideInAPackage("..adapter.in.rest..")
                 .and().haveSimpleNameEndingWith("Controller")
-                .should().onlyAccessClassesThat(
-                        javaClass -> javaClass.getPackageName().contains("application.port.in")
-                                || javaClass.getPackageName().contains("adapter.in.rest")
-                                || javaClass.getPackageName().contains("domain.model")
-                                || javaClass.getPackageName().contains("domain.exception")
-                                || javaClass.getPackageName().startsWith("java")
-                                || javaClass.getPackageName().startsWith("org.springframework")
-                                || javaClass.getPackageName().startsWith("io.swagger")
-                );
+                .should().onlyAccessClassesThat(allowedControllerAccess);
 
         rule.check(importedClasses);
     }

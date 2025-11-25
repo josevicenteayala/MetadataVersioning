@@ -8,16 +8,7 @@ CREATE INDEX IF NOT EXISTS idx_versions_content_gin
 
 -- GIN index for JSONB schema searches in schema_definitions table
 CREATE INDEX IF NOT EXISTS idx_schema_definitions_schema_gin 
-    ON schema_definitions USING GIN (schema_content);
-
--- Composite index for active version queries (most common query pattern)
-CREATE INDEX IF NOT EXISTS idx_metadata_documents_active_lookup 
-    ON metadata_documents (type, name) 
-    WHERE EXISTS (
-        SELECT 1 FROM versions v 
-        WHERE v.metadata_document_id = metadata_documents.id 
-        AND v.is_active = true
-    );
+    ON schema_definitions USING GIN (schema_json);
 
 -- Index for version queries by publishing state
 CREATE INDEX IF NOT EXISTS idx_versions_publishing_state 
@@ -25,12 +16,12 @@ CREATE INDEX IF NOT EXISTS idx_versions_publishing_state
 
 -- Partial index for active versions only (optimizes active version queries)
 CREATE INDEX IF NOT EXISTS idx_versions_active_only 
-    ON versions (metadata_document_id) 
+    ON versions (document_id) 
     WHERE is_active = true;
 
 -- Composite index for version history queries
 CREATE INDEX IF NOT EXISTS idx_versions_history 
-    ON versions (metadata_document_id, version_number DESC);
+    ON versions (document_id, version_number DESC);
 
 -- Add statistics collection for query planner optimization
 ANALYZE metadata_documents;

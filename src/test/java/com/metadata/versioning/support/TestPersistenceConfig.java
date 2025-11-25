@@ -3,7 +3,9 @@ package com.metadata.versioning.support;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.metadata.versioning.application.port.out.MetadataDocumentRepository;
+import com.metadata.versioning.application.port.out.SchemaDefinitionRepository;
 import com.metadata.versioning.domain.model.MetadataDocument;
+import com.metadata.versioning.domain.model.SchemaDefinition;
 import com.metadata.versioning.domain.model.Version;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
@@ -28,6 +30,12 @@ public class TestPersistenceConfig {
     @Primary
     public MetadataDocumentRepository inMemoryMetadataDocumentRepository(ObjectMapper objectMapper) {
         return new InMemoryMetadataDocumentRepository(objectMapper);
+    }
+
+    @Bean
+    @Primary
+    public SchemaDefinitionRepository inMemorySchemaDefinitionRepository(ObjectMapper objectMapper) {
+        return new InMemorySchemaDefinitionRepository(objectMapper);
     }
 
     private static class InMemoryMetadataDocumentRepository implements MetadataDocumentRepository {
@@ -116,6 +124,58 @@ public class TestPersistenceConfig {
             List<MetadataDocument> content = start >= documents.size() ? List.of() :
                     documents.subList(start, end).stream().map(this::deepCopy).toList();
             return new PageImpl<>(content, pageable, documents.size());
+        }
+    }
+
+    private static class InMemorySchemaDefinitionRepository implements SchemaDefinitionRepository {
+        private final Map<String, SchemaDefinition> store = new ConcurrentHashMap<>();
+        private final ObjectMapper objectMapper;
+
+        InMemorySchemaDefinitionRepository(ObjectMapper objectMapper) {
+            this.objectMapper = objectMapper;
+        }
+
+        @Override
+        public SchemaDefinition save(SchemaDefinition schema) {
+            store.put(schema.type(), deepCopy(schema));
+            return deepCopy(schema);
+        }
+
+        @Override
+        public java.util.Optional<SchemaDefinition> findByType(String type) {
+            return java.util.Optional.ofNullable(store.get(type))
+                    .map(this::deepCopy);
+        }
+
+        @Override
+        public List<SchemaDefinition> findAll() {
+            return store.values().stream()
+                    .map(this::deepCopy)
+                    .toList();
+        }
+
+        @Override
+        public void deleteByType(String type) {
+            store.remove(type);
+        }
+
+        @Override
+        public boolean existsByType(String type) {
+            return store.containsKey(type);
+        }
+
+        private SchemaDefinition deepCopy(SchemaDefinition schema) {
+            try {
+                JsonNode schemaCopy = objectMapper.readTree(objectMapper.writeValueAsString(schema.schema()));
+                return new SchemaDefinition(
+                        schema.type(),
+                        schemaCopy,
+                        schema.description(),
+                        schema.strictMode()
+                );
+            } catch (Exception e) {
+                throw new IllegalStateException("Failed to copy schema", e);
+            }
         }
     }
 }

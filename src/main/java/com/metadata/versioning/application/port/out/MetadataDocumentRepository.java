@@ -1,6 +1,8 @@
 package com.metadata.versioning.application.port.out;
 
 import com.metadata.versioning.domain.model.MetadataDocument;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.Optional;
 
@@ -44,4 +46,21 @@ public interface MetadataDocumentRepository {
      * @return The updated document
      */
     MetadataDocument update(MetadataDocument document);
+
+    /**
+     * Find all metadata documents with pagination (FR-015).
+     * 
+     * @param pageable Pagination parameters
+     * @return Page of documents
+     */
+    Page<MetadataDocument> findAll(Pageable pageable);
+
+    /**
+     * Find all metadata documents of a specific type with pagination.
+     * 
+     * @param type Document type filter
+     * @param pageable Pagination parameters
+     * @return Page of documents
+     */
+    Page<MetadataDocument> findAllByType(String type, Pageable pageable);
 }

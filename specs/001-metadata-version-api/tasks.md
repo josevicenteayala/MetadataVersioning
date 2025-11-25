@@ -102,10 +102,10 @@ Within each phase, tasks marked `[P]` can execute in parallel:
 
 ### Integration (US1)
 
-- [ ] T028 [US1] Write integration test for create metadata document in `src/test/java/com/metadata/versioning/adapter/in/rest/MetadataControllerTest.java`
-- [ ] T029 [US1] Write integration test for create new version in `src/test/java/com/metadata/versioning/adapter/in/rest/MetadataControllerTest.java`
-- [ ] T030 [US1] Write integration test for version history retrieval in `src/test/java/com/metadata/versioning/adapter/in/rest/MetadataControllerTest.java`
-- [ ] T031 [US1] Write E2E test for complete create-update-history workflow in `src/test/java/com/metadata/versioning/e2e/MetadataVersioningE2ETest.java`
+- [x] T028 [US1] Write integration test for create metadata document in `src/test/java/com/metadata/versioning/adapter/in/rest/MetadataControllerTest.java`
+- [x] T029 [US1] Write integration test for create new version in `src/test/java/com/metadata/versioning/adapter/in/rest/MetadataControllerTest.java`
+- [x] T030 [US1] Write integration test for version history retrieval in `src/test/java/com/metadata/versioning/adapter/in/rest/MetadataControllerTest.java`
+- [x] T031 [US1] Write E2E test for complete create-update-history workflow in `src/test/java/com/metadata/versioning/e2e/MetadataVersioningE2ETest.java`
 
 ---
 
@@ -121,24 +121,24 @@ Within each phase, tasks marked `[P]` can execute in parallel:
 
 ### Domain Layer (US2)
 
-- [ ] T032 [P] [US2] Add activate/deactivate methods to Version in `src/main/java/com/metadata/versioning/domain/model/Version.java`
+- [x] T032 [P] [US2] Add activate/deactivate methods to Version in `src/main/java/com/metadata/versioning/domain/model/Version.java`
 - [ ] T033 [US2] Add activateVersion method to MetadataDocument with FR-023 enforcement (only published versions) in `src/main/java/com/metadata/versioning/domain/model/MetadataDocument.java` (depends on T072-T074 for PublishingState)
-- [ ] T034 [P] [US2] Create InvalidActivationException in `src/main/java/com/metadata/versioning/domain/exception/InvalidActivationException.java`
+- [x] T034 [P] [US2] Create InvalidActivationException in `src/main/java/com/metadata/versioning/domain/exception/InvalidActivationException.java`
 
 ### Application Layer (US2)
 
-- [ ] T035 [US2] Define ActivateVersionUseCase port in `src/main/java/com/metadata/versioning/application/port/in/ActivateVersionUseCase.java`
-- [ ] T036 [US2] Define GetActiveVersionUseCase port in `src/main/java/com/metadata/versioning/application/port/in/GetActiveVersionUseCase.java`
-- [ ] T037 [US2] Implement activation logic in VersionManagementService in `src/main/java/com/metadata/versioning/application/service/VersionManagementService.java`
-- [ ] T038 [US2] Implement MetadataQueryService for active version retrieval in `src/main/java/com/metadata/versioning/application/service/MetadataQueryService.java`
-- [ ] T038a [US2] Implement ListMetadataDocumentsUseCase in MetadataQueryService (FR-015) in `src/main/java/com/metadata/versioning/application/service/MetadataQueryService.java`
+- [x] T035 [US2] Define ActivateVersionUseCase port in `src/main/java/com/metadata/versioning/application/port/in/ActivateVersionUseCase.java`
+- [x] T036 [US2] Define GetActiveVersionUseCase port in `src/main/java/com/metadata/versioning/application/port/in/GetActiveVersionUseCase.java`
+- [x] T037 [US2] Implement activation logic in VersionManagementService in `src/main/java/com/metadata/versioning/application/service/VersionManagementService.java`
+- [x] T038 [US2] Implement MetadataQueryService for active version retrieval in `src/main/java/com/metadata/versioning/application/service/MetadataQueryService.java`
+- [x] T038a [US2] Implement ListMetadataDocumentsUseCase in MetadataQueryService (FR-015) in `src/main/java/com/metadata/versioning/application/service/MetadataQueryService.java`
 
 ### Adapter Layer (US2)
 
-- [ ] T039 [P] [US2] Add activation query methods to JpaMetadataDocumentRepository in `src/main/java/com/metadata/versioning/adapter/out/persistence/repository/JpaMetadataDocumentRepository.java`
-- [ ] T040 [US2] Create VersionController with activation endpoints in `src/main/java/com/metadata/versioning/adapter/in/rest/VersionController.java`
-- [ ] T041 [US2] Add GET /metadata/{type}/{name}/active endpoint to MetadataController in `src/main/java/com/metadata/versioning/adapter/in/rest/MetadataController.java`
-- [ ] T041a [US2] Add GET /metadata endpoint to list all documents with pagination (FR-015) in `src/main/java/com/metadata/versioning/adapter/in/rest/MetadataController.java`
+- [x] T039 [P] [US2] Add activation query methods to JpaMetadataDocumentRepository in `src/main/java/com/metadata/versioning/adapter/out/persistence/repository/JpaMetadataDocumentRepository.java`
+- [x] T040 [US2] Create VersionController with activation endpoints in `src/main/java/com/metadata/versioning/adapter/in/rest/VersionController.java`
+- [x] T041 [US2] Add GET /metadata/{type}/{name}/active endpoint to MetadataController in `src/main/java/com/metadata/versioning/adapter/in/rest/MetadataController.java`
+- [x] T041a [US2] Add GET /metadata endpoint to list all documents with pagination (FR-015) in `src/main/java/com/metadata/versioning/adapter/in/rest/MetadataController.java`
 
 ### Integration (US2)
 

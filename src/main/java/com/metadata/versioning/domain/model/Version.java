@@ -100,4 +100,20 @@ public record Version(
     public boolean isFirstVersion() {
         return versionNumber == 1;
     }
+
+    /**
+     * Activate this version for consumption.
+     * Returns a new version instance with isActive=true.
+     */
+    public Version activate() {
+        return withActiveStatus(true);
+    }
+
+    /**
+     * Deactivate this version.
+     * Returns a new version instance with isActive=false.
+     */
+    public Version deactivate() {
+        return withActiveStatus(false);
+    }
 }

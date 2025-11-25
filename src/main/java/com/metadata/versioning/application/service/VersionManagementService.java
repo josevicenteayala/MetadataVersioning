@@ -1,5 +1,6 @@
 package com.metadata.versioning.application.service;
 
+import com.metadata.versioning.application.port.in.ActivateVersionUseCase;
 import com.metadata.versioning.application.port.in.CreateVersionUseCase;
 import com.metadata.versioning.application.port.in.GetVersionHistoryUseCase;
 import com.metadata.versioning.application.port.out.MetadataDocumentRepository;
@@ -19,7 +20,7 @@ import java.util.List;
  */
 @Service
 @Transactional
-public class VersionManagementService implements CreateVersionUseCase, GetVersionHistoryUseCase {
+public class VersionManagementService implements CreateVersionUseCase, GetVersionHistoryUseCase, ActivateVersionUseCase {
 
     private final MetadataDocumentRepository repository;
 
@@ -105,5 +106,19 @@ public class VersionManagementService implements CreateVersionUseCase, GetVersio
         return document.getVersion(query.versionNumber())
                 .orElseThrow(() -> new VersionNotFoundException(
                         query.type(), query.name(), query.versionNumber()));
+    }
+
+    @Override
+    public void activateVersion(String type, String name, Integer versionNumber) {
+        // Find document
+        MetadataDocument document = repository.findByTypeAndName(type, name)
+                .orElseThrow(() -> new VersionNotFoundException(type, name));
+
+        // Activate the version (FR-006)
+        // This deactivates any currently active version and activates the specified one
+        document.activateVersion(versionNumber);
+
+        // Persist the changes
+        repository.update(document);
     }
 }

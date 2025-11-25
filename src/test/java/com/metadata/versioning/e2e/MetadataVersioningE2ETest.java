@@ -8,12 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.DynamicPropertyRegistry;
-import org.springframework.test.context.DynamicPropertySource;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
-import org.testcontainers.containers.PostgreSQLContainer;
-import org.testcontainers.junit.jupiter.Container;
-import org.testcontainers.junit.jupiter.Testcontainers;
 
 import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -25,21 +21,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  */
 @SpringBootTest
 @AutoConfigureMockMvc
-@Testcontainers
+@ActiveProfiles("test")
 class MetadataVersioningE2ETest {
-
-    @Container
-    static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:17-alpine")
-            .withDatabaseName("metadata_e2e_test")
-            .withUsername("test")
-            .withPassword("test");
-
-    @DynamicPropertySource
-    static void configureProperties(DynamicPropertyRegistry registry) {
-        registry.add("spring.datasource.url", postgres::getJdbcUrl);
-        registry.add("spring.datasource.username", postgres::getUsername);
-        registry.add("spring.datasource.password", postgres::getPassword);
-    }
 
     @Autowired
     private MockMvc mockMvc;
@@ -319,4 +302,150 @@ class MetadataVersioningE2ETest {
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.message").value(containsString("size")));
     }
+
+    /**
+     * T044: Complete activation workflow
+     * 
+     * Business Scenario: A configuration manager creates multiple versions of a campaign,
+     * activates one for production use, then switches to a different version based on
+     * business needs. Downstream systems consume the active version.
+     * 
+     * Tests US2 complete workflow:
+     * 1. Create metadata document with initial version
+     * 2. Create additional versions
+     * 3. Activate a specific version
+     * 4. Verify active version is retrievable
+     * 5. Switch activation to different version
+     * 6. Verify only one version is active at a time
+     */
+    @Test
+    void testActivationWorkflow() throws Exception {
+        // Step 1: Create initial campaign metadata
+        String timestamp = String.valueOf(System.currentTimeMillis());
+        String campaignName = "summer-sale-" + timestamp;
+        
+        String initialCampaign = """
+                {
+                    "campaignId": "SUMMER2024",
+                    "title": "Summer Sale 2024",
+                    "discountPercent": 15,
+                    "startDate": "2024-06-01",
+                    "endDate": "2024-08-31",
+                    "targetAudience": "all-customers"
+                }
+                """;
+
+        CreateMetadataRequest createRequest = new CreateMetadataRequest(
+                "campaign",
+                campaignName,
+                objectMapper.readTree(initialCampaign)
+        );
+
+        mockMvc.perform(post("/api/v1/metadata")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(createRequest)))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.versionNumber").value(1))
+                .andExpect(jsonPath("$.isActive").value(false)); // Not active by default
+
+        // Step 2: Create v2 with increased discount
+        String improvedCampaign = """
+                {
+                    "campaignId": "SUMMER2024",
+                    "title": "Summer Sale 2024 - Extended",
+                    "discountPercent": 20,
+                    "startDate": "2024-06-01",
+                    "endDate": "2024-08-31",
+                    "targetAudience": "all-customers"
+                }
+                """;
+
+        CreateVersionRequest version2Request = new CreateVersionRequest(
+                objectMapper.readTree(improvedCampaign),
+                "Increased discount to 20%"
+        );
+
+        mockMvc.perform(post("/api/v1/metadata/campaign/" + campaignName + "/versions")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(version2Request)))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.versionNumber").value(2))
+                .andExpect(jsonPath("$.isActive").value(false));
+
+        // Step 3: Create v3 with targeted audience
+        String targetedCampaign = """
+                {
+                    "campaignId": "SUMMER2024",
+                    "title": "Summer Sale 2024 - VIP",
+                    "discountPercent": 25,
+                    "startDate": "2024-06-01",
+                    "endDate": "2024-08-31",
+                    "targetAudience": "vip-customers"
+                }
+                """;
+
+        CreateVersionRequest version3Request = new CreateVersionRequest(
+                objectMapper.readTree(targetedCampaign),
+                "VIP-targeted campaign"
+        );
+
+        mockMvc.perform(post("/api/v1/metadata/campaign/" + campaignName + "/versions")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(version3Request)))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.versionNumber").value(3))
+                .andExpect(jsonPath("$.isActive").value(false));
+
+        // Step 4: Activate version 2 for production use
+        mockMvc.perform(post("/api/metadata/campaign/" + campaignName + "/versions/2/activate"))
+                .andExpect(status().isNoContent());
+
+        // Step 5: Verify v2 is now active via active endpoint
+        mockMvc.perform(get("/api/v1/metadata/campaign/" + campaignName + "/active"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.versionNumber").value(2))
+                .andExpect(jsonPath("$.isActive").value(true))
+                .andExpect(jsonPath("$.content.discountPercent").value(20))
+                .andExpect(jsonPath("$.content.title").value("Summer Sale 2024 - Extended"));
+
+        // Step 6: Verify v2 shows as active in version history
+        mockMvc.perform(get("/api/v1/metadata/campaign/" + campaignName + "/versions"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.versions", hasSize(3)))
+                .andExpect(jsonPath("$.versions[0].versionNumber").value(1))
+                .andExpect(jsonPath("$.versions[0].isActive").value(false))
+                .andExpect(jsonPath("$.versions[1].versionNumber").value(2))
+                .andExpect(jsonPath("$.versions[1].isActive").value(true))
+                .andExpect(jsonPath("$.versions[2].versionNumber").value(3))
+                .andExpect(jsonPath("$.versions[2].isActive").value(false));
+
+        // Step 7: Switch activation to v3 (VIP campaign)
+        mockMvc.perform(post("/api/metadata/campaign/" + campaignName + "/versions/3/activate"))
+                .andExpect(status().isNoContent());
+
+        // Step 8: Verify v3 is now active and v2 is no longer active
+        mockMvc.perform(get("/api/v1/metadata/campaign/" + campaignName + "/active"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.versionNumber").value(3))
+                .andExpect(jsonPath("$.isActive").value(true))
+                .andExpect(jsonPath("$.content.discountPercent").value(25))
+                .andExpect(jsonPath("$.content.targetAudience").value("vip-customers"));
+
+        // Step 9: Verify only one version is active in history
+        mockMvc.perform(get("/api/v1/metadata/campaign/" + campaignName + "/versions"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.versions[0].isActive").value(false))
+                .andExpect(jsonPath("$.versions[1].isActive").value(false))
+                .andExpect(jsonPath("$.versions[2].isActive").value(true));
+
+        // Step 10: Verify downstream integration - list all campaigns with active version info
+        mockMvc.perform(get("/api/v1/metadata")
+                        .param("type", "campaign")
+                        .param("page", "0")
+                        .param("size", "10"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.content[?(@.name == '" + campaignName + "')].hasActiveVersion").value(true))
+                .andExpect(jsonPath("$.content[?(@.name == '" + campaignName + "')].versionCount").value(3));
+    }
 }
+

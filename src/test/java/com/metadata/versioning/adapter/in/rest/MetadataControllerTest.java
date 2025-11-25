@@ -9,12 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.DynamicPropertyRegistry;
-import org.springframework.test.context.DynamicPropertySource;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
-import org.testcontainers.containers.PostgreSQLContainer;
-import org.testcontainers.junit.jupiter.Container;
-import org.testcontainers.junit.jupiter.Testcontainers;
 
 import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -26,21 +22,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  */
 @SpringBootTest
 @AutoConfigureMockMvc
-@Testcontainers
+@ActiveProfiles("test")
 class MetadataControllerTest {
-
-    @Container
-    static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:17-alpine")
-            .withDatabaseName("metadata_test")
-            .withUsername("test")
-            .withPassword("test");
-
-    @DynamicPropertySource
-    static void configureProperties(DynamicPropertyRegistry registry) {
-        registry.add("spring.datasource.url", postgres::getJdbcUrl);
-        registry.add("spring.datasource.username", postgres::getUsername);
-        registry.add("spring.datasource.password", postgres::getPassword);
-    }
 
     @Autowired
     private MockMvc mockMvc;
@@ -360,5 +343,119 @@ class MetadataControllerTest {
                 .andExpect(jsonPath("$.author").value("anonymous"))
                 .andExpect(jsonPath("$.createdAt").exists())
                 .andExpect(jsonPath("$.createdAt").isNotEmpty());
+    }
+
+    /**
+     * T043: Test active version retrieval (FR-007)
+     * Validates that the active version endpoint returns the correct version
+     */
+    @Test
+    void testGetActiveVersion() throws Exception {
+        // Arrange: Create document with 2 versions
+        String type = "loyalty-program";
+        String name = "active-test-" + System.currentTimeMillis();
+        
+        CreateMetadataRequest request1 = new CreateMetadataRequest(
+                type,
+                name,
+                objectMapper.readTree(sampleJsonContent)
+        );
+
+        mockMvc.perform(post("/api/v1/metadata")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request1)))
+                .andExpect(status().isCreated());
+
+        // Create v2
+        CreateVersionRequest versionRequest = new CreateVersionRequest(
+                objectMapper.readTree("{\"tier\": \"gold\", \"discount\": 25}"),
+                "Updated tier");
+        
+        mockMvc.perform(post("/api/v1/metadata/" + type + "/" + name + "/versions")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(versionRequest)))
+                .andExpect(status().isCreated());
+
+        // Activate version 2
+        mockMvc.perform(post("/api/metadata/" + type + "/" + name + "/versions/2/activate"))
+                .andExpect(status().isNoContent());
+
+        // Act & Assert: Get active version
+        mockMvc.perform(get("/api/v1/metadata/" + type + "/" + name + "/active"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.versionNumber").value(2))
+                .andExpect(jsonPath("$.isActive").value(true))
+                .andExpect(jsonPath("$.content.tier").value("gold"))
+                .andExpect(jsonPath("$.content.discount").value(25));
+    }
+
+    /**
+     * T043: Test active version when none is active
+     * Should return 404 when no version is activated
+     */
+    @Test
+    void testGetActiveVersion_NoneActive() throws Exception {
+        // Arrange: Create document but don't activate any version
+        String type = "campaign";
+        String name = "no-active-" + System.currentTimeMillis();
+        
+        CreateMetadataRequest request = new CreateMetadataRequest(
+                type,
+                name,
+                objectMapper.readTree("{\"name\": \"Test Campaign\"}")
+        );
+
+        mockMvc.perform(post("/api/v1/metadata")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isCreated());
+
+        // Act & Assert: Try to get active version
+        mockMvc.perform(get("/api/v1/metadata/" + type + "/" + name + "/active"))
+                .andExpect(status().isNotFound());
+    }
+
+    /**
+     * T043a: Test listing metadata documents with pagination (FR-015)
+     * Validates that documents can be listed and filtered by type
+     */
+    @Test
+    void testListMetadataDocuments() throws Exception {
+        // Arrange: Create multiple documents
+        String timestamp = String.valueOf(System.currentTimeMillis());
+        
+        for (int i = 1; i <= 3; i++) {
+            CreateMetadataRequest request = new CreateMetadataRequest(
+                    "loyalty-program",
+                    "list-test-" + timestamp + "-" + i,
+                    objectMapper.readTree("{\"tier\": \"silver\", \"id\": " + i + "}")
+            );
+            mockMvc.perform(post("/api/v1/metadata")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(objectMapper.writeValueAsString(request)))
+                    .andExpect(status().isCreated());
+        }
+
+        // Act & Assert: List all documents
+        mockMvc.perform(get("/api/v1/metadata")
+                        .param("page", "0")
+                        .param("size", "10"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.content").isArray())
+                .andExpect(jsonPath("$.content.length()").value(greaterThanOrEqualTo(3)))
+                .andExpect(jsonPath("$.totalElements").value(greaterThanOrEqualTo(3)))
+                .andExpect(jsonPath("$.content[0].type").exists())
+                .andExpect(jsonPath("$.content[0].name").exists())
+                .andExpect(jsonPath("$.content[0].versionCount").exists())
+                .andExpect(jsonPath("$.content[0].hasActiveVersion").exists());
+
+        // Filter by type
+        mockMvc.perform(get("/api/v1/metadata")
+                        .param("type", "loyalty-program")
+                        .param("page", "0")
+                        .param("size", "10"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.content").isArray())
+                .andExpect(jsonPath("$.content[?(@.type != 'loyalty-program')]").doesNotExist());
     }
 }

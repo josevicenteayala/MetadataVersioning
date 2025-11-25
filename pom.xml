@@ -76,6 +76,13 @@
             <artifactId>jackson-databind</artifactId>
         </dependency>
 
+        <!-- JSON Schema Validation -->
+        <dependency>
+            <groupId>com.networknt</groupId>
+            <artifactId>json-schema-validator</artifactId>
+            <version>1.5.3</version>
+        </dependency>
+
         <!-- JSONB Support for PostgreSQL -->
         <dependency>
             <groupId>io.hypersistence</groupId>

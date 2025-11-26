@@ -97,9 +97,7 @@ describe('VersionHistoryTable', () => {
         <VersionHistoryTable versions={[]} onRowClick={onRowClick} onSort={onSort} />,
       )
 
-      expect(
-        screen.getByRole('heading', { name: /no versions yet/i }),
-      ).toBeInTheDocument()
+      expect(screen.getByRole('heading', { name: /no versions yet/i })).toBeInTheDocument()
       expect(
         screen.getByText(/create the first version to start tracking changes/i),
       ).toBeInTheDocument()
@@ -111,9 +109,7 @@ describe('VersionHistoryTable', () => {
         <VersionHistoryTable versions={[]} onRowClick={onRowClick} onSort={onSort} />,
       )
 
-      expect(
-        screen.getByRole('button', { name: /create first version/i }),
-      ).toBeInTheDocument()
+      expect(screen.getByRole('button', { name: /create first version/i })).toBeInTheDocument()
     })
   })
 
@@ -123,15 +119,9 @@ describe('VersionHistoryTable', () => {
         <VersionHistoryTable versions={mockVersions} onRowClick={onRowClick} onSort={onSort} />,
       )
 
-      expect(screen.getByRole('columnheader', { name: /version/i })).toHaveAttribute(
-        'aria-sort',
-      )
-      expect(screen.getByRole('columnheader', { name: /created/i })).toHaveAttribute(
-        'aria-sort',
-      )
-      expect(screen.getByRole('columnheader', { name: /status/i })).toHaveAttribute(
-        'aria-sort',
-      )
+      expect(screen.getByRole('columnheader', { name: /version/i })).toHaveAttribute('aria-sort')
+      expect(screen.getByRole('columnheader', { name: /created/i })).toHaveAttribute('aria-sort')
+      expect(screen.getByRole('columnheader', { name: /status/i })).toHaveAttribute('aria-sort')
     })
 
     it('calls onSort with column key when header is clicked', async () => {
@@ -240,9 +230,7 @@ describe('VersionHistoryTable', () => {
 
     it('does not call onRowClick when onRowClick is undefined', async () => {
       const user = userEvent.setup()
-      renderWithProviders(
-        <VersionHistoryTable versions={mockVersions} onSort={onSort} />,
-      )
+      renderWithProviders(<VersionHistoryTable versions={mockVersions} onSort={onSort} />)
 
       const rows = screen.getAllByTestId('version-history-row')
       await user.click(rows[0])
@@ -254,12 +242,7 @@ describe('VersionHistoryTable', () => {
   describe('loading state', () => {
     it('renders skeleton rows when loading', () => {
       renderWithProviders(
-        <VersionHistoryTable
-          versions={[]}
-          onRowClick={onRowClick}
-          onSort={onSort}
-          isLoading
-        />,
+        <VersionHistoryTable versions={[]} onRowClick={onRowClick} onSort={onSort} isLoading />,
       )
 
       expect(screen.getByLabelText(/loading version history/i)).toBeInTheDocument()
@@ -268,12 +251,7 @@ describe('VersionHistoryTable', () => {
 
     it('sets aria-busy when loading', () => {
       renderWithProviders(
-        <VersionHistoryTable
-          versions={[]}
-          onRowClick={onRowClick}
-          onSort={onSort}
-          isLoading
-        />,
+        <VersionHistoryTable versions={[]} onRowClick={onRowClick} onSort={onSort} isLoading />,
       )
 
       expect(screen.getByRole('region')).toHaveAttribute('aria-busy', 'true')
@@ -286,10 +264,7 @@ describe('VersionHistoryTable', () => {
         <VersionHistoryTable versions={mockVersions} onRowClick={onRowClick} onSort={onSort} />,
       )
 
-      expect(screen.getByRole('table')).toHaveAttribute(
-        'aria-label',
-        'Version history',
-      )
+      expect(screen.getByRole('table')).toHaveAttribute('aria-label', 'Version history')
     })
 
     it('rows are focusable when onRowClick is provided', () => {
@@ -304,9 +279,7 @@ describe('VersionHistoryTable', () => {
     })
 
     it('rows are not focusable when onRowClick is not provided', () => {
-      renderWithProviders(
-        <VersionHistoryTable versions={mockVersions} onSort={onSort} />,
-      )
+      renderWithProviders(<VersionHistoryTable versions={mockVersions} onSort={onSort} />)
 
       const rows = screen.getAllByTestId('version-history-row')
       rows.forEach((row) => {

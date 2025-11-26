@@ -84,12 +84,24 @@ const SortableHeader = ({
 
 const SkeletonRow = () => (
   <tr data-testid="version-skeleton-row" className="version-history-table__skeleton-row">
-    <td><span className="skeleton skeleton--version" /></td>
-    <td><span className="skeleton skeleton--status" /></td>
-    <td><span className="skeleton skeleton--author" /></td>
-    <td><span className="skeleton skeleton--date" /></td>
-    <td><span className="skeleton skeleton--date" /></td>
-    <td><span className="skeleton skeleton--summary" /></td>
+    <td>
+      <span className="skeleton skeleton--version" />
+    </td>
+    <td>
+      <span className="skeleton skeleton--status" />
+    </td>
+    <td>
+      <span className="skeleton skeleton--author" />
+    </td>
+    <td>
+      <span className="skeleton skeleton--date" />
+    </td>
+    <td>
+      <span className="skeleton skeleton--date" />
+    </td>
+    <td>
+      <span className="skeleton skeleton--summary" />
+    </td>
   </tr>
 )
 
@@ -99,10 +111,7 @@ const EmptyState = () => (
     <p className="version-history-table__empty-description">
       Create the first version to start tracking changes to this document.
     </p>
-    <button
-      type="button"
-      className="btn btn--primary version-history-table__empty-cta"
-    >
+    <button type="button" className="btn btn--primary version-history-table__empty-cta">
       Create first version
     </button>
   </div>
@@ -233,7 +242,10 @@ const VersionHistoryTable = ({
                   </span>
                 </td>
                 <td className="version-history-table__author">{version.createdBy}</td>
-                <td className="version-history-table__created" title={formatDateTime(version.createdAt)}>
+                <td
+                  className="version-history-table__created"
+                  title={formatDateTime(version.createdAt)}
+                >
                   {formatDate(version.createdAt)}
                 </td>
                 <td className="version-history-table__activated version-activated-at">

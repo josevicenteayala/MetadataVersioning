@@ -8,9 +8,7 @@ import type { MetadataVersion, SortColumn, SortDirection } from '@features/versi
 import type { MetadataDocumentResponse } from '@services/generated/models/MetadataDocumentResponse'
 
 const fetchDocument = async (documentId: string): Promise<MetadataDocumentResponse> => {
-  const response = await httpClient.get<MetadataDocumentResponse>(
-    `/api/v1/metadata/${documentId}`,
-  )
+  const response = await httpClient.get<MetadataDocumentResponse>(`/api/v1/metadata/${documentId}`)
   return response.data
 }
 
@@ -157,8 +155,7 @@ const DocumentRoute = () => {
   // Error state
   if (isDocumentError || isVersionsError) {
     const error = documentError ?? versionsError
-    const errorCorrelationId =
-      (error as { correlationId?: string })?.correlationId ?? 'unknown'
+    const errorCorrelationId = (error as { correlationId?: string })?.correlationId ?? 'unknown'
 
     return (
       <div className="document-route document-route--error" data-testid="document-detail">
@@ -195,7 +192,13 @@ const DocumentRoute = () => {
       <nav className="document-route__breadcrumb" aria-label="Breadcrumb">
         <ol>
           <li>
-            <a href="/dashboard" onClick={(e) => { e.preventDefault(); handleBackToDashboard() }}>
+            <a
+              href="/dashboard"
+              onClick={(e) => {
+                e.preventDefault()
+                handleBackToDashboard()
+              }}
+            >
               Documents
             </a>
           </li>

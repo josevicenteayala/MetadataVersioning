@@ -126,11 +126,7 @@ const VersionDetailDrawer = ({
   return (
     <>
       {/* Backdrop */}
-      <div
-        className="version-detail-drawer__backdrop"
-        onClick={onClose}
-        aria-hidden="true"
-      />
+      <div className="version-detail-drawer__backdrop" onClick={onClose} aria-hidden="true" />
 
       {/* Drawer */}
       <div
@@ -161,9 +157,7 @@ const VersionDetailDrawer = ({
         <div className="version-detail-drawer__content">
           {/* Version badge */}
           <div className="version-detail-drawer__version-badge">
-            <span className="version-number version-number--large">
-              v{version.versionNumber}
-            </span>
+            <span className="version-number version-number--large">v{version.versionNumber}</span>
             <span className={`status-chip status-chip--${version.status}`}>
               {version.status.charAt(0).toUpperCase() + version.status.slice(1)}
             </span>
@@ -177,19 +171,14 @@ const VersionDetailDrawer = ({
             <MetadataField label="Author" value={version.createdBy} />
             <MetadataField label="Created" value={formatDateTime(version.createdAt)} />
             {version.activatedAt && (
-              <MetadataField
-                label="Activated"
-                value={formatDateTime(version.activatedAt)}
-              />
+              <MetadataField label="Activated" value={formatDateTime(version.activatedAt)} />
             )}
             <MetadataField label="Summary" value={version.changeSummary || '—'} />
             {correlationId && (
               <MetadataField
                 label="Correlation ID"
                 value={
-                  <code className="version-detail-drawer__correlation-id">
-                    {correlationId}
-                  </code>
+                  <code className="version-detail-drawer__correlation-id">{correlationId}</code>
                 }
                 testId="correlation-id"
               />
@@ -210,11 +199,7 @@ const VersionDetailDrawer = ({
           <button type="button" className="btn btn--outline">
             Compare with Active
           </button>
-          <button
-            type="button"
-            className="btn btn--ghost"
-            onClick={onClose}
-          >
+          <button type="button" className="btn btn--ghost" onClick={onClose}>
             Close
           </button>
         </footer>

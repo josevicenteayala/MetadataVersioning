@@ -98,9 +98,7 @@ test.describe('Document History Page', () => {
       const activeRow = page.getByTestId('version-history-row').first()
       await activeRow.click()
 
-      await expect(drawer.getByTestId('activation-eligibility')).toContainText(
-        /currently active/i,
-      )
+      await expect(drawer.getByTestId('activation-eligibility')).toContainText(/currently active/i)
     })
 
     test('displays payload preview in JSON format', async ({ page }) => {
@@ -220,9 +218,7 @@ test.describe('Document History Page', () => {
       await page.goto('/documents/doc-empty')
 
       await expect(page.getByRole('heading', { name: /no versions yet/i })).toBeVisible()
-      await expect(
-        page.getByRole('button', { name: /create first version/i }),
-      ).toBeVisible()
+      await expect(page.getByRole('button', { name: /create first version/i })).toBeVisible()
     })
   })
 

@@ -24,7 +24,7 @@ test.describe('Dashboard list journey', () => {
         type: 'loyalty-program',
         name: `document-${i + 1}`,
         versionCount: (i % 5) + 1,
-        activeVersion: (i % 2) === 0 ? 1 : null,
+        activeVersion: i % 2 === 0 ? 1 : null,
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
       })).filter((d) => (query ? d.name.includes(query) : true))

@@ -1,5 +1,6 @@
 import path from 'node:path'
 import { defineConfig } from 'vite'
+import { configDefaults } from 'vitest/config'
 import react from '@vitejs/plugin-react'
 
 // https://vite.dev/config/
@@ -15,6 +16,17 @@ export default defineConfig({
       '@styles': path.resolve(__dirname, 'src/styles'),
       '@tests': path.resolve(__dirname, 'tests'),
       '@lib': path.resolve(__dirname, 'src/lib'),
+    },
+  },
+  test: {
+    environment: 'jsdom',
+    globals: true,
+    setupFiles: ['./src/setupTests.ts'],
+    include: [...configDefaults.include, 'tests/**/*.spec.{ts,tsx}', 'tests/**/*.test.{ts,tsx}'],
+    passWithNoTests: true,
+    coverage: {
+      provider: 'v8',
+      reporter: ['text', 'html'],
     },
   },
 })

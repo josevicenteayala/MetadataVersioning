@@ -69,7 +69,8 @@ const ConfirmationModal = ({
           </p>
           <p className="activation-modal__warning">
             This will make this version the active version for this document.
-            {version.status !== 'active' && ' The current active version will be demoted to Published.'}
+            {version.status !== 'active' &&
+              ' The current active version will be demoted to Published.'}
           </p>
         </div>
 

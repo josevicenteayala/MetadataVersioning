@@ -77,7 +77,9 @@
   background-color: var(--coffee-color-foam);
   min-height: 200px;
   resize: vertical;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 .version-form__json-editor:focus {
@@ -101,7 +103,9 @@
   border: 1px solid var(--coffee-color-crema);
   border-radius: var(--coffee-radius-md);
   background-color: var(--coffee-color-foam);
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 .version-form__summary-input:focus {
@@ -150,8 +154,12 @@
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 .activation-modal {
@@ -160,8 +168,9 @@
   padding: 1.5rem;
   width: 90%;
   max-width: 28rem;
-  box-shadow: 0 20px 25px -5px rgba(42, 18, 10, 0.1),
-              0 10px 10px -5px rgba(42, 18, 10, 0.04);
+  box-shadow:
+    0 20px 25px -5px rgba(42, 18, 10, 0.1),
+    0 10px 10px -5px rgba(42, 18, 10, 0.04);
   animation: slideUp 0.2s ease;
 }
 
@@ -244,8 +253,12 @@
 }
 
 @keyframes spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .status-chip {

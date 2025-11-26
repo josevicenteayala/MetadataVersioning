@@ -82,25 +82,31 @@ const NewVersionForm = ({ documentId, onSuccess, onCancel }: NewVersionFormProps
     setErrors((prev) => ({ ...prev, changeSummary: error }))
   }, [changeSummary, validateSummary])
 
-  const handlePayloadChange = useCallback((value: string) => {
-    setPayload(value)
-    // Clear error when user starts typing
-    if (errors.payload) {
-      setErrors((prev) => ({ ...prev, payload: undefined }))
-    }
-  }, [errors.payload])
+  const handlePayloadChange = useCallback(
+    (value: string) => {
+      setPayload(value)
+      // Clear error when user starts typing
+      if (errors.payload) {
+        setErrors((prev) => ({ ...prev, payload: undefined }))
+      }
+    },
+    [errors.payload],
+  )
 
-  const handleSummaryChange = useCallback((value: string) => {
-    setChangeSummary(value)
-    if (errors.changeSummary && value.length <= MAX_SUMMARY_LENGTH) {
-      setErrors((prev) => ({ ...prev, changeSummary: undefined }))
-    } else if (value.length > MAX_SUMMARY_LENGTH) {
-      setErrors((prev) => ({
-        ...prev,
-        changeSummary: `Summary must be ${MAX_SUMMARY_LENGTH} characters or less`,
-      }))
-    }
-  }, [errors.changeSummary])
+  const handleSummaryChange = useCallback(
+    (value: string) => {
+      setChangeSummary(value)
+      if (errors.changeSummary && value.length <= MAX_SUMMARY_LENGTH) {
+        setErrors((prev) => ({ ...prev, changeSummary: undefined }))
+      } else if (value.length > MAX_SUMMARY_LENGTH) {
+        setErrors((prev) => ({
+          ...prev,
+          changeSummary: `Summary must be ${MAX_SUMMARY_LENGTH} characters or less`,
+        }))
+      }
+    },
+    [errors.changeSummary],
+  )
 
   const handleFormatJson = useCallback(() => {
     const result = validateJsonPayload(payload)

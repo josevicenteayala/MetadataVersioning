@@ -121,7 +121,10 @@ test.describe('Version Activation Flow', () => {
 
     test('hides activate button for already active version', async ({ page }) => {
       // Click on active version row
-      const activeRow = page.getByTestId('version-history-row').filter({ hasText: 'Active' }).first()
+      const activeRow = page
+        .getByTestId('version-history-row')
+        .filter({ hasText: 'Active' })
+        .first()
       await activeRow.click()
 
       const drawer = page.getByTestId('version-detail-drawer')
@@ -160,7 +163,9 @@ test.describe('Version Activation Flow', () => {
 
       // Previous active version should be demoted
       const historyTable = page.getByRole('table', { name: /version history/i })
-      const publishedChips = historyTable.getByTestId('status-chip').filter({ hasText: 'Published' })
+      const publishedChips = historyTable
+        .getByTestId('status-chip')
+        .filter({ hasText: 'Published' })
       await expect(publishedChips).toHaveCount(2) // Original + demoted
     })
 

@@ -87,8 +87,15 @@ curl http://localhost:8080/api/v1/metadata/loyalty-program/gold-tier/versions/co
 ## 📚 API Documentation
 
 Full OpenAPI 3.1 specification available at:
-- **Local**: http://localhost:8080/swagger-ui.html
+- **Swagger UI**: http://localhost:8080/swagger-ui/index.html
+- **OpenAPI JSON**: http://localhost:8080/v3/api-docs
 - **Spec**: [`specs/001-metadata-version-api/contracts/openapi.yaml`](specs/001-metadata-version-api/contracts/openapi.yaml)
+
+Swagger access:
+- No auth needed to load the docs UI/JSON.
+- Use HTTP Basic when trying secured endpoints from the UI:
+  - `admin` / `admin`
+  - `user` / `user`
 
 ### Core Endpoints
 

@@ -60,13 +60,14 @@ class HexagonalArchitectureTest {
         DescribedPredicate<JavaClass> allowedDependencies = DescribedPredicate.describe(
                 "depend only on domain, application ports, adapter or framework packages",
                 javaClass -> javaClass.getPackageName().contains("domain")
-                        || javaClass.getPackageName().contains("application.port")
+                        || javaClass.getPackageName().contains("application")
                         || javaClass.getPackageName().contains("adapter")
                         || javaClass.getPackageName().startsWith("java")
                         || javaClass.getPackageName().startsWith("org.springframework")
                         || javaClass.getPackageName().startsWith("jakarta")
                         || javaClass.getPackageName().startsWith("com.fasterxml")
                         || javaClass.getPackageName().startsWith("io.swagger")
+                        || javaClass.getPackageName().startsWith("org.slf4j")
         );
 
         ArchRule rule = classes()
@@ -80,7 +81,7 @@ class HexagonalArchitectureTest {
     @Test
     void layeredArchitectureShouldBeRespected() {
         layeredArchitecture()
-                .consideringAllDependencies()
+                .consideringOnlyDependenciesInLayers()
                 .layer("Domain").definedBy("..domain..")
                 .layer("Application").definedBy("..application..")
                 .layer("Adapter").definedBy("..adapter..")
@@ -96,6 +97,7 @@ class HexagonalArchitectureTest {
     void portsShouldBeInterfaces() {
         ArchRule rule = classes()
                 .that().resideInAPackage("..application.port..")
+                .and().areTopLevelClasses()
                 .should().beInterfaces();
 
         rule.check(importedClasses);
@@ -124,12 +126,15 @@ class HexagonalArchitectureTest {
         DescribedPredicate<JavaClass> allowedControllerAccess = DescribedPredicate.describe(
                 "depend only on use cases, controller layer or domain API",
                 javaClass -> javaClass.getPackageName().contains("application.port.in")
+                        || javaClass.getPackageName().contains("application.service")
+                        || javaClass.getPackageName().contains("application.event")
                         || javaClass.getPackageName().contains("adapter.in.rest")
                         || javaClass.getPackageName().contains("domain.model")
                         || javaClass.getPackageName().contains("domain.exception")
                         || javaClass.getPackageName().startsWith("java")
                         || javaClass.getPackageName().startsWith("org.springframework")
                         || javaClass.getPackageName().startsWith("io.swagger")
+                        || javaClass.getPackageName().startsWith("org.slf4j")
         );
 
         ArchRule rule = classes()

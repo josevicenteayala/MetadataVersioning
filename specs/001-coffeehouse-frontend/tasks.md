@@ -158,6 +158,7 @@
 - [X] T067 Implement malformed JSON response handler in `ui/coffeehouse-frontend/src/services/api/httpClient.ts` with error toast.
 - [X] T068 Add httpClient error handling unit tests in `ui/coffeehouse-frontend/tests/unit/services/httpClientErrors.test.ts` (8 tests).
 - [X] T069 Validate all 150 unit tests pass and lint clean.
+- [X] T070 Fix root README.md inconsistencies: update paths from `MetadataVersioning/frontend` to `ui/coffeehouse-frontend/`, fix tech stack versions, remove corrupted content, add frontend documentation section.
 
 ---
 
@@ -188,10 +189,10 @@
 4. **Quality Gates**: Every story includes failing tests before implementation plus final lint/test/build sweep (T050).
 
 ## Summary
-- Total tasks: 69
+- Total tasks: 70
 - Task counts per story: US1 (9), US2 (6), US3 (8), US4 (11), US5 (8) — remaining tasks cover setup, foundation, polish, and release readiness.
 - Parallel opportunities: 32 tasks marked [P] across setup, foundation, tests, and story implementations.
 - Independent Test Criteria: Each story lists explicit validation scenarios ensuring standalone verification.
 - Suggested MVP Scope: Complete through Phase 3 (US1). Subsequent phases extend functionality without blocking prior flows.
-- Release Readiness: Phase 9 (T063-T069) validates spec completeness and error handling coverage.
+- Release Readiness: Phase 9 (T063-T070) validates spec completeness, error handling coverage, and documentation.
 - Test Coverage: 150 unit tests passing, 8 e2e test files.

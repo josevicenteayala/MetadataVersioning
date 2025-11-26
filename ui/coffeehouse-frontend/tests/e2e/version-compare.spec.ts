@@ -174,7 +174,9 @@ test.describe('Version Compare Flow', () => {
     await page.keyboard.press('ArrowDown')
 
     // Active element should change
-    const activeElement = await page.evaluate(() => document.activeElement?.getAttribute('data-testid'))
+    const activeElement = await page.evaluate(() =>
+      document.activeElement?.getAttribute('data-testid'),
+    )
     expect(activeElement).toMatch(/diff-line/)
   })
 

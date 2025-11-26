@@ -3,45 +3,45 @@
  * Compare selector UI with inline/split toggle + metadata badges
  */
 
-import React, { useState, useCallback, useMemo } from 'react';
-import { VersionDiffViewer, type DiffViewMode } from './VersionDiffViewer';
-import { useVersionDiff } from '../api/useVersionDiff';
+import React, { useState, useCallback, useMemo } from 'react'
+import { VersionDiffViewer, type DiffViewMode } from './VersionDiffViewer'
+import { useVersionDiff } from '../api/useVersionDiff'
 
 export interface VersionCompareOption {
-  id: string;
-  versionNumber: number;
-  label: string;
-  createdAt: string;
-  isActive: boolean;
+  id: string
+  versionNumber: number
+  label: string
+  createdAt: string
+  isActive: boolean
 }
 
 export interface VersionComparePanelProps {
   /** Document ID for the versions being compared */
-  documentId: string;
+  documentId: string
   /** Available versions to select from */
-  versions: VersionCompareOption[];
+  versions: VersionCompareOption[]
   /** Pre-selected left version ID */
-  initialLeftVersionId?: string;
+  initialLeftVersionId?: string
   /** Pre-selected right version ID */
-  initialRightVersionId?: string;
+  initialRightVersionId?: string
   /** Callback when comparison selection changes */
-  onSelectionChange?: (leftId: string, rightId: string) => void;
+  onSelectionChange?: (leftId: string, rightId: string) => void
   /** Callback when panel is closed */
-  onClose?: () => void;
+  onClose?: () => void
   /** Custom class name */
-  className?: string;
+  className?: string
 }
 
 /**
  * Version selector dropdown component
  */
 interface VersionSelectorProps {
-  label: string;
-  value: string;
-  options: VersionCompareOption[];
-  onChange: (id: string) => void;
-  excludeId?: string;
-  id: string;
+  label: string
+  value: string
+  options: VersionCompareOption[]
+  onChange: (id: string) => void
+  excludeId?: string
+  id: string
 }
 
 const VersionSelector: React.FC<VersionSelectorProps> = ({
@@ -52,7 +52,7 @@ const VersionSelector: React.FC<VersionSelectorProps> = ({
   excludeId,
   id,
 }) => {
-  const filteredOptions = options.filter((opt) => opt.id !== excludeId);
+  const filteredOptions = options.filter((opt) => opt.id !== excludeId)
 
   return (
     <div className="version-selector">
@@ -75,15 +75,15 @@ const VersionSelector: React.FC<VersionSelectorProps> = ({
         ))}
       </select>
     </div>
-  );
-};
+  )
+}
 
 /**
  * Swap button component
  */
 interface SwapButtonProps {
-  onClick: () => void;
-  disabled: boolean;
+  onClick: () => void
+  disabled: boolean
 }
 
 const SwapButton: React.FC<SwapButtonProps> = ({ onClick, disabled }) => (
@@ -96,7 +96,7 @@ const SwapButton: React.FC<SwapButtonProps> = ({ onClick, disabled }) => (
   >
     <span aria-hidden="true">⇄</span>
   </button>
-);
+)
 
 /**
  * VersionComparePanel - Main comparison UI panel
@@ -110,72 +110,70 @@ export const VersionComparePanel: React.FC<VersionComparePanelProps> = ({
   onClose,
   className = '',
 }) => {
-  const [leftVersionId, setLeftVersionId] = useState(initialLeftVersionId ?? '');
-  const [rightVersionId, setRightVersionId] = useState(initialRightVersionId ?? '');
-  const [viewMode, setViewMode] = useState<DiffViewMode>('inline');
+  const [leftVersionId, setLeftVersionId] = useState(initialLeftVersionId ?? '')
+  const [rightVersionId, setRightVersionId] = useState(initialRightVersionId ?? '')
+  const [viewMode, setViewMode] = useState<DiffViewMode>('inline')
 
   // Compute diff only when both versions are selected
-  const shouldFetch = !!leftVersionId && !!rightVersionId;
+  const shouldFetch = !!leftVersionId && !!rightVersionId
 
   const {
     data: diffResult,
     isLoading,
     error,
     refetch,
-  } = useVersionDiff(
-    {
-      documentId,
-      leftVersionId,
-      rightVersionId,
-      enabled: shouldFetch,
-    }
-  );
+  } = useVersionDiff({
+    documentId,
+    leftVersionId,
+    rightVersionId,
+    enabled: shouldFetch,
+  })
 
   // Get version metadata for display
   const leftVersion = useMemo(
     () => versions.find((v) => v.id === leftVersionId),
-    [versions, leftVersionId]
-  );
+    [versions, leftVersionId],
+  )
   const rightVersion = useMemo(
     () => versions.find((v) => v.id === rightVersionId),
-    [versions, rightVersionId]
-  );
+    [versions, rightVersionId],
+  )
 
   // Handle version selection
   const handleLeftChange = useCallback(
     (id: string) => {
-      setLeftVersionId(id);
-      onSelectionChange?.(id, rightVersionId);
+      setLeftVersionId(id)
+      onSelectionChange?.(id, rightVersionId)
     },
-    [rightVersionId, onSelectionChange]
-  );
+    [rightVersionId, onSelectionChange],
+  )
 
   const handleRightChange = useCallback(
     (id: string) => {
-      setRightVersionId(id);
-      onSelectionChange?.(leftVersionId, id);
+      setRightVersionId(id)
+      onSelectionChange?.(leftVersionId, id)
     },
-    [leftVersionId, onSelectionChange]
-  );
+    [leftVersionId, onSelectionChange],
+  )
 
   // Swap versions
   const handleSwap = useCallback(() => {
-    const newLeft = rightVersionId;
-    const newRight = leftVersionId;
-    setLeftVersionId(newLeft);
-    setRightVersionId(newRight);
-    onSelectionChange?.(newLeft, newRight);
-  }, [leftVersionId, rightVersionId, onSelectionChange]);
+    const newLeft = rightVersionId
+    const newRight = leftVersionId
+    setLeftVersionId(newLeft)
+    setRightVersionId(newRight)
+    onSelectionChange?.(newLeft, newRight)
+  }, [leftVersionId, rightVersionId, onSelectionChange])
 
   // Auto-select latest versions if none provided
   React.useEffect(() => {
     if (versions.length >= 2 && !initialLeftVersionId && !initialRightVersionId) {
       // Sort by version number descending
-      const sorted = [...versions].sort((a, b) => b.versionNumber - a.versionNumber);
-      setRightVersionId(sorted[0].id); // Latest as right
-      setLeftVersionId(sorted[1].id); // Second latest as left
+      const sorted = [...versions].sort((a, b) => b.versionNumber - a.versionNumber)
+      setRightVersionId(sorted[0].id) // Latest as right
+      setLeftVersionId(sorted[1].id) // Second latest as left
     }
-  }, [versions, initialLeftVersionId, initialRightVersionId]);
+  }, [versions, initialLeftVersionId, initialRightVersionId])
 
   return (
     <div
@@ -208,10 +206,7 @@ export const VersionComparePanel: React.FC<VersionComparePanelProps> = ({
           excludeId={rightVersionId}
         />
 
-        <SwapButton
-          onClick={handleSwap}
-          disabled={!leftVersionId || !rightVersionId}
-        />
+        <SwapButton onClick={handleSwap} disabled={!leftVersionId || !rightVersionId} />
 
         <VersionSelector
           id="right-version-select"
@@ -235,7 +230,9 @@ export const VersionComparePanel: React.FC<VersionComparePanelProps> = ({
               </span>
             )}
           </div>
-          <span className="compare-arrow" aria-hidden="true">→</span>
+          <span className="compare-arrow" aria-hidden="true">
+            →
+          </span>
           <div className="version-badge version-badge--right">
             <span className="version-badge__number">v{rightVersion.versionNumber}</span>
             <span className="version-badge__label">{rightVersion.label}</span>
@@ -282,7 +279,7 @@ export const VersionComparePanel: React.FC<VersionComparePanelProps> = ({
         </div>
       )}
     </div>
-  );
-};
+  )
+}
 
-export default VersionComparePanel;
+export default VersionComparePanel

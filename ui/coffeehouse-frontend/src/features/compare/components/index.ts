@@ -5,16 +5,12 @@ export {
   VersionDiffViewer,
   type VersionDiffViewerProps,
   type DiffViewMode,
-} from './VersionDiffViewer';
+} from './VersionDiffViewer'
 
 export {
   VersionComparePanel,
   type VersionComparePanelProps,
   type VersionCompareOption,
-} from './VersionComparePanel';
+} from './VersionComparePanel'
 
-export {
-  DiffErrorState,
-  DiffErrorBoundary,
-  type DiffErrorStateProps,
-} from './DiffErrorState';
+export { DiffErrorState, DiffErrorBoundary, type DiffErrorStateProps } from './DiffErrorState'

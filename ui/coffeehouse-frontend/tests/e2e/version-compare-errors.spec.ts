@@ -48,9 +48,7 @@ test.describe('Version Compare Error Handling', () => {
       await page.goto('/documents/doc-001/compare?left=ver-001&right=ver-002')
 
       // Should show auth prompt or redirect
-      await expect(
-        page.getByText(/session expired|sign in|unauthorized/i),
-      ).toBeVisible()
+      await expect(page.getByText(/session expired|sign in|unauthorized/i)).toBeVisible()
     })
 
     test('shows permission error on 403 forbidden', async ({ page }) => {

@@ -1,26 +1,27 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /**
  * T036: VersionDiffViewer Component
  * Renders JSON diff visualization using jsondiffpatch with coffeehouse theming
  */
 
-import React, { useMemo, useState, useCallback } from 'react';
-import type { VersionDiffResult } from '../api/useVersionDiff';
+import React, { useMemo, useState, useCallback } from 'react'
+import type { VersionDiffResult } from '../api/useVersionDiff'
 
-export type DiffViewMode = 'inline' | 'split';
+export type DiffViewMode = 'inline' | 'split'
 
 export interface VersionDiffViewerProps {
   /** Diff result from useVersionDiff hook */
-  diffResult: VersionDiffResult | null;
+  diffResult: VersionDiffResult | null
   /** View mode: inline (unified) or split (side-by-side) */
-  viewMode?: DiffViewMode;
+  viewMode?: DiffViewMode
   /** Callback when view mode changes */
-  onViewModeChange?: (mode: DiffViewMode) => void;
+  onViewModeChange?: (mode: DiffViewMode) => void
   /** Whether to start with all sections collapsed */
-  defaultCollapsed?: boolean;
+  defaultCollapsed?: boolean
   /** Loading state */
-  isLoading?: boolean;
+  isLoading?: boolean
   /** Custom class name */
-  className?: string;
+  className?: string
 }
 
 /**
@@ -45,15 +46,15 @@ const DIFF_COLORS = {
     border: 'var(--color-crema-dark, #FFF176)',
     text: 'var(--color-mocha, #3E2723)',
   },
-};
+}
 
 interface DiffLineProps {
-  type: 'added' | 'removed' | 'modified' | 'unchanged';
-  path: string;
-  oldValue?: unknown;
-  newValue?: unknown;
-  isExpanded?: boolean;
-  onToggle?: () => void;
+  type: 'added' | 'removed' | 'modified' | 'unchanged'
+  path: string
+  oldValue?: unknown
+  newValue?: unknown
+  isExpanded?: boolean
+  onToggle?: () => void
 }
 
 /**
@@ -67,7 +68,7 @@ const DiffLine: React.FC<DiffLineProps> = ({
   isExpanded = true,
   onToggle,
 }) => {
-  const colors = type !== 'unchanged' ? DIFF_COLORS[type] : null;
+  const colors = type !== 'unchanged' ? DIFF_COLORS[type] : null
 
   const lineStyle: React.CSSProperties = colors
     ? {
@@ -75,25 +76,41 @@ const DiffLine: React.FC<DiffLineProps> = ({
         borderLeft: `4px solid ${colors.border}`,
         color: colors.text,
       }
-    : {};
+    : {}
 
   const formatValue = (value: unknown): string => {
-    if (value === undefined) return '';
-    return JSON.stringify(value, null, 2);
-  };
+    if (value === undefined) return ''
+    return JSON.stringify(value, null, 2)
+  }
 
   const getTypeIcon = () => {
     switch (type) {
       case 'added':
-        return <span className="diff-icon diff-icon--added" aria-label="Added">+</span>;
+        return (
+          <span className="diff-icon diff-icon--added" aria-label="Added">
+            +
+          </span>
+        )
       case 'removed':
-        return <span className="diff-icon diff-icon--removed" aria-label="Removed">−</span>;
+        return (
+          <span className="diff-icon diff-icon--removed" aria-label="Removed">
+            −
+          </span>
+        )
       case 'modified':
-        return <span className="diff-icon diff-icon--modified" aria-label="Modified">~</span>;
+        return (
+          <span className="diff-icon diff-icon--modified" aria-label="Modified">
+            ~
+          </span>
+        )
       default:
-        return <span className="diff-icon diff-icon--unchanged" aria-hidden="true"> </span>;
+        return (
+          <span className="diff-icon diff-icon--unchanged" aria-hidden="true">
+            {' '}
+          </span>
+        )
     }
-  };
+  }
 
   return (
     <div
@@ -121,7 +138,11 @@ const DiffLine: React.FC<DiffLineProps> = ({
               {formatValue(oldValue)}
             </pre>
           )}
-          {type === 'modified' && <span className="diff-arrow" aria-hidden="true">→</span>}
+          {type === 'modified' && (
+            <span className="diff-arrow" aria-hidden="true">
+              →
+            </span>
+          )}
           {(type === 'added' || type === 'modified') && (
             <pre className="diff-line__new-value" aria-label="New value">
               {formatValue(newValue)}
@@ -130,40 +151,35 @@ const DiffLine: React.FC<DiffLineProps> = ({
         </div>
       )}
     </div>
-  );
-};
+  )
+}
 
 interface DiffEntry {
-  path: string;
-  type: 'added' | 'removed' | 'modified' | 'unchanged';
-  oldValue?: unknown;
-  newValue?: unknown;
+  path: string
+  type: 'added' | 'removed' | 'modified' | 'unchanged'
+  oldValue?: unknown
+  newValue?: unknown
 }
 
 /**
  * Flatten jsondiffpatch delta into array of diff entries
  */
-function flattenDelta(
-  delta: unknown,
-  left: unknown,
-  right: unknown,
-  path = ''
-): DiffEntry[] {
-  const entries: DiffEntry[] = [];
+function flattenDelta(delta: unknown, left: unknown, right: unknown, path = ''): DiffEntry[] {
+  const entries: DiffEntry[] = []
 
   if (!delta || typeof delta !== 'object') {
-    return entries;
+    return entries
   }
 
-  const deltaObj = delta as Record<string, unknown>;
+  const deltaObj = delta as Record<string, unknown>
 
   for (const [key, value] of Object.entries(deltaObj)) {
     // Skip internal jsondiffpatch properties
-    if (key === '_t') continue;
+    if (key === '_t') continue
 
-    const currentPath = path ? `${path}.${key}` : key;
-    const leftVal = (left as Record<string, unknown>)?.[key];
-    const rightVal = (right as Record<string, unknown>)?.[key];
+    const currentPath = path ? `${path}.${key}` : key
+    const leftVal = (left as Record<string, unknown>)?.[key]
+    const rightVal = (right as Record<string, unknown>)?.[key]
 
     if (Array.isArray(value)) {
       if (value.length === 1) {
@@ -172,7 +188,7 @@ function flattenDelta(
           path: currentPath,
           type: 'added',
           newValue: value[0],
-        });
+        })
       } else if (value.length === 2) {
         // Modification: [oldValue, newValue]
         entries.push({
@@ -180,22 +196,22 @@ function flattenDelta(
           type: 'modified',
           oldValue: value[0],
           newValue: value[1],
-        });
+        })
       } else if (value.length === 3 && value[2] === 0) {
         // Deletion: [oldValue, 0, 0]
         entries.push({
           path: currentPath,
           type: 'removed',
           oldValue: value[0],
-        });
+        })
       }
     } else if (typeof value === 'object' && value !== null) {
       // Nested object diff
-      entries.push(...flattenDelta(value, leftVal, rightVal, currentPath));
+      entries.push(...flattenDelta(value, leftVal, rightVal, currentPath))
     }
   }
 
-  return entries;
+  return entries
 }
 
 /**
@@ -210,50 +226,49 @@ export const VersionDiffViewer: React.FC<VersionDiffViewerProps> = ({
   className = '',
 }) => {
   const [expandedPaths, setExpandedPaths] = useState<Set<string>>(
-    defaultCollapsed ? new Set() : new Set(['*'])
-  );
+    defaultCollapsed ? new Set() : new Set(['*']),
+  )
 
   const togglePath = useCallback((path: string) => {
     setExpandedPaths((prev) => {
-      const next = new Set(prev);
+      const next = new Set(prev)
       if (next.has(path)) {
-        next.delete(path);
+        next.delete(path)
       } else {
-        next.add(path);
+        next.add(path)
       }
-      return next;
-    });
-  }, []);
+      return next
+    })
+  }, [])
 
   const expandAll = useCallback(() => {
-    setExpandedPaths(new Set(['*']));
-  }, []);
+    setExpandedPaths(new Set(['*']))
+  }, [])
 
   const collapseAll = useCallback(() => {
-    setExpandedPaths(new Set());
-  }, []);
+    setExpandedPaths(new Set())
+  }, [])
 
   const diffEntries = useMemo(() => {
-    if (!diffResult?.delta) return [];
+    if (!diffResult?.delta) return []
     return flattenDelta(
       diffResult.delta,
       diffResult.leftVersion.payload as Record<string, unknown>,
-      diffResult.rightVersion.payload as Record<string, unknown>
-    );
-  }, [diffResult]);
+      diffResult.rightVersion.payload as Record<string, unknown>,
+    )
+  }, [diffResult])
 
   const stats = useMemo(() => {
-    const counts = { added: 0, removed: 0, modified: 0 };
+    const counts = { added: 0, removed: 0, modified: 0 }
     for (const entry of diffEntries) {
       if (entry.type in counts) {
-        counts[entry.type as keyof typeof counts]++;
+        counts[entry.type as keyof typeof counts]++
       }
     }
-    return counts;
-  }, [diffEntries]);
+    return counts
+  }, [diffEntries])
 
-  const isExpanded = (path: string) =>
-    expandedPaths.has('*') || expandedPaths.has(path);
+  const isExpanded = (path: string) => expandedPaths.has('*') || expandedPaths.has(path)
 
   if (isLoading) {
     return (
@@ -265,30 +280,22 @@ export const VersionDiffViewer: React.FC<VersionDiffViewerProps> = ({
         <div className="diff-loading-spinner" aria-hidden="true" />
         <span>Computing diff...</span>
       </div>
-    );
+    )
   }
 
   if (!diffResult) {
     return (
-      <div
-        className={`version-diff-viewer version-diff-viewer--empty ${className}`}
-        role="status"
-      >
+      <div className={`version-diff-viewer version-diff-viewer--empty ${className}`} role="status">
         <span>Select two versions to compare</span>
       </div>
-    );
+    )
   }
 
   if (diffResult.exceedsLimit) {
     return (
-      <div
-        className={`version-diff-viewer version-diff-viewer--error ${className}`}
-        role="alert"
-      >
+      <div className={`version-diff-viewer version-diff-viewer--error ${className}`} role="alert">
         <h3>Payload Too Large</h3>
-        <p>
-          One or both versions exceed the 200KB limit for diff visualization.
-        </p>
+        <p>One or both versions exceed the 200KB limit for diff visualization.</p>
         <dl>
           <dt>Left payload size:</dt>
           <dd>{(diffResult.leftPayloadSize / 1024).toFixed(1)} KB</dd>
@@ -296,7 +303,7 @@ export const VersionDiffViewer: React.FC<VersionDiffViewerProps> = ({
           <dd>{(diffResult.rightPayloadSize / 1024).toFixed(1)} KB</dd>
         </dl>
       </div>
-    );
+    )
   }
 
   return (
@@ -314,24 +321,19 @@ export const VersionDiffViewer: React.FC<VersionDiffViewerProps> = ({
           <span className="diff-stat diff-stat--removed" aria-label={`${stats.removed} removals`}>
             −{stats.removed}
           </span>
-          <span className="diff-stat diff-stat--modified" aria-label={`${stats.modified} modifications`}>
+          <span
+            className="diff-stat diff-stat--modified"
+            aria-label={`${stats.modified} modifications`}
+          >
             ~{stats.modified}
           </span>
         </div>
 
         <div className="diff-controls">
-          <button
-            className="diff-control-btn"
-            onClick={expandAll}
-            aria-label="Expand all"
-          >
+          <button className="diff-control-btn" onClick={expandAll} aria-label="Expand all">
             Expand All
           </button>
-          <button
-            className="diff-control-btn"
-            onClick={collapseAll}
-            aria-label="Collapse all"
-          >
+          <button className="diff-control-btn" onClick={collapseAll} aria-label="Collapse all">
             Collapse All
           </button>
 
@@ -367,7 +369,9 @@ export const VersionDiffViewer: React.FC<VersionDiffViewerProps> = ({
             {new Date(String(diffResult.leftVersion.createdAt)).toLocaleDateString()}
           </span>
         </div>
-        <span className="diff-metadata__arrow" aria-hidden="true">→</span>
+        <span className="diff-metadata__arrow" aria-hidden="true">
+          →
+        </span>
         <div className="diff-metadata__version diff-metadata__version--right">
           <span className="diff-metadata__label">Right:</span>
           <span className="diff-metadata__number">
@@ -380,11 +384,7 @@ export const VersionDiffViewer: React.FC<VersionDiffViewerProps> = ({
       </div>
 
       {/* Diff content */}
-      <div
-        className="diff-content"
-        role="table"
-        aria-label="Diff entries"
-      >
+      <div className="diff-content" role="table" aria-label="Diff entries">
         {diffEntries.length === 0 ? (
           <div className="diff-no-changes" role="row">
             <span role="cell">No differences found</span>
@@ -440,7 +440,7 @@ export const VersionDiffViewer: React.FC<VersionDiffViewerProps> = ({
         </span>
       </footer>
     </div>
-  );
-};
+  )
+}
 
-export default VersionDiffViewer;
+export default VersionDiffViewer

@@ -1,9 +1,13 @@
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/prefer-nullish-coalescing */
 /**
  * T058: Diff Latency Telemetry
  * Performance instrumentation for version comparison (SC-003)
  */
 
-import { telemetry } from '@services/telemetry';
+import { telemetry } from '@services/telemetry'
 
 /**
  * Telemetry event names for diff operations
@@ -23,7 +27,7 @@ export const DIFF_TELEMETRY_EVENTS = {
   SECTION_COLLAPSED: 'diff.section_collapsed',
   /** User swapped left/right versions */
   VERSIONS_SWAPPED: 'diff.versions_swapped',
-} as const;
+} as const
 
 /**
  * Performance thresholds for diff latency (milliseconds)
@@ -35,61 +39,61 @@ export const DIFF_LATENCY_THRESHOLDS = {
   ACCEPTABLE: 1500,
   /** Poor performance - may need optimization */
   POOR: 3000,
-} as const;
+} as const
 
 /**
  * Diff latency classification
  */
-export type DiffLatencyCategory = 'good' | 'acceptable' | 'poor' | 'critical';
+export type DiffLatencyCategory = 'good' | 'acceptable' | 'poor' | 'critical'
 
 /**
  * Classify diff latency into performance categories
  */
 export function classifyDiffLatency(latencyMs: number): DiffLatencyCategory {
-  if (latencyMs <= DIFF_LATENCY_THRESHOLDS.GOOD) return 'good';
-  if (latencyMs <= DIFF_LATENCY_THRESHOLDS.ACCEPTABLE) return 'acceptable';
-  if (latencyMs <= DIFF_LATENCY_THRESHOLDS.POOR) return 'poor';
-  return 'critical';
+  if (latencyMs <= DIFF_LATENCY_THRESHOLDS.GOOD) return 'good'
+  if (latencyMs <= DIFF_LATENCY_THRESHOLDS.ACCEPTABLE) return 'acceptable'
+  if (latencyMs <= DIFF_LATENCY_THRESHOLDS.POOR) return 'poor'
+  return 'critical'
 }
 
 /**
  * Common properties for diff telemetry events
  */
 interface DiffTelemetryBase {
-  documentId: string;
-  leftVersionId: string;
-  rightVersionId: string;
+  documentId: string
+  leftVersionId: string
+  rightVersionId: string
 }
 
 /**
  * Properties for diff started event
  */
 interface DiffStartedProps extends DiffTelemetryBase {
-  correlationId: string;
+  correlationId: string
 }
 
 /**
  * Properties for diff completed event
  */
 interface DiffCompletedProps extends DiffTelemetryBase {
-  correlationId: string;
-  latencyMs: number;
-  leftPayloadSizeBytes: number;
-  rightPayloadSizeBytes: number;
-  diffEntriesCount: number;
-  additionsCount: number;
-  removalsCount: number;
-  modificationsCount: number;
+  correlationId: string
+  latencyMs: number
+  leftPayloadSizeBytes: number
+  rightPayloadSizeBytes: number
+  diffEntriesCount: number
+  additionsCount: number
+  removalsCount: number
+  modificationsCount: number
 }
 
 /**
  * Properties for diff failed event
  */
 interface DiffFailedProps extends DiffTelemetryBase {
-  correlationId: string;
-  errorCode: string;
-  errorMessage: string;
-  latencyMs?: number;
+  correlationId: string
+  errorCode: string
+  errorMessage: string
+  latencyMs?: number
 }
 
 /**
@@ -99,14 +103,14 @@ export function trackDiffStarted(props: DiffStartedProps): void {
   telemetry.track(DIFF_TELEMETRY_EVENTS.DIFF_STARTED, {
     ...props,
     timestamp: Date.now(),
-  });
+  })
 }
 
 /**
  * Track successful diff completion with latency metrics
  */
 export function trackDiffCompleted(props: DiffCompletedProps): void {
-  const latencyCategory = classifyDiffLatency(props.latencyMs);
+  const latencyCategory = classifyDiffLatency(props.latencyMs)
 
   telemetry.track(DIFF_TELEMETRY_EVENTS.DIFF_COMPLETED, {
     ...props,
@@ -114,19 +118,15 @@ export function trackDiffCompleted(props: DiffCompletedProps): void {
     timestamp: Date.now(),
     // Computed metrics
     totalPayloadSizeBytes: props.leftPayloadSizeBytes + props.rightPayloadSizeBytes,
-    totalChangesCount:
-      props.additionsCount + props.removalsCount + props.modificationsCount,
-  });
+    totalChangesCount: props.additionsCount + props.removalsCount + props.modificationsCount,
+  })
 
   // Log warning for poor performance
   if (latencyCategory === 'poor' || latencyCategory === 'critical') {
-    console.warn(
-      `[Diff Telemetry] ${latencyCategory} performance: ${props.latencyMs}ms`,
-      {
-        documentId: props.documentId,
-        totalPayloadSize: props.leftPayloadSizeBytes + props.rightPayloadSizeBytes,
-      }
-    );
+    console.warn(`[Diff Telemetry] ${latencyCategory} performance: ${props.latencyMs}ms`, {
+      documentId: props.documentId,
+      totalPayloadSize: props.leftPayloadSizeBytes + props.rightPayloadSizeBytes,
+    })
   }
 }
 
@@ -137,7 +137,7 @@ export function trackDiffFailed(props: DiffFailedProps): void {
   telemetry.track(DIFF_TELEMETRY_EVENTS.DIFF_FAILED, {
     ...props,
     timestamp: Date.now(),
-  });
+  })
 }
 
 /**
@@ -146,33 +146,29 @@ export function trackDiffFailed(props: DiffFailedProps): void {
 export function trackViewModeChange(
   documentId: string,
   fromMode: 'inline' | 'split',
-  toMode: 'inline' | 'split'
+  toMode: 'inline' | 'split',
 ): void {
   telemetry.track(DIFF_TELEMETRY_EVENTS.VIEW_MODE_CHANGED, {
     documentId,
     fromMode,
     toMode,
     timestamp: Date.now(),
-  });
+  })
 }
 
 /**
  * Track section expand/collapse for UX analytics
  */
-export function trackSectionToggle(
-  documentId: string,
-  path: string,
-  expanded: boolean
-): void {
+export function trackSectionToggle(documentId: string, path: string, expanded: boolean): void {
   const event = expanded
     ? DIFF_TELEMETRY_EVENTS.SECTION_EXPANDED
-    : DIFF_TELEMETRY_EVENTS.SECTION_COLLAPSED;
+    : DIFF_TELEMETRY_EVENTS.SECTION_COLLAPSED
 
   telemetry.track(event, {
     documentId,
     path,
     timestamp: Date.now(),
-  });
+  })
 }
 
 /**
@@ -182,7 +178,7 @@ export function trackVersionsSwapped(props: DiffTelemetryBase): void {
   telemetry.track(DIFF_TELEMETRY_EVENTS.VERSIONS_SWAPPED, {
     ...props,
     timestamp: Date.now(),
-  });
+  })
 }
 
 /**
@@ -190,29 +186,29 @@ export function trackVersionsSwapped(props: DiffTelemetryBase): void {
  */
 export function withDiffTelemetry<T>(
   props: DiffTelemetryBase,
-  computeFn: () => Promise<T>
+  computeFn: () => Promise<T>,
 ): Promise<T> {
-  const correlationId = crypto.randomUUID();
-  const startTime = performance.now();
+  const correlationId = crypto.randomUUID()
+  const startTime = performance.now()
 
-  trackDiffStarted({ ...props, correlationId });
+  trackDiffStarted({ ...props, correlationId })
 
   return computeFn()
     .then((result) => {
       // Note: Caller should call trackDiffCompleted with full metrics
-      return result;
+      return result
     })
     .catch((error) => {
-      const latencyMs = performance.now() - startTime;
+      const latencyMs = performance.now() - startTime
       trackDiffFailed({
         ...props,
         correlationId,
         errorCode: error.code || 'UNKNOWN',
         errorMessage: error.message || 'Unknown error',
         latencyMs,
-      });
-      throw error;
-    });
+      })
+      throw error
+    })
 }
 
 /**
@@ -226,5 +222,5 @@ export function useDiffTelemetry(documentId: string) {
       trackSectionToggle(documentId, path, expanded),
     trackVersionsSwapped: (leftId: string, rightId: string) =>
       trackVersionsSwapped({ documentId, leftVersionId: leftId, rightVersionId: rightId }),
-  };
+  }
 }

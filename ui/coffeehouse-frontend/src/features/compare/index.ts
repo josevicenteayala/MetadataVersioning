@@ -3,13 +3,13 @@
  */
 
 // API hooks
-export * from './api';
+export * from './api'
 
 // Components
-export * from './components';
+export * from './components'
 
 // Routes
-export * from './routes';
+export * from './routes'
 
 // Telemetry
-export * from './telemetry';
+export * from './telemetry'

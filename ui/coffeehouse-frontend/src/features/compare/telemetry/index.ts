@@ -14,4 +14,4 @@ export {
   withDiffTelemetry,
   useDiffTelemetry,
   type DiffLatencyCategory,
-} from './diffLatencyMetrics';
+} from './diffLatencyMetrics'

@@ -110,13 +110,13 @@ describe('VersionDiffViewer', () => {
     it('renders inline view by default', () => {
       const diffResult = createMockDiffResult()
       const handleViewModeChange = vi.fn()
-      
+
       renderWithProviders(
-        <VersionDiffViewer 
-          diffResult={diffResult} 
+        <VersionDiffViewer
+          diffResult={diffResult}
           viewMode="inline"
           onViewModeChange={handleViewModeChange}
-        />
+        />,
       )
 
       const inlineBtn = screen.getByRole('button', { name: /inline/i })
@@ -126,13 +126,13 @@ describe('VersionDiffViewer', () => {
     it('switches to split view when toggle clicked', async () => {
       const diffResult = createMockDiffResult()
       const handleViewModeChange = vi.fn()
-      
+
       renderWithProviders(
-        <VersionDiffViewer 
-          diffResult={diffResult} 
+        <VersionDiffViewer
+          diffResult={diffResult}
           viewMode="inline"
           onViewModeChange={handleViewModeChange}
-        />
+        />,
       )
 
       const splitBtn = screen.getByRole('button', { name: /split/i })
@@ -143,13 +143,9 @@ describe('VersionDiffViewer', () => {
 
     it('renders split panels in split view mode', () => {
       const diffResult = createMockDiffResult()
-      
+
       renderWithProviders(
-        <VersionDiffViewer 
-          diffResult={diffResult} 
-          viewMode="split"
-          onViewModeChange={vi.fn()}
-        />
+        <VersionDiffViewer diffResult={diffResult} viewMode="split" onViewModeChange={vi.fn()} />,
       )
 
       expect(screen.getByLabelText(/left version/i)).toBeInTheDocument()
@@ -183,9 +179,7 @@ describe('VersionDiffViewer', () => {
 
     it('starts collapsed when defaultCollapsed is true', () => {
       const diffResult = createMockDiffResult()
-      renderWithProviders(
-        <VersionDiffViewer diffResult={diffResult} defaultCollapsed={true} />
-      )
+      renderWithProviders(<VersionDiffViewer diffResult={diffResult} defaultCollapsed={true} />)
 
       // Content should exist but toggle buttons should show collapsed state
       const viewer = screen.getByRole('region', { name: /version diff viewer/i })
@@ -286,9 +280,7 @@ describe('VersionDiffViewer', () => {
   describe('CSS class application', () => {
     it('applies inline class in inline mode', () => {
       const diffResult = createMockDiffResult()
-      renderWithProviders(
-        <VersionDiffViewer diffResult={diffResult} viewMode="inline" />
-      )
+      renderWithProviders(<VersionDiffViewer diffResult={diffResult} viewMode="inline" />)
 
       const viewer = screen.getByRole('region', { name: /version diff viewer/i })
       expect(viewer).toHaveClass('version-diff-viewer--inline')
@@ -296,9 +288,7 @@ describe('VersionDiffViewer', () => {
 
     it('applies split class in split mode', () => {
       const diffResult = createMockDiffResult()
-      renderWithProviders(
-        <VersionDiffViewer diffResult={diffResult} viewMode="split" />
-      )
+      renderWithProviders(<VersionDiffViewer diffResult={diffResult} viewMode="split" />)
 
       const viewer = screen.getByRole('region', { name: /version diff viewer/i })
       expect(viewer).toHaveClass('version-diff-viewer--split')
@@ -313,9 +303,7 @@ describe('VersionDiffViewer', () => {
 
     it('applies custom className', () => {
       const diffResult = createMockDiffResult()
-      renderWithProviders(
-        <VersionDiffViewer diffResult={diffResult} className="custom-class" />
-      )
+      renderWithProviders(<VersionDiffViewer diffResult={diffResult} className="custom-class" />)
 
       const viewer = screen.getByRole('region', { name: /version diff viewer/i })
       expect(viewer).toHaveClass('custom-class')

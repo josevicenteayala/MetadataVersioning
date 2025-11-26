@@ -92,11 +92,7 @@ export const emitDiffPayloadWarning = (sizeKb: number, correlationId?: string) =
 /**
  * Emit error toast for diff computation failure
  */
-export const emitDiffErrorToast = (
-  errorCode: string,
-  message: string,
-  correlationId?: string
-) =>
+export const emitDiffErrorToast = (errorCode: string, message: string, correlationId?: string) =>
   emitToast({
     title: `Diff Error: ${errorCode}`,
     message,

@@ -195,9 +195,7 @@ describe('DiffErrorState', () => {
         message: 'Error',
       }
 
-      renderWithProviders(
-        <DiffErrorState error={error} onRetry={vi.fn()} onDismiss={vi.fn()} />
-      )
+      renderWithProviders(<DiffErrorState error={error} onRetry={vi.fn()} onDismiss={vi.fn()} />)
 
       expect(screen.getByLabelText(/retry diff computation/i)).toBeInTheDocument()
       expect(screen.getByLabelText(/dismiss error/i)).toBeInTheDocument()
@@ -242,7 +240,7 @@ describe('DiffErrorBoundary', () => {
     renderWithProviders(
       <DiffErrorBoundary>
         <div data-testid="child">Content</div>
-      </DiffErrorBoundary>
+      </DiffErrorBoundary>,
     )
 
     expect(screen.getByTestId('child')).toBeInTheDocument()
@@ -256,7 +254,7 @@ describe('DiffErrorBoundary', () => {
     renderWithProviders(
       <DiffErrorBoundary fallback={<div>Custom fallback</div>}>
         <ThrowingComponent />
-      </DiffErrorBoundary>
+      </DiffErrorBoundary>,
     )
 
     expect(screen.getByText('Custom fallback')).toBeInTheDocument()
@@ -270,7 +268,7 @@ describe('DiffErrorBoundary', () => {
     renderWithProviders(
       <DiffErrorBoundary>
         <ThrowingComponent />
-      </DiffErrorBoundary>
+      </DiffErrorBoundary>,
     )
 
     expect(screen.getByRole('alert')).toBeInTheDocument()
@@ -286,7 +284,7 @@ describe('DiffErrorBoundary', () => {
     renderWithProviders(
       <DiffErrorBoundary onError={onError}>
         <ThrowingComponent />
-      </DiffErrorBoundary>
+      </DiffErrorBoundary>,
     )
 
     expect(onError).toHaveBeenCalledTimes(1)

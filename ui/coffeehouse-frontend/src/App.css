@@ -292,13 +292,13 @@
 
 /* CSS Custom Properties for diff colors */
 :root {
-  --color-foam: #C8E6C9;
-  --color-foam-dark: #81C784;
-  --color-blush-latte: #FFCDD2;
-  --color-blush-dark: #E57373;
-  --color-crema: #FFF9C4;
-  --color-crema-dark: #FFF176;
-  --color-mocha: #3E2723;
+  --color-foam: #c8e6c9;
+  --color-foam-dark: #81c784;
+  --color-blush-latte: #ffcdd2;
+  --color-blush-dark: #e57373;
+  --color-crema: #fff9c4;
+  --color-crema-dark: #fff176;
+  --color-mocha: #3e2723;
 }
 
 .version-diff-viewer {
@@ -358,17 +358,17 @@
 
 .diff-stat--added {
   background: var(--color-foam);
-  color: #2E7D32;
+  color: #2e7d32;
 }
 
 .diff-stat--removed {
   background: var(--color-blush-latte);
-  color: #C62828;
+  color: #c62828;
 }
 
 .diff-stat--modified {
   background: var(--color-crema);
-  color: #F57C00;
+  color: #f57c00;
 }
 
 .diff-controls {
@@ -942,4 +942,3 @@
   background: transparent;
   color: var(--coffee-color-mocha);
 }
-

@@ -9,4 +9,4 @@ export {
   type VersionDiffResult,
   type VersionDiffError,
   type UseVersionDiffOptions,
-} from './useVersionDiff';
+} from './useVersionDiff'

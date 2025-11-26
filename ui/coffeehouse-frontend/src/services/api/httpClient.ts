@@ -57,6 +57,21 @@ const setCorrelationId = (response?: AxiosResponse): void => {
   }
 }
 
+/**
+ * T045 [US5]: Callback registry for 401 credential prompts
+ * Allows UI components to register handlers for credential prompts
+ */
+type UnauthorizedCallback = (correlationId?: string) => void
+let onUnauthorizedCallback: UnauthorizedCallback | undefined
+
+/**
+ * Register a callback to be invoked when 401 response is received
+ * Useful for triggering credential prompt UI
+ */
+export const onUnauthorized = (callback: UnauthorizedCallback | undefined) => {
+  onUnauthorizedCallback = callback
+}
+
 const client: AxiosInstance = axios.create({
   baseURL: API_BASE_URL,
   timeout: API_TIMEOUT_MS,
@@ -84,13 +99,20 @@ client.interceptors.response.use(
     setCorrelationId(response)
 
     if (response?.status === 401) {
+      const correlationId = readCorrelationId(response)
       sessionStore.getState().handleUnauthorized()
+      
       emitToast({
         intent: 'warning',
         title: 'Session expired',
-        message: 'Credentials cleared after unauthorized response. Please re-enter.',
-        correlationId: readCorrelationId(response),
+        message: 'Credentials cleared after unauthorized response. Please re-enter in Settings.',
+        correlationId,
       })
+
+      // T045: Invoke registered callback for credential prompt
+      if (onUnauthorizedCallback) {
+        onUnauthorizedCallback(correlationId)
+      }
     }
 
     return Promise.reject(error)
@@ -100,3 +122,11 @@ client.interceptors.response.use(
 export const httpClient = client
 
 export type HttpClient = typeof httpClient
+
+/**
+ * T049: Get the current correlation ID from session store
+ * Useful for error boundary displays and support troubleshooting
+ */
+export const getCorrelationId = (): string | null => {
+  return sessionStore.getState().correlationId ?? null
+}

@@ -121,16 +121,16 @@
 **Independent Test**: Enter credentials, run test connection, and confirm credentials persist in-memory plus auto-clear on 401.
 
 ### Tests (write first)
-- [ ] T040 [P] [US5] Create Vitest spec `ui/coffeehouse-frontend/tests/unit/settings/authSettingsPanel.test.tsx` covering validation + auto-clear.
-- [ ] T041 [P] [US5] Add Playwright spec `ui/coffeehouse-frontend/tests/e2e/auth-settings.spec.ts` verifying credential entry and API failure handling.
-- [ ] T060 [P] [US5] Write Vitest spec `ui/coffeehouse-frontend/tests/unit/settings/sessionStoreGuards.test.ts` ensuring invalid credentials never persist after failed `/auth/check` responses.
+- [X] T040 [P] [US5] Create Vitest spec `ui/coffeehouse-frontend/tests/unit/settings/authSettingsPanel.test.tsx` covering validation + auto-clear.
+- [X] T041 [P] [US5] Add Playwright spec `ui/coffeehouse-frontend/tests/e2e/auth-settings.spec.ts` verifying credential entry and API failure handling.
+- [X] T060 [P] [US5] Write Vitest spec `ui/coffeehouse-frontend/tests/unit/settings/sessionStoreGuards.test.ts` ensuring invalid credentials never persist after failed `/auth/check` responses.
 
 ### Implementation
-- [ ] T042 [P] [US5] Implement `/auth/check` hook `ui/coffeehouse-frontend/src/features/settings/api/useAuthCheck.ts` using generated client + toast bus.
-- [ ] T043 [US5] Build Settings/Auth panel `ui/coffeehouse-frontend/src/features/settings/components/AuthSettingsPanel.tsx` with test button + guidance copy.
-- [ ] T044 [US5] Wire session store actions + context provider `ui/coffeehouse-frontend/src/app/providers/AuthProvider.tsx` to share credentials globally.
-- [ ] T045 [US5] Add automatic credential prompts on 401 in `ui/coffeehouse-frontend/src/services/api/httpClient.ts` using Zustand store callbacks.
-- [ ] T061 [US5] Enforce invalid credential guard + toast guidance inside `ui/coffeehouse-frontend/src/services/auth/sessionStore.ts`, clearing secrets immediately when `/auth/check` fails.
+- [X] T042 [P] [US5] Implement `/auth/check` hook `ui/coffeehouse-frontend/src/features/settings/api/useAuthCheck.ts` using generated client + toast bus.
+- [X] T043 [US5] Build Settings/Auth panel `ui/coffeehouse-frontend/src/features/settings/components/AuthSettingsPanel.tsx` with test button + guidance copy.
+- [X] T044 [US5] Wire session store actions + context provider `ui/coffeehouse-frontend/src/app/providers/AuthProvider.tsx` to share credentials globally.
+- [X] T045 [US5] Add automatic credential prompts on 401 in `ui/coffeehouse-frontend/src/services/api/httpClient.ts` using Zustand store callbacks.
+- [X] T061 [US5] Enforce invalid credential guard + toast guidance inside `ui/coffeehouse-frontend/src/services/auth/sessionStore.ts`, clearing secrets immediately when `/auth/check` fails.
 
 ---
 
@@ -138,12 +138,12 @@
 
 **Purpose**: Finish documentation, accessibility, and performance hardening.
 
-- [ ] T046 [P] Audit accessibility (color contrast, focus order) across `src/features/*` and document fixes in `docs/accessibility.md`.
-- [ ] T047 [P] Finalize README snippet + quickstart updates referencing scripts in `ui/coffeehouse-frontend/README.md`.
-- [ ] T048 Run Lighthouse/Performance tests and tune lazy loading + code splitting in `ui/coffeehouse-frontend/vite.config.ts`.
-- [ ] T049 Harden error boundary + fallback UI in `ui/coffeehouse-frontend/src/app/App.tsx` ensuring correlation IDs display on failures.
-- [ ] T050 Execute `pnpm lint && pnpm test:ci && pnpm test:e2e` plus `pnpm build` to validate release checklist.
-- [ ] T062 Wire SC-004 supportability telemetry by streaming lifecycle + diff metrics into `ui/coffeehouse-frontend/src/services/analytics/supportInsights.ts` and documenting alert wiring.
+- [X] T046 [P] Audit accessibility (color contrast, focus order) across `src/features/*` and document fixes in `docs/accessibility.md`.
+- [X] T047 [P] Finalize README snippet + quickstart updates referencing scripts in `ui/coffeehouse-frontend/README.md`.
+- [X] T048 Run Lighthouse/Performance tests and tune lazy loading + code splitting in `ui/coffeehouse-frontend/vite.config.ts`.
+- [X] T049 Harden error boundary + fallback UI in `ui/coffeehouse-frontend/src/app/App.tsx` ensuring correlation IDs display on failures.
+- [X] T050 Execute `pnpm lint && pnpm test:ci && pnpm test:e2e` plus `pnpm build` to validate release checklist.
+- [X] T062 Wire SC-004 supportability telemetry by streaming lifecycle + diff metrics into `ui/coffeehouse-frontend/src/services/analytics/supportInsights.ts` and documenting alert wiring.
 
 ---
 

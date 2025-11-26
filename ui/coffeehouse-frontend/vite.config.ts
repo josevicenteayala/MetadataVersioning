@@ -18,6 +18,33 @@ export default defineConfig({
       '@lib': path.resolve(__dirname, 'src/lib'),
     },
   },
+  build: {
+    // Code splitting configuration for optimal performance
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          // Vendor chunk for React ecosystem
+          vendor: ['react', 'react-dom', 'react-router-dom'],
+          // Data fetching chunk
+          query: ['@tanstack/react-query'],
+          // State management chunk
+          state: ['zustand'],
+          // Diff visualization chunk (loaded when needed)
+          diff: ['jsondiffpatch'],
+        },
+      },
+    },
+    // Enable source maps for production debugging
+    sourcemap: true,
+    // Target modern browsers for smaller bundles
+    target: 'esnext',
+    // Chunk size warning threshold (500KB)
+    chunkSizeWarningLimit: 500,
+  },
+  // Optimize dependency pre-bundling
+  optimizeDeps: {
+    include: ['react', 'react-dom', 'react-router-dom', '@tanstack/react-query', 'zustand', 'axios'],
+  },
   test: {
     environment: 'jsdom',
     globals: true,

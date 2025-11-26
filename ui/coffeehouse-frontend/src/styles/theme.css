@@ -4,6 +4,18 @@
   }
 }
 
+/* Reduced motion support for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
 body {
   background: radial-gradient(circle at top, var(--coffee-color-crema), var(--coffee-color-foam));
   color: var(--coffee-color-espresso);
@@ -212,7 +224,7 @@ body {
   border-radius: var(--coffee-radius-pill);
   font-size: 0.7rem;
   font-weight: 700;
-  background: var(--coffee-color-matcha);
+  background: var(--coffee-color-moss);
   color: #fff;
 }
 
@@ -298,7 +310,7 @@ body {
 
 /* Active status chip */
 .status-chip--active {
-  background: var(--coffee-color-matcha);
+  background: var(--coffee-color-moss);
   color: #fff;
 }
 
@@ -769,7 +781,7 @@ body {
   border-radius: var(--coffee-radius-pill);
   font-size: 0.8rem;
   font-weight: 700;
-  background: var(--coffee-color-matcha);
+  background: var(--coffee-color-moss);
   color: #fff;
   font-family: var(--coffee-font-mono);
 }

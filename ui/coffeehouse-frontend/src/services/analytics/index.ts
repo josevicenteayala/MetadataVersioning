@@ -1,0 +1,17 @@
+export {
+  trackDiffInitiated,
+  trackDiffCompleted,
+  trackDiffFailed,
+  trackSelfServiceResolution,
+  trackVersionLookup,
+  trackActivationAttempt,
+  trackAuthFailure,
+  trackErrorDisplayed,
+  getTelemetrySummary,
+  resetTelemetry,
+  exportEvents,
+  flushEvents,
+  type DiffComparisonEvent,
+  type SelfServiceResolutionEvent,
+  type SupportAbilityMetric,
+} from './supportInsights'

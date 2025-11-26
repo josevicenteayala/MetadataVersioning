@@ -2,6 +2,7 @@ package com.metadata.versioning.adapter.out.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -29,15 +30,17 @@ public class SecurityConfig {
         http
             .csrf(AbstractHttpConfigurer::disable)
             .authorizeHttpRequests(auth -> auth
+                // Swagger/OpenAPI docs allowed
+                .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
                 // Public read access
-                .requestMatchers("GET", "/api/**").permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/**").permitAll()
                 // Actuator endpoints public
                 .requestMatchers("/actuator/**").permitAll()
                 // Write operations require authentication
-                .requestMatchers("POST", "/api/**").authenticated()
-                .requestMatchers("PUT", "/api/**").authenticated()
-                .requestMatchers("PATCH", "/api/**").authenticated()
-                .requestMatchers("DELETE", "/api/**").authenticated()
+                .requestMatchers(HttpMethod.POST, "/api/**").authenticated()
+                .requestMatchers(HttpMethod.PUT, "/api/**").authenticated()
+                .requestMatchers(HttpMethod.PATCH, "/api/**").authenticated()
+                .requestMatchers(HttpMethod.DELETE, "/api/**").authenticated()
                 .anyRequest().authenticated()
             )
             .httpBasic(withDefaults());

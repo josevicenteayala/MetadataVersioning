@@ -1,5 +1,6 @@
 package com.metadata.versioning.domain.model;
 
+import com.metadata.versioning.domain.exception.InvalidActivationException;
 import com.metadata.versioning.domain.exception.VersionNotFoundException;
 
 import java.time.Instant;
@@ -81,15 +82,22 @@ public class MetadataDocument {
     }
 
     /**
-     * Activate a specific version by number (FR-006).
+     * Activate a specific version by number (FR-006, FR-023).
      * Deactivates any currently active version.
+     * Only published versions can be activated (FR-023).
      * 
      * @throws VersionNotFoundException if version number doesn't exist
+     * @throws InvalidActivationException if version is not in published state
      */
     public void activateVersion(int versionNumber) {
         // Find the version to activate
         Version versionToActivate = getVersion(versionNumber)
                 .orElseThrow(() -> new VersionNotFoundException(type, name, versionNumber));
+
+        // Enforce FR-023: Only published versions can be activated
+        if (!versionToActivate.isPublished()) {
+            throw InvalidActivationException.nonPublishedVersion(type, name, versionNumber);
+        }
 
         // Deactivate all versions and activate the specified one
         List<Version> updatedVersions = new ArrayList<>();

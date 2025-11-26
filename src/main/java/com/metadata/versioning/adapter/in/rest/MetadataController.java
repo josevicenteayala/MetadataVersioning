@@ -4,7 +4,10 @@ import com.metadata.versioning.adapter.in.rest.dto.CreateMetadataRequest;
 import com.metadata.versioning.adapter.in.rest.dto.CreateVersionRequest;
 import com.metadata.versioning.adapter.in.rest.dto.VersionResponse;
 import com.metadata.versioning.application.port.in.CreateVersionUseCase;
+import com.metadata.versioning.application.port.in.GetActiveVersionUseCase;
 import com.metadata.versioning.application.port.in.GetVersionHistoryUseCase;
+import com.metadata.versioning.application.service.MetadataQueryService;
+import com.metadata.versioning.domain.model.MetadataDocument;
 import com.metadata.versioning.domain.model.Version;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -30,11 +33,17 @@ public class MetadataController {
 
     private final CreateVersionUseCase createVersionUseCase;
     private final GetVersionHistoryUseCase getVersionHistoryUseCase;
+    private final GetActiveVersionUseCase getActiveVersionUseCase;
+    private final MetadataQueryService metadataQueryService;
 
     public MetadataController(CreateVersionUseCase createVersionUseCase,
-                             GetVersionHistoryUseCase getVersionHistoryUseCase) {
+                             GetVersionHistoryUseCase getVersionHistoryUseCase,
+                             GetActiveVersionUseCase getActiveVersionUseCase,
+                             MetadataQueryService metadataQueryService) {
         this.createVersionUseCase = createVersionUseCase;
         this.getVersionHistoryUseCase = getVersionHistoryUseCase;
+        this.getActiveVersionUseCase = getActiveVersionUseCase;
+        this.metadataQueryService = metadataQueryService;
     }
 
     /**
@@ -116,28 +125,51 @@ public class MetadataController {
     /**
      * Get all versions for a metadata document (FR-009).
      * Public access - no authentication required (FR-026).
+     * Supports filtering by publishing state (FR-024).
      */
     @GetMapping("/{type}/{name}/versions")
     @Operation(
         summary = "List all versions",
-        description = "Get version history ordered by version number"
+        description = "Get version history ordered by version number. Optionally filter by publishing state."
     )
     @ApiResponse(responseCode = "200", description = "Version list")
     @ApiResponse(responseCode = "404", description = "Document not found")
     public ResponseEntity<List<VersionResponse>> getVersionHistory(
             @PathVariable String type,
-            @PathVariable String name) {
+            @PathVariable String name,
+            @RequestParam(required = false) String state) {
 
         GetVersionHistoryUseCase.VersionHistoryQuery query =
                 new GetVersionHistoryUseCase.VersionHistoryQuery(type, name);
 
         List<Version> versions = getVersionHistoryUseCase.getVersionHistory(query);
 
+        // Apply state filter if provided
+        if (state != null && !state.isBlank()) {
+            String normalizedState = state.toUpperCase();
+            versions = versions.stream()
+                    .filter(v -> matchesPublishingState(v, normalizedState))
+                    .collect(Collectors.toList());
+        }
+
         List<VersionResponse> response = versions.stream()
                 .map(v -> VersionResponse.fromDomain(v, type, name))
                 .collect(Collectors.toList());
 
         return ResponseEntity.ok(response);
+    }
+
+    /**
+     * Check if version matches the requested publishing state filter.
+     */
+    private boolean matchesPublishingState(Version version, String stateFilter) {
+        return switch (stateFilter) {
+            case "DRAFT" -> version.publishingState() instanceof com.metadata.versioning.domain.model.PublishingState.Draft;
+            case "APPROVED" -> version.publishingState() instanceof com.metadata.versioning.domain.model.PublishingState.Approved;
+            case "PUBLISHED" -> version.publishingState() instanceof com.metadata.versioning.domain.model.PublishingState.Published;
+            case "ARCHIVED" -> version.publishingState() instanceof com.metadata.versioning.domain.model.PublishingState.Archived;
+            default -> true; // Unknown state filter - return all
+        };
     }
 
     /**
@@ -164,4 +196,76 @@ public class MetadataController {
 
         return ResponseEntity.ok(response);
     }
+
+    /**
+     * Get currently active version (FR-007).
+     * This is the main endpoint for downstream systems consuming metadata.
+     * Public access - no authentication required (FR-026).
+     */
+    @GetMapping("/{type}/{name}/active")
+    @Operation(
+        summary = "Get active version",
+        description = "Retrieve the currently active version for consumption by downstream systems"
+    )
+    @ApiResponse(responseCode = "200", description = "Active version details")
+    @ApiResponse(responseCode = "404", description = "No active version or document not found")
+    public ResponseEntity<VersionResponse> getActiveVersion(
+            @PathVariable String type,
+            @PathVariable String name) {
+
+        return getActiveVersionUseCase.getActiveVersion(type, name)
+                .map(version -> VersionResponse.fromDomain(version, type, name))
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    /**
+     * List all metadata documents with pagination (FR-015).
+     * Public access - no authentication required (FR-026).
+     */
+    @GetMapping
+    @Operation(
+        summary = "List metadata documents",
+        description = "Get paginated list of all metadata documents"
+    )
+    @ApiResponse(responseCode = "200", description = "List of documents")
+    public ResponseEntity<org.springframework.data.domain.Page<MetadataDocumentSummary>> listDocuments(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "20") int size,
+            @RequestParam(required = false) String type) {
+
+        org.springframework.data.domain.Pageable pageable =
+                org.springframework.data.domain.PageRequest.of(page, size);
+
+        org.springframework.data.domain.Page<MetadataDocument> documents;
+        if (type != null && !type.isBlank()) {
+            documents = metadataQueryService.listDocumentsByType(type, pageable);
+        } else {
+            documents = metadataQueryService.listDocuments(pageable);
+        }
+
+        org.springframework.data.domain.Page<MetadataDocumentSummary> response =
+                documents.map(doc -> new MetadataDocumentSummary(
+                    doc.getType(),
+                    doc.getName(),
+                    doc.getVersionCount(),
+                    doc.hasActiveVersion(),
+                    doc.getCreatedAt(),
+                    doc.getUpdatedAt()
+                ));
+
+        return ResponseEntity.ok(response);
+    }
+
+    /**
+     * DTO for document list summary.
+     */
+    public record MetadataDocumentSummary(
+            String type,
+            String name,
+            int versionCount,
+            boolean hasActiveVersion,
+            java.time.Instant createdAt,
+            java.time.Instant updatedAt
+    ) {}
 }

@@ -46,6 +46,9 @@ public class VersionEntity {
     @Column(name = "change_summary", length = 1000)
     private String changeSummary;
 
+    @Column(name = "publishing_state", nullable = false, length = 20)
+    private String publishingState = "DRAFT";
+
     @Column(name = "is_active", nullable = false)
     private boolean isActive = false;
 
@@ -115,6 +118,14 @@ public class VersionEntity {
 
     public void setChangeSummary(String changeSummary) {
         this.changeSummary = changeSummary;
+    }
+
+    public String getPublishingState() {
+        return publishingState;
+    }
+
+    public void setPublishingState(String publishingState) {
+        this.publishingState = publishingState;
     }
 
     public boolean isActive() {

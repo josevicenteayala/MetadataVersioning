@@ -8,8 +8,11 @@ import com.metadata.versioning.adapter.out.persistence.entity.VersionEntity;
 import com.metadata.versioning.adapter.out.persistence.repository.JpaMetadataDocumentRepository;
 import com.metadata.versioning.application.port.out.MetadataDocumentRepository;
 import com.metadata.versioning.domain.model.MetadataDocument;
+import com.metadata.versioning.domain.model.PublishingState;
 import com.metadata.versioning.domain.model.Version;
 import org.springframework.context.annotation.Profile;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -67,6 +70,18 @@ public class MetadataDocumentPersistenceAdapter implements MetadataDocumentRepos
         return toDomain(savedEntity);
     }
 
+    @Override
+    public Page<MetadataDocument> findAll(Pageable pageable) {
+        return jpaRepository.findAll(pageable)
+                .map(this::toDomain);
+    }
+
+    @Override
+    public Page<MetadataDocument> findAllByType(String type, Pageable pageable) {
+        return jpaRepository.findAllByType(type, pageable)
+                .map(this::toDomain);
+    }
+
     /**
      * Convert domain model to JPA entity.
      */
@@ -93,12 +108,17 @@ public class MetadataDocumentPersistenceAdapter implements MetadataDocumentRepos
     private void updateEntity(MetadataDocumentEntity entity, MetadataDocument document) {
         entity.setUpdatedAt(document.getUpdatedAt());
 
-        // Only add new versions (don't clear existing ones)
-        int existingVersionCount = entity.getVersions().size();
         List<Version> allVersions = document.getAllVersions();
         
-        // Add only new versions
-        for (int i = existingVersionCount; i < allVersions.size(); i++) {
+        // Update existing versions (for activation status changes)
+        for (int i = 0; i < Math.min(entity.getVersions().size(), allVersions.size()); i++) {
+            VersionEntity existingEntity = entity.getVersions().get(i);
+            Version domainVersion = allVersions.get(i);
+            existingEntity.setActive(domainVersion.isActive());
+        }
+        
+        // Add new versions if any
+        for (int i = entity.getVersions().size(); i < allVersions.size(); i++) {
             Version version = allVersions.get(i);
             VersionEntity versionEntity = toVersionEntity(version);
             entity.addVersion(versionEntity);
@@ -119,6 +139,7 @@ public class MetadataDocumentPersistenceAdapter implements MetadataDocumentRepos
             );
             entity.setCreatedAt(version.createdAt());
             entity.setActive(version.isActive());
+            entity.setPublishingState(version.publishingState().name());
             return entity;
         } catch (JsonProcessingException e) {
             throw new RuntimeException("Failed to serialize version content", e);
@@ -148,12 +169,15 @@ public class MetadataDocumentPersistenceAdapter implements MetadataDocumentRepos
     private Version toVersionDomain(VersionEntity entity) {
         try {
             JsonNode content = objectMapper.readTree(entity.getContent());
+            PublishingState state = PublishingState.fromString(entity.getPublishingState());
+            
             return new Version(
                     entity.getVersionNumber(),
                     content,
                     entity.getAuthor(),
                     entity.getCreatedAt(),
                     entity.getChangeSummary(),
+                    state,
                     entity.isActive()
             );
         } catch (JsonProcessingException e) {

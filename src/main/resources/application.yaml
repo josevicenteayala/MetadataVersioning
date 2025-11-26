@@ -47,7 +47,61 @@ logging:
   pattern:
     console: "%d{yyyy-MM-dd HH:mm:ss} - %logger{36} - %msg%n"
 
+# Spring Boot Actuator configuration
 management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+      base-path: /actuator
+  endpoint:
+    health:
+      show-details: when-authorized
+      probes:
+        enabled: true
+  health:
+    livenessState:
+      enabled: true
+    readinessState:
+      enabled: true
+    db:
+      enabled: true
+    diskSpace:
+      enabled: true
+      threshold: 10MB
+  metrics:
+    tags:
+      application: ${spring.application.name}
+    distribution:
+      percentiles-histogram:
+        http.server.requests: true
+      slo:
+        http.server.requests: 100ms,200ms,500ms,1s,3s
+  info:
+    env:
+      enabled: true
+    java:
+      enabled: true
+    os:
+      enabled: true
+
+# Application information for /actuator/info endpoint
+info:
+  app:
+    name: Metadata Versioning Service
+    description: RESTful API for comprehensive metadata management with version control
+    version: 1.0.0-SNAPSHOT
+    encoding: @project.build.sourceEncoding@
+    java:
+      version: @java.version@
+
+# Enable async execution for audit logging
+spring.task.execution:
+  pool:
+    core-size: 2
+    max-size: 5
+    queue-capacity: 100
+  thread-name-prefix: audit-async-
   endpoints:
     web:
       exposure:

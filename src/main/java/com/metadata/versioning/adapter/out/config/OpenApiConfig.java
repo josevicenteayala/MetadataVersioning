@@ -47,9 +47,9 @@ public class OpenApiConfig {
             .addServersItem(new Server()
                 .url("http://localhost:8080")
                 .description("Local development server"))
-            .addSecurityItem(new SecurityRequirement().addList("basicAuth"))
+            .addSecurityItem(new SecurityRequirement().addList("BasicAuth"))
             .components(new io.swagger.v3.oas.models.Components()
-                .addSecuritySchemes("basicAuth", new SecurityScheme()
+                .addSecuritySchemes("BasicAuth", new SecurityScheme()
                     .type(SecurityScheme.Type.HTTP)
                     .scheme("basic")
                     .description("HTTP Basic Authentication for write operations")));

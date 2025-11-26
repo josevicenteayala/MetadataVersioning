@@ -1,13 +1,17 @@
 package com.metadata.versioning.application.service;
 
+import com.metadata.versioning.application.port.in.ActivateVersionUseCase;
 import com.metadata.versioning.application.port.in.CreateVersionUseCase;
 import com.metadata.versioning.application.port.in.GetVersionHistoryUseCase;
 import com.metadata.versioning.application.port.out.MetadataDocumentRepository;
+import com.metadata.versioning.application.port.out.SchemaDefinitionRepository;
 import com.metadata.versioning.domain.exception.DocumentAlreadyExistsException;
 import com.metadata.versioning.domain.exception.VersionNotFoundException;
 import com.metadata.versioning.domain.model.MetadataDocument;
+import com.metadata.versioning.domain.model.PublishingState;
 import com.metadata.versioning.domain.model.Version;
 import com.metadata.versioning.domain.validator.JsonStructureValidator;
+import com.metadata.versioning.domain.validator.SchemaValidator;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,18 +23,26 @@ import java.util.List;
  */
 @Service
 @Transactional
-public class VersionManagementService implements CreateVersionUseCase, GetVersionHistoryUseCase {
+public class VersionManagementService implements CreateVersionUseCase, GetVersionHistoryUseCase, ActivateVersionUseCase {
 
     private final MetadataDocumentRepository repository;
+    private final SchemaDefinitionRepository schemaRepository;
+    private final SchemaValidator schemaValidator;
 
-    public VersionManagementService(MetadataDocumentRepository repository) {
+    public VersionManagementService(MetadataDocumentRepository repository,
+                                   SchemaDefinitionRepository schemaRepository) {
         this.repository = repository;
+        this.schemaRepository = schemaRepository;
+        this.schemaValidator = new SchemaValidator();
     }
 
     @Override
     public Version createFirstVersion(CreateFirstVersionCommand command) {
         // Validate JSON structure and size (FR-011, FR-025)
         JsonStructureValidator.validate(command.content());
+
+        // Validate against schema if one exists
+        validateAgainstSchema(command.type(), command.content());
 
         // Check if document already exists (FR-005)
         if (repository.existsByTypeAndName(command.type(), command.name())) {
@@ -64,6 +76,9 @@ public class VersionManagementService implements CreateVersionUseCase, GetVersio
         // Validate JSON structure and size (FR-011, FR-025)
         JsonStructureValidator.validate(command.content());
 
+        // Validate against schema if one exists
+        validateAgainstSchema(command.type(), command.content());
+
         // Find existing document
         MetadataDocument document = repository.findByTypeAndName(command.type(), command.name())
                 .orElseThrow(() -> new VersionNotFoundException(command.type(), command.name()));
@@ -81,6 +96,16 @@ public class VersionManagementService implements CreateVersionUseCase, GetVersio
         // Return the newly created version
         return updatedDocument.getVersion(newVersion.versionNumber())
                 .orElseThrow(() -> new IllegalStateException("Failed to retrieve created version"));
+    }
+
+    /**
+     * Validate content against schema if one exists for the type.
+     * Throws SchemaViolationException if validation fails in strict mode.
+     */
+    private void validateAgainstSchema(String type, com.fasterxml.jackson.databind.JsonNode content) {
+        schemaRepository.findByType(type).ifPresent(schema ->
+                schemaValidator.validate(content, schema)
+        );
     }
 
     @Override
@@ -105,5 +130,60 @@ public class VersionManagementService implements CreateVersionUseCase, GetVersio
         return document.getVersion(query.versionNumber())
                 .orElseThrow(() -> new VersionNotFoundException(
                         query.type(), query.name(), query.versionNumber()));
+    }
+
+    @Override
+    public void activateVersion(String type, String name, Integer versionNumber) {
+        // Find document
+        MetadataDocument document = repository.findByTypeAndName(type, name)
+                .orElseThrow(() -> new VersionNotFoundException(type, name));
+
+        // Activate the version (FR-006)
+        // This deactivates any currently active version and activates the specified one
+        document.activateVersion(versionNumber);
+
+        // Persist the changes
+        repository.update(document);
+    }
+
+    /**
+     * Transition version publishing state (FR-024).
+     * Validates state transitions using PublishingState rules.
+     */
+    public Version transitionVersionState(String type, String name, Integer versionNumber, PublishingState newState) {
+        // Find document
+        MetadataDocument document = repository.findByTypeAndName(type, name)
+                .orElseThrow(() -> new VersionNotFoundException(type, name));
+
+        // Get the version to transition
+        Version version = document.getVersion(versionNumber)
+                .orElseThrow(() -> new VersionNotFoundException(type, name, versionNumber));
+
+        // Transition to new state (validates transition rules)
+        Version updatedVersion = version.transitionTo(newState);
+
+        // Replace version in document
+        List<Version> updatedVersions = new java.util.ArrayList<>();
+        for (Version v : document.getAllVersions()) {
+            if (v.versionNumber().equals(versionNumber)) {
+                updatedVersions.add(updatedVersion);
+            } else {
+                updatedVersions.add(v);
+            }
+        }
+
+        // Create updated document with new version list
+        MetadataDocument updatedDocument = new MetadataDocument(
+                document.getType(),
+                document.getName(),
+                updatedVersions,
+                document.getCreatedAt(),
+                document.getUpdatedAt()
+        );
+
+        // Save and return
+        MetadataDocument savedDocument = repository.update(updatedDocument);
+        return savedDocument.getVersion(versionNumber)
+                .orElseThrow(() -> new IllegalStateException("Failed to retrieve updated version"));
     }
 }

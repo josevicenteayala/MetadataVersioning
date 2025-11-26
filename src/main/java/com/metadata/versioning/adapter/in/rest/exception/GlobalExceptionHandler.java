@@ -3,18 +3,18 @@ package com.metadata.versioning.adapter.in.rest.exception;
 import com.metadata.versioning.domain.exception.DocumentAlreadyExistsException;
 import com.metadata.versioning.domain.exception.DomainException;
 import com.metadata.versioning.domain.exception.InvalidJsonException;
+import com.metadata.versioning.domain.exception.SchemaAlreadyExistsException;
+import com.metadata.versioning.domain.exception.SchemaNotFoundException;
+import com.metadata.versioning.domain.exception.SchemaViolationException;
 import com.metadata.versioning.domain.exception.VersionNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.time.Instant;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -53,6 +53,40 @@ public class GlobalExceptionHandler {
                 ex.getMessage(),
                 HttpStatus.BAD_REQUEST.value(),
                 Instant.now()
+        );
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+    }
+
+    @ExceptionHandler(SchemaNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleSchemaNotFound(SchemaNotFoundException ex) {
+        ErrorResponse error = new ErrorResponse(
+                ex.getErrorCode(),
+                ex.getMessage(),
+                HttpStatus.NOT_FOUND.value(),
+                Instant.now()
+        );
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+    }
+
+    @ExceptionHandler(SchemaAlreadyExistsException.class)
+    public ResponseEntity<ErrorResponse> handleSchemaAlreadyExists(SchemaAlreadyExistsException ex) {
+        ErrorResponse error = new ErrorResponse(
+                ex.getErrorCode(),
+                ex.getMessage(),
+                HttpStatus.CONFLICT.value(),
+                Instant.now()
+        );
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
+    }
+
+    @ExceptionHandler(SchemaViolationException.class)
+    public ResponseEntity<SchemaViolationErrorResponse> handleSchemaViolation(SchemaViolationException ex) {
+        SchemaViolationErrorResponse error = new SchemaViolationErrorResponse(
+                ex.getErrorCode(),
+                ex.getMessage(),
+                HttpStatus.BAD_REQUEST.value(),
+                Instant.now(),
+                ex.getViolations()
         );
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
     }
@@ -143,5 +177,16 @@ public class GlobalExceptionHandler {
             String field,
             String message,
             Object rejectedValue
+    ) {}
+
+    /**
+     * Schema violation error response with list of violations.
+     */
+    public record SchemaViolationErrorResponse(
+            String error,
+            String message,
+            int status,
+            Instant timestamp,
+            List<String> violations
     ) {}
 }

@@ -1,52 +1,315 @@
-# MetadataVersioning# MetadataVersioning
+# Metadata Versioning Service
 
+> A production-ready RESTful API for comprehensive metadata management with version control, schema validation, and publishing workflows.
 
+[![Java](https://img.shields.io/badge/Java-21_LTS-orange.svg)](https://openjdk.org/projects/jdk/21/)
+[![Spring Boot](https://img.shields.io/badge/Spring_Boot-3.5.0-green.svg)](https://spring.io/projects/spring-boot)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-17+-blue.svg)](https://www.postgresql.org/)
+[![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
-> A versioned metadata management platform for business-configurable JSON documentsMetadataVersioning is a platform that helps non-technical business users describe and evolve metadata for topics such as loyalty programs, retail campaigns, offers, and coupons. Each metadata document is stored as JSON, validated against a schema that defines the stable structure, and remains open to custom properties that stakeholders may need for their specific scenarios. Every change to a JSON document is versioned, so customers can view history, compare revisions, and confidently publish updates.
+## 🎯 Overview
 
+MetadataVersioning is a platform that helps business users and developers manage versioned JSON metadata for topics such as loyalty programs, retail campaigns, offers, and coupons. Every change is versioned, validated against schemas, and traceable through a complete audit history.
 
+### Key Features
 
-MetadataVersioning empowers non-technical business users to create and evolve metadata for topics such as loyalty programs, retail campaigns, offers, and coupons—without writing code. Every change is versioned, validated against schemas, and traceable through a complete audit history.## Audience & Purpose
+- 📝 **Versioned JSON Storage**: Every save creates an immutable version with full change history
+- 🔄 **Version Control**: Create, activate, and compare versions with built-in diff engine
+- ✅ **Schema Validation**: JSON Schema validation with flexible custom property support
+- 🚀 **Publishing Workflow**: Draft → Approved → Published → Archived lifecycle
+- 🔍 **Version Comparison**: Side-by-side diff to understand changes before publishing
+- 🔐 **Security**: Public read access, authenticated write operations
+- 📊 **Observability**: Micrometer metrics, health checks, distributed tracing
+- 🏗️ **Hexagonal Architecture**: Clean separation of domain, application, and adapter layers
 
-- **Business owners / customer teams** need a safe way to describe business rules without touching code.
+## 🚀 Quick Start
 
-## What It Does- **Developers / integrators** expect reliable APIs, validation, and traceable history when consuming the metadata in downstream systems.
+### Prerequisites
 
+- **Java 21 LTS** (OpenJDK 21.0.9 or later)
+- **Maven 3.9+**
+- **PostgreSQL 17+**
+- **Docker** (optional, for running PostgreSQL)
 
+### 1. Start PostgreSQL
 
-- **Schema-aware editing**: Define structured metadata with flexibility for custom propertiesThe application bridges both worlds by providing APIs for automation and a guided UI for collaborative editing.
+Using Docker:
+```bash
+docker-compose up -d
+```
 
-- **Version control**: Every save creates an immutable version with full change history
+Or manually:
+```bash
+psql -U postgres -c "CREATE DATABASE metadata_versioning;"
+```
 
-- **Visual comparison**: Side-by-side diff to understand changes before publishing## Core Concepts
+### 2. Build the Application
 
-- **Dual interfaces**: REST API for developers, guided UI for business users- **Topics** – logical areas such as `loyalty`, `retail`, `offers`, `coupons`. Each topic has a base schema curated by the platform team.
+```bash
+mvn clean install
+```bash
+curl http://localhost:8080/actuator/health
+```
 
-- **Role-based access**: Secure permissions for viewing, editing, and publishing- **Schema with extensions** – schemas define required and optional fields plus the slots where custom attributes live. Custom properties are stored alongside schema-defined ones and validated through generic rules (data type, naming, depth limits).
+### 5. Try the API
 
-- **Versioned JSON documents** – each save operation creates a new immutable version (`v1`, `v2`, ...). Metadata includes author, timestamp, diff summary, and publishing state.
+#### Create a metadata document:
+```bash
+curl -X POST http://localhost:8080/api/v1/metadata \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Basic dXNlcjpwYXNz" \
+  -d '{
+    "type": "loyalty-program",
+    "name": "gold-tier",
+    "content": {
+      "displayName": "Gold Tier Benefits",
+      "pointsMultiplier": 1.5,
+      "perks": ["Free shipping", "Birthday bonus", "Priority support"]
+    }
+  }'
+```
 
-## Key Features- **Comparison tooling** – users can diff any two versions of the same topic to understand structural and value changes before promoting them to production.
+#### Retrieve active version:
+```bash
+curl http://localhost:8080/api/v1/metadata/loyalty-program/gold-tier/active
+```
 
+#### List all versions:
+```bash
+curl http://localhost:8080/api/v1/metadata/loyalty-program/gold-tier/versions
+```
 
+#### Compare versions:
+```bash
+curl http://localhost:8080/api/v1/metadata/loyalty-program/gold-tier/versions/compare?from=1&to=2
+```
 
-- 📝 **Rich JSON editor** with business-friendly form controls## MVP Scope
+## 📚 API Documentation
 
-- 🔄 **Version history** with rollback and comparison### MVP 1 – API-first delivery
+Full OpenAPI 3.1 specification available at:
+- **Swagger UI**: http://localhost:8080/swagger-ui/index.html
+- **OpenAPI JSON**: http://localhost:8080/v3/api-docs
+- **Spec**: [`specs/001-metadata-version-api/contracts/openapi.yaml`](specs/001-metadata-version-api/contracts/openapi.yaml)
 
-- ✅ **Validation** against JSON schemas with custom property support- CRUD endpoints for topic JSONs (`POST /topics/{topic}/documents`, `GET /.../{version}`, `PUT`, `DELETE`).
+Swagger access:
+- No auth needed to load the docs UI/JSON.
+- Use HTTP Basic when trying secured endpoints from the UI:
+  - `admin` / `admin`
+  - `user` / `user`
 
-- 🔐 **RBAC security** with audit logging- Schema-aware validation that enforces required fields while allowing custom properties.
+### Core Endpoints
 
-- 🎯 **Template gallery** for common metadata types- Version history retrieval and comparison service returning human-friendly diff data.
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/metadata` | GET | List all metadata documents (paginated) |
+| `/metadata` | POST | Create new metadata document (auth required) |
+| `/metadata/{type}/{name}/active` | GET | Get currently active version |
+| `/metadata/{type}/{name}/versions` | GET | List all versions (supports state filtering) |
+| `/metadata/{type}/{name}/versions` | POST | Create new version (auth required) |
+| `/metadata/{type}/{name}/versions/{version}/activate` | POST | Activate specific version (auth required) |
+| `/metadata/{type}/{name}/versions/{version}/state` | PATCH | Transition publishing state (auth required) |
+| `/metadata/{type}/{name}/versions/compare` | GET | Compare two versions |
+| `/schemas` | POST | Define schema for metadata type (auth required) |
 
-- 🔗 **REST API** for programmatic access and integration- Authentication / authorization hooks so only permitted users manipulate a topic.
+## 🏗️ Architecture
 
-- Postman / OpenAPI documentation to help customer teams integrate quickly.
+### Hexagonal Architecture (Ports & Adapters)
 
-## Quick Start
+```
+┌─────────────────────────────────────────────────────────────┐
+│                        Adapter Layer                         │
+│  ┌──────────────┐     ┌────────────────┐                    │
+│  │ REST API     │     │ JPA Repository │                    │
+│  │ Controllers  │     │ Adapters       │                    │
+│  └──────────────┘     └────────────────┘                    │
+└───────────────┬────────────────┬────────────────────────────┘
+                │                │
+┌───────────────▼────────────────▼────────────────────────────┐
+│                     Application Layer                        │
+│  ┌──────────────────────────────────────────────────────┐   │
+│  │  Use Case Ports (Inbound)                            │   │
+│  │  - CreateVersionUseCase                              │   │
+│  │  - ActivateVersionUseCase                            │   │
+│  │  - CompareVersionsUseCase                            │   │
+│  └──────────────────────────────────────────────────────┘   │
+│  ┌──────────────────────────────────────────────────────┐   │
+│  │  Repository Ports (Outbound)                         │   │
+│  │  - MetadataDocumentRepository                        │   │
+│  │  - SchemaDefinitionRepository                        │   │
+│  └──────────────────────────────────────────────────────┘   │
+└───────────────────────────┬──────────────────────────────────┘
+                            │
+┌───────────────────────────▼──────────────────────────────────┐
+│                        Domain Layer                           │
+│  ┌──────────────┐  ┌────────────┐  ┌──────────────────┐    │
+│  │ Entities     │  │ Value      │  │ Domain Services  │    │
+│  │ - Metadata   │  │ Objects    │  │ - DiffEngine     │    │
+│  │   Document   │  │ - Version  │  │ - Schema         │    │
+│  │ - Schema     │  │ - Change   │  │   Validator      │    │
+│  │   Definition │  │   Type     │  │                  │    │
+│  └──────────────┘  └────────────┘  └──────────────────┘    │
+└────────────────────────────────────────────────────────────┘
+```
 
-### MVP 2 – UI experience
+### Technology Stack
+
+- **Java 21 LTS**: Modern Java with Records, Sealed Classes, Pattern Matching
+- **Spring Boot 3.5.0**: Production-ready framework with comprehensive ecosystem
+- **PostgreSQL 17+**: JSONB support for flexible JSON storage with GIN indexes
+- **Flyway**: Database migration management
+- **Jackson**: JSON serialization/deserialization
+- **TestContainers**: Integration testing with real PostgreSQL
+- **ArchUnit**: Architecture validation and hexagonal boundary enforcement
+- **Micrometer**: Application metrics and monitoring
+- **Spring Boot Actuator**: Health checks and observability endpoints
+
+## 📊 Observability
+
+### Health Checks
+```bash
+# Liveness probe
+curl http://localhost:8080/actuator/health/liveness
+
+# Readiness probe
+curl http://localhost:8080/actuator/health/readiness
+
+# Detailed health
+curl http://localhost:8080/actuator/health
+```
+
+### Metrics
+```bash
+# Prometheus metrics
+curl http://localhost:8080/actuator/prometheus
+
+# Application metrics
+curl http://localhost:8080/actuator/metrics
+```
+
+### Distributed Tracing
+All requests include `X-Correlation-ID` header for distributed tracing:
+```bash
+curl -H "X-Correlation-ID: my-trace-123" http://localhost:8080/api/v1/metadata
+```
+
+## 🧪 Testing
+
+### Run All Tests
+```bash
+mvn clean test
+```
+
+### Test Categories
+
+- **Unit Tests**: Domain logic, validators, business rules
+- **Integration Tests**: REST controllers, database persistence
+- **E2E Tests**: Complete user workflows (US1-US5)
+- **Architecture Tests**: Hexagonal boundary enforcement
+- **Performance Tests**: Response time targets (disabled without TestContainers)
+
+### Test Coverage
+
+Current coverage: **39 tests passing** (100% pass rate)
+
+| Feature | Tests | Status |
+|---------|-------|--------|
+| US1: Create & Version | 12 | ✅ PASS |
+| US2: Activate & Consume | 3 | ✅ PASS |
+| US3: Version Comparison | 6 | ✅ PASS |
+| US4: Schema Management | 13 | ✅ PASS |
+| US5: Publishing Lifecycle | 5 | ✅ PASS |
+
+## 🚢 Deployment
+
+### Docker Compose (Development)
+```bash
+docker-compose up -d
+```
+
+### Production Configuration
+
+Update `application.yaml` for production:
+```yaml
+spring:
+  datasource:
+    url: ${DATABASE_URL}
+    username: ${DATABASE_USERNAME}
+    password: ${DATABASE_PASSWORD}
+  
+  jpa:
+    show-sql: false
+  
+logging:
+  level:
+    root: INFO
+    com.metadata.versioning: INFO
+```
+
+### Environment Variables
+
+| Variable | Description | Default |
+|----------|-------------|---------|
+| `DATABASE_URL` | PostgreSQL JDBC URL | `jdbc:postgresql://localhost:5432/metadata_versioning` |
+| `DATABASE_USERNAME` | Database username | `postgres` |
+| `DATABASE_PASSWORD` | Database password | `postgres` |
+| `SERVER_PORT` | Application port | `8080` |
+
+## 📖 Documentation
+
+- **[VISION.md](docs/VISION.md)** - Product vision and target audiences
+- **[ARCHITECTURE.md](docs/ARCHITECTURE.md)** - Technical design and patterns
+- **[PRODUCT_ROADMAP.md](docs/PRODUCT_ROADMAP.md)** - MVP scope and timeline
+- **[API_REFERENCE.md](docs/API_REFERENCE.md)** - Complete API documentation
+- **[Spec](specs/001-metadata-version-api/)** - Detailed feature specification
+
+## 🎯 Implementation Status
+
+**Completed**: **99 of 102 tasks (97%)**
+
+### ✅ Completed Phases
+- **Phase 1-2**: Setup + Foundational (12 tasks)
+- **Phase 3**: US1 - Create and Version Metadata (19 tasks)
+- **Phase 4**: US2 - Activate and Consume Metadata (17 tasks)
+- **Phase 5**: US3 - Compare Versions (10 tasks)
+- **Phase 6**: US4 - Manage Schema Definitions (17 tasks)
+- **Phase 7**: US5 - Track Publishing Lifecycle (11 tasks)
+- **Phase 8**: Polish & Cross-Cutting (13 tasks)
+
+### 🔄 Remaining Tasks
+- T095-T096: OpenAPI spec documentation enhancements
+- T097: README completion (in progress)
+
+## 🤝 Contributing
+
+Contributions are welcome! Please follow these steps:
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'feat: add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+### Development Guidelines
+
+- Follow hexagonal architecture principles
+- Write tests before implementation (TDD)
+- Maintain 85%+ test coverage
+- Use conventional commits
+- Update documentation for API changes
+
+## 📝 License
+
+This project is licensed under the Apache License 2.0 - see the [LICENSE](LICENSE) file for details.
+
+## 📧 Support
+
+- **Issues**: [GitHub Issues](https://github.com/josevicenteayala/MetadataVersioning/issues)
+- **Email**: api-support@metadata-versioning.com
+- **Documentation**: [docs/](docs/)
+
+---
+
+Built with ❤️ using Java 21 LTS, Spring Boot 3.5, and PostgreSQL 17
 
 ```bash- Rich JSON editor that layers business-friendly controls on top of the schema (dropdowns, checkboxes, inline validation).
 

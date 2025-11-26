@@ -1,6 +1,8 @@
 package com.metadata.versioning.adapter.out.persistence.repository;
 
 import com.metadata.versioning.adapter.out.persistence.entity.MetadataDocumentEntity;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -21,4 +23,9 @@ public interface JpaMetadataDocumentRepository extends JpaRepository<MetadataDoc
      * Check if document exists by type and name.
      */
     boolean existsByTypeAndName(String type, String name);
+
+    /**
+     * Find all documents of a specific type with pagination.
+     */
+    Page<MetadataDocumentEntity> findAllByType(String type, Pageable pageable);
 }

@@ -121,32 +121,32 @@ Within each phase, tasks marked `[P]` can execute in parallel:
 
 ### Domain Layer (US2)
 
-- [ ] T032 [P] [US2] Add activate/deactivate methods to Version in `src/main/java/com/metadata/versioning/domain/model/Version.java`
-- [ ] T033 [US2] Add activateVersion method to MetadataDocument with FR-023 enforcement (only published versions) in `src/main/java/com/metadata/versioning/domain/model/MetadataDocument.java` (depends on T072-T074 for PublishingState)
-- [ ] T034 [P] [US2] Create InvalidActivationException in `src/main/java/com/metadata/versioning/domain/exception/InvalidActivationException.java`
+- [x] T032 [P] [US2] Add activate/deactivate methods to Version in `src/main/java/com/metadata/versioning/domain/model/Version.java`
+- [x] T033 [US2] Add activateVersion method to MetadataDocument with FR-023 enforcement (only published versions) in `src/main/java/com/metadata/versioning/domain/model/MetadataDocument.java` (depends on T072-T074 for PublishingState)
+- [x] T034 [P] [US2] Create InvalidActivationException in `src/main/java/com/metadata/versioning/domain/exception/InvalidActivationException.java`
 
 ### Application Layer (US2)
 
-- [ ] T035 [US2] Define ActivateVersionUseCase port in `src/main/java/com/metadata/versioning/application/port/in/ActivateVersionUseCase.java`
-- [ ] T036 [US2] Define GetActiveVersionUseCase port in `src/main/java/com/metadata/versioning/application/port/in/GetActiveVersionUseCase.java`
-- [ ] T037 [US2] Implement activation logic in VersionManagementService in `src/main/java/com/metadata/versioning/application/service/VersionManagementService.java`
-- [ ] T038 [US2] Implement MetadataQueryService for active version retrieval in `src/main/java/com/metadata/versioning/application/service/MetadataQueryService.java`
-- [ ] T038a [US2] Implement ListMetadataDocumentsUseCase in MetadataQueryService (FR-015) in `src/main/java/com/metadata/versioning/application/service/MetadataQueryService.java`
+- [x] T035 [US2] Define ActivateVersionUseCase port in `src/main/java/com/metadata/versioning/application/port/in/ActivateVersionUseCase.java`
+- [x] T036 [US2] Define GetActiveVersionUseCase port in `src/main/java/com/metadata/versioning/application/port/in/GetActiveVersionUseCase.java`
+- [x] T037 [US2] Implement activation logic in VersionManagementService in `src/main/java/com/metadata/versioning/application/service/VersionManagementService.java`
+- [x] T038 [US2] Implement MetadataQueryService for active version retrieval in `src/main/java/com/metadata/versioning/application/service/MetadataQueryService.java`
+- [x] T038a [US2] Implement ListMetadataDocumentsUseCase in MetadataQueryService (FR-015) in `src/main/java/com/metadata/versioning/application/service/MetadataQueryService.java`
 
 ### Adapter Layer (US2)
 
-- [ ] T039 [P] [US2] Add activation query methods to JpaMetadataDocumentRepository in `src/main/java/com/metadata/versioning/adapter/out/persistence/repository/JpaMetadataDocumentRepository.java`
-- [ ] T040 [US2] Create VersionController with activation endpoints in `src/main/java/com/metadata/versioning/adapter/in/rest/VersionController.java`
-- [ ] T041 [US2] Add GET /metadata/{type}/{name}/active endpoint to MetadataController in `src/main/java/com/metadata/versioning/adapter/in/rest/MetadataController.java`
-- [ ] T041a [US2] Add GET /metadata endpoint to list all documents with pagination (FR-015) in `src/main/java/com/metadata/versioning/adapter/in/rest/MetadataController.java`
+- [x] T039 [P] [US2] Add activation query methods to JpaMetadataDocumentRepository in `src/main/java/com/metadata/versioning/adapter/out/persistence/repository/JpaMetadataDocumentRepository.java`
+- [x] T040 [US2] Create VersionController with activation endpoints in `src/main/java/com/metadata/versioning/adapter/in/rest/VersionController.java`
+- [x] T041 [US2] Add GET /metadata/{type}/{name}/active endpoint to MetadataController in `src/main/java/com/metadata/versioning/adapter/in/rest/MetadataController.java`
+- [x] T041a [US2] Add GET /metadata endpoint to list all documents with pagination (FR-015) in `src/main/java/com/metadata/versioning/adapter/in/rest/MetadataController.java`
 
 ### Integration (US2)
 
-- [ ] T042 [US2] Write integration test for version activation in `src/test/java/com/metadata/versioning/adapter/in/rest/VersionControllerTest.java`
-- [ ] T042a [US2] Write integration test for FR-023 enforcement (reject non-published activation) in `src/test/java/com/metadata/versioning/adapter/in/rest/VersionControllerTest.java`
-- [ ] T043 [US2] Write integration test for active version retrieval in `src/test/java/com/metadata/versioning/adapter/in/rest/MetadataControllerTest.java`
-- [ ] T043a [US2] Write integration test for listing metadata documents with pagination (FR-015) in `src/test/java/com/metadata/versioning/adapter/in/rest/MetadataControllerTest.java`
-- [ ] T044 [US2] Write E2E test for activation workflow in `src/test/java/com/metadata/versioning/e2e/MetadataVersioningE2ETest.java`
+- [x] T042 [US2] Write integration test for version activation in `src/test/java/com/metadata/versioning/adapter/in/rest/VersionControllerTest.java`
+- [x] T042a [US2] Write integration test for FR-023 enforcement (reject non-published activation) in `src/test/java/com/metadata/versioning/adapter/in/rest/VersionControllerTest.java`
+- [x] T043 [US2] Write integration test for active version retrieval in `src/test/java/com/metadata/versioning/adapter/in/rest/MetadataControllerTest.java`
+- [x] T043a [US2] Write integration test for listing metadata documents with pagination (FR-015) in `src/test/java/com/metadata/versioning/adapter/in/rest/MetadataControllerTest.java`
+- [x] T044 [US2] Write E2E test for activation workflow in `src/test/java/com/metadata/versioning/e2e/MetadataVersioningE2ETest.java`
 
 ---
 
@@ -162,25 +162,25 @@ Within each phase, tasks marked `[P]` can execute in parallel:
 
 ### Domain Layer (US3)
 
-- [ ] T045 [P] [US3] Create VersionComparison value object in `src/main/java/com/metadata/versioning/domain/model/VersionComparison.java`
-- [ ] T046 [P] [US3] Create ChangeType sealed class hierarchy in `src/main/java/com/metadata/versioning/domain/model/ChangeType.java`
-- [ ] T047 [P] [US3] Create DiffEngine for JSON comparison in `src/main/java/com/metadata/versioning/domain/service/DiffEngine.java`
+- [x] T045 [P] [US3] Create VersionComparison value object in `src/main/java/com/metadata/versioning/domain/model/VersionComparison.java`
+- [x] T046 [P] [US3] Create ChangeType sealed class hierarchy in `src/main/java/com/metadata/versioning/domain/model/ChangeType.java`
+- [x] T047 [P] [US3] Create DiffEngine for JSON comparison in `src/main/java/com/metadata/versioning/domain/service/DiffEngine.java`
 
 ### Application Layer (US3)
 
-- [ ] T048 [US3] Define CompareVersionsUseCase port in `src/main/java/com/metadata/versioning/application/port/in/CompareVersionsUseCase.java`
-- [ ] T049 [US3] Implement VersionComparisonService using JSON Patch in `src/main/java/com/metadata/versioning/application/service/VersionComparisonService.java`
+- [x] T048 [US3] Define CompareVersionsUseCase port in `src/main/java/com/metadata/versioning/application/port/in/CompareVersionsUseCase.java`
+- [x] T049 [US3] Implement VersionComparisonService using JSON Patch in `src/main/java/com/metadata/versioning/application/service/VersionComparisonService.java`
 
 ### Adapter Layer (US3)
 
-- [ ] T050 [P] [US3] Create ComparisonResponse DTO using Java Record in `src/main/java/com/metadata/versioning/adapter/in/rest/dto/ComparisonResponse.java`
-- [ ] T051 [US3] Add GET /metadata/{type}/{name}/compare endpoint to VersionController in `src/main/java/com/metadata/versioning/adapter/in/rest/VersionController.java`
+- [x] T050 [P] [US3] Create ComparisonResponse DTO using Java Record in `src/main/java/com/metadata/versioning/adapter/in/rest/dto/ComparisonResponse.java`
+- [x] T051 [US3] Add GET /metadata/{type}/{name}/compare endpoint to VersionController in `src/main/java/com/metadata/versioning/adapter/in/rest/VersionController.java`
 
 ### Integration (US3)
 
-- [ ] T052 [US3] Write integration test for version comparison with field changes in `src/test/java/com/metadata/versioning/adapter/in/rest/VersionControllerTest.java`
-- [ ] T053 [US3] Write integration test for identifying breaking vs additive changes in `src/test/java/com/metadata/versioning/adapter/in/rest/VersionControllerTest.java`
-- [ ] T054 [US3] Write E2E test for comparison workflow in `src/test/java/com/metadata/versioning/e2e/MetadataVersioningE2ETest.java`
+- [x] T052 [US3] Write integration test for version comparison with field changes in `src/test/java/com/metadata/versioning/adapter/in/rest/VersionControllerTest.java`
+- [x] T053 [US3] Write integration test for identifying breaking vs additive changes in `src/test/java/com/metadata/versioning/adapter/in/rest/VersionControllerTest.java`
+- [x] T054 [US3] Write E2E test for comparison workflow in `src/test/java/com/metadata/versioning/e2e/MetadataVersioningE2ETest.java`
 
 ---
 
@@ -196,32 +196,32 @@ Within each phase, tasks marked `[P]` can execute in parallel:
 
 ### Domain Layer (US4)
 
-- [ ] T055 [P] [US4] Create SchemaDefinition entity in `src/main/java/com/metadata/versioning/domain/model/SchemaDefinition.java`
-- [ ] T056 [P] [US4] Create SchemaValidator for JSON Schema validation in `src/main/java/com/metadata/versioning/domain/validator/SchemaValidator.java`
-- [ ] T057 [P] [US4] Create SchemaViolationException in `src/main/java/com/metadata/versioning/domain/exception/SchemaViolationException.java`
+- [x] T055 [P] [US4] Create SchemaDefinition entity in `src/main/java/com/metadata/versioning/domain/model/SchemaDefinition.java`
+- [x] T056 [P] [US4] Create SchemaValidator for JSON Schema validation in `src/main/java/com/metadata/versioning/domain/validator/SchemaValidator.java`
+- [x] T057 [P] [US4] Create SchemaViolationException in `src/main/java/com/metadata/versioning/domain/exception/SchemaViolationException.java`
 
 ### Application Layer (US4)
 
-- [ ] T058 [US4] Define ManageSchemaUseCase port in `src/main/java/com/metadata/versioning/application/port/in/ManageSchemaUseCase.java`
-- [ ] T059 [US4] Define SchemaDefinitionRepository outbound port in `src/main/java/com/metadata/versioning/application/port/out/SchemaDefinitionRepository.java`
-- [ ] T060 [US4] Implement SchemaManagementService in `src/main/java/com/metadata/versioning/application/service/SchemaManagementService.java`
-- [ ] T061 [US4] Integrate schema validation into VersionManagementService in `src/main/java/com/metadata/versioning/application/service/VersionManagementService.java`
+- [x] T058 [US4] Define ManageSchemaUseCase port in `src/main/java/com/metadata/versioning/application/port/in/ManageSchemaUseCase.java`
+- [x] T059 [US4] Define SchemaDefinitionRepository outbound port in `src/main/java/com/metadata/versioning/application/port/out/SchemaDefinitionRepository.java`
+- [x] T060 [US4] Implement SchemaManagementService in `src/main/java/com/metadata/versioning/application/service/SchemaManagementService.java`
+- [x] T061 [US4] Integrate schema validation into VersionManagementService in `src/main/java/com/metadata/versioning/application/service/VersionManagementService.java`
 
 ### Adapter Layer (US4)
 
-- [ ] T062 [P] [US4] Create Flyway migration V2__create_schema_tables.sql in `src/main/resources/db/migration/`
-- [ ] T063 [P] [US4] Create SchemaDefinitionEntity JPA entity in `src/main/java/com/metadata/versioning/adapter/out/persistence/entity/SchemaDefinitionEntity.java`
-- [ ] T064 [US4] Create JpaSchemaRepository Spring Data interface in `src/main/java/com/metadata/versioning/adapter/out/persistence/repository/JpaSchemaRepository.java`
-- [ ] T065 [US4] Implement SchemaDefinitionPersistenceAdapter in `src/main/java/com/metadata/versioning/adapter/out/persistence/adapter/SchemaDefinitionPersistenceAdapter.java`
-- [ ] T066 [US4] Create SchemaDefinitionRequest DTO using Java Record in `src/main/java/com/metadata/versioning/adapter/in/rest/dto/SchemaDefinitionRequest.java`
-- [ ] T067 [US4] Create SchemaController with POST /schemas and PUT /schemas/{type} endpoints in `src/main/java/com/metadata/versioning/adapter/in/rest/SchemaController.java`
+- [x] T062 [P] [US4] Create Flyway migration V2__create_schema_tables.sql in `src/main/resources/db/migration/`
+- [x] T063 [P] [US4] Create SchemaDefinitionEntity JPA entity in `src/main/java/com/metadata/versioning/adapter/out/persistence/entity/SchemaDefinitionEntity.java`
+- [x] T064 [US4] Create JpaSchemaRepository Spring Data interface in `src/main/java/com/metadata/versioning/adapter/out/persistence/repository/JpaSchemaRepository.java`
+- [x] T065 [US4] Implement SchemaDefinitionPersistenceAdapter in `src/main/java/com/metadata/versioning/adapter/out/persistence/adapter/SchemaDefinitionPersistenceAdapter.java`
+- [x] T066 [US4] Create SchemaDefinitionRequest DTO using Java Record in `src/main/java/com/metadata/versioning/adapter/in/rest/dto/SchemaDefinitionRequest.java`
+- [x] T067 [US4] Create SchemaController with POST /schemas and PUT /schemas/{type} endpoints in `src/main/java/com/metadata/versioning/adapter/in/rest/SchemaController.java`
 
 ### Integration (US4)
 
-- [ ] T068 [US4] Write integration test for schema definition creation in `src/test/java/com/metadata/versioning/adapter/in/rest/SchemaControllerTest.java`
-- [ ] T069 [US4] Write integration test for schema validation on version creation in `src/test/java/com/metadata/versioning/adapter/in/rest/MetadataControllerTest.java`
-- [ ] T070 [US4] Write integration test for schema update with compliance warnings in `src/test/java/com/metadata/versioning/adapter/in/rest/SchemaControllerTest.java`
-- [ ] T071 [US4] Write E2E test for schema management workflow in `src/test/java/com/metadata/versioning/e2e/SchemaManagementE2ETest.java`
+- [x] T068 [US4] Write integration test for schema definition creation in `src/test/java/com/metadata/versioning/adapter/in/rest/SchemaControllerTest.java`
+- [x] T069 [US4] Write integration test for schema validation on version creation in `src/test/java/com/metadata/versioning/adapter/in/rest/MetadataControllerTest.java`
+- [x] T070 [US4] Write integration test for schema update with compliance warnings in `src/test/java/com/metadata/versioning/adapter/in/rest/SchemaControllerTest.java`
+- [x] T071 [US4] Write E2E test for schema management workflow in `src/test/java/com/metadata/versioning/e2e/SchemaManagementE2ETest.java`
 
 ---
 
@@ -237,26 +237,26 @@ Within each phase, tasks marked `[P]` can execute in parallel:
 
 ### Domain Layer (US5)
 
-- [ ] T072 [P] [US5] Create PublishingState sealed class with allowed transitions in `src/main/java/com/metadata/versioning/domain/model/PublishingState.java`
-- [ ] T073 [P] [US5] Create InvalidStateTransitionException in `src/main/java/com/metadata/versioning/domain/exception/InvalidStateTransitionException.java`
-- [ ] T074 [US5] Add publishing state and transition methods to Version in `src/main/java/com/metadata/versioning/domain/model/Version.java`
-- [ ] T075 [US5] Enforce published state requirement in activation logic in `src/main/java/com/metadata/versioning/domain/model/MetadataDocument.java`
+- [x] T072 [P] [US5] Create PublishingState sealed class with allowed transitions in `src/main/java/com/metadata/versioning/domain/model/PublishingState.java`
+- [x] T073 [P] [US5] Create InvalidStateTransitionException in `src/main/java/com/metadata/versioning/domain/exception/InvalidStateTransitionException.java`
+- [x] T074 [US5] Add publishing state and transition methods to Version in `src/main/java/com/metadata/versioning/domain/model/Version.java`
+- [x] T075 [US5] Enforce published state requirement in activation logic in `src/main/java/com/metadata/versioning/domain/model/MetadataDocument.java`
 
 ### Application Layer (US5)
 
-- [ ] T076 [US5] Add state transition methods to VersionManagementService in `src/main/java/com/metadata/versioning/application/service/VersionManagementService.java`
+- [x] T076 [US5] Add state transition methods to VersionManagementService in `src/main/java/com/metadata/versioning/application/service/VersionManagementService.java`
 
 ### Adapter Layer (US5)
 
-- [ ] T077 [P] [US5] Add publishing_state column to versions table via migration in `src/main/resources/db/migration/V4__add_publishing_state.sql`
-- [ ] T078 [US5] Add state transition endpoints to VersionController in `src/main/java/com/metadata/versioning/adapter/in/rest/VersionController.java`
-- [ ] T079 [US5] Add state filtering to version list queries in `src/main/java/com/metadata/versioning/adapter/in/rest/MetadataController.java`
+- [x] T077 [P] [US5] Add publishing_state column to versions table via migration in `src/main/resources/db/migration/V4__add_publishing_state.sql`
+- [x] T078 [US5] Add state transition endpoints to VersionController in `src/main/java/com/metadata/versioning/adapter/in/rest/VersionController.java`
+- [x] T079 [US5] Add state filtering to version list queries in `src/main/java/com/metadata/versioning/adapter/in/rest/MetadataController.java`
 
 ### Integration (US5)
 
-- [ ] T080 [US5] Write integration test for state transitions in `src/test/java/com/metadata/versioning/adapter/in/rest/VersionControllerTest.java`
-- [ ] T081 [US5] Write integration test for activation of non-published version rejection in `src/test/java/com/metadata/versioning/adapter/in/rest/VersionControllerTest.java`
-- [ ] T082 [US5] Write E2E test for publishing workflow in `src/test/java/com/metadata/versioning/e2e/MetadataVersioningE2ETest.java`
+- [x] T080 [US5] Write integration test for state transitions in `src/test/java/com/metadata/versioning/adapter/in/rest/VersionControllerTest.java`
+- [x] T081 [US5] Write integration test for activation of non-published version rejection in `src/test/java/com/metadata/versioning/adapter/in/rest/VersionControllerTest.java`
+- [x] T082 [US5] Write E2E test for publishing workflow in `src/test/java/com/metadata/versioning/e2e/MetadataVersioningE2ETest.java`
 
 ---
 
@@ -264,22 +264,22 @@ Within each phase, tasks marked `[P]` can execute in parallel:
 
 **Purpose**: Performance, observability, security, and documentation
 
-- [ ] T083 [P] Create Flyway migration V3__create_audit_tables.sql for audit trail in `src/main/resources/db/migration/`
-- [ ] T084 [P] Create AuditEntryEntity JPA entity in `src/main/java/com/metadata/versioning/adapter/out/persistence/entity/AuditEntryEntity.java`
-- [ ] T085 [P] Implement AuditPersistenceAdapter with async logging in `src/main/java/com/metadata/versioning/adapter/out/persistence/adapter/AuditPersistenceAdapter.java`
-- [ ] T086 [P] Add GIN indexes for JSONB queries in migration in `src/main/resources/db/migration/V5__add_performance_indexes.sql`
-- [ ] T087 [P] Configure correlation ID filter for request tracing in `src/main/java/com/metadata/versioning/adapter/in/rest/filter/CorrelationIdFilter.java`
-- [ ] T088 [P] Configure Micrometer metrics for use case timing in `src/main/java/com/metadata/versioning/adapter/out/config/MetricsConfig.java`
-- [ ] T089 [P] Add Spring Boot Actuator health checks in `src/main/resources/application.yaml`
-- [ ] T090 Write ArchUnit test to enforce hexagonal boundaries in `src/test/java/com/metadata/versioning/architecture/HexagonalArchitectureTest.java`
-- [ ] T091 Write performance test for version creation (<500ms) in `src/test/java/com/metadata/versioning/performance/VersionCreationPerformanceTest.java`
-- [ ] T092 Write performance test for active version retrieval (<200ms) in `src/test/java/com/metadata/versioning/performance/ActiveVersionQueryPerformanceTest.java`
-- [ ] T093 Write performance test for version comparison (<3s) in `src/test/java/com/metadata/versioning/performance/VersionComparisonPerformanceTest.java`
-- [ ] T093a Write concurrency test for 50 concurrent requests (SC-005) in `src/test/java/com/metadata/versioning/performance/ConcurrencyPerformanceTest.java`
-- [ ] T094 Add custom error responses with field paths in `src/main/java/com/metadata/versioning/adapter/in/rest/exception/GlobalExceptionHandler.java`
-- [ ] T095 Update OpenAPI specification with all endpoints in `specs/001-metadata-version-api/contracts/openapi.yaml`
-- [ ] T096 Add API examples to OpenAPI spec in `specs/001-metadata-version-api/contracts/openapi.yaml`
-- [ ] T097 Create README with quickstart instructions in `README.md`
+- [x] T083 [P] Create Flyway migration V3__create_audit_tables.sql for audit trail in `src/main/resources/db/migration/`
+- [x] T084 [P] Create AuditEntryEntity JPA entity in `src/main/java/com/metadata/versioning/adapter/out/persistence/entity/AuditEntryEntity.java`
+- [x] T085 [P] Implement AuditPersistenceAdapter with async logging in `src/main/java/com/metadata/versioning/adapter/out/persistence/adapter/AuditPersistenceAdapter.java`
+- [x] T086 [P] Add GIN indexes for JSONB queries in migration in `src/main/resources/db/migration/V5__add_performance_indexes.sql`
+- [x] T087 [P] Configure correlation ID filter for request tracing in `src/main/java/com/metadata/versioning/adapter/in/rest/filter/CorrelationIdFilter.java`
+- [x] T088 [P] Configure Micrometer metrics for use case timing in `src/main/java/com/metadata/versioning/adapter/out/config/MetricsConfig.java`
+- [x] T089 [P] Add Spring Boot Actuator health checks in `src/main/resources/application.yaml`
+- [x] T090 Write ArchUnit test to enforce hexagonal boundaries in `src/test/java/com/metadata/versioning/architecture/HexagonalArchitectureTest.java`
+- [x] T091 Write performance test for version creation (<500ms) in `src/test/java/com/metadata/versioning/performance/VersionCreationPerformanceTest.java`
+- [x] T092 Write performance test for active version retrieval (<200ms) in `src/test/java/com/metadata/versioning/performance/ActiveVersionQueryPerformanceTest.java`
+- [x] T093 Write performance test for version comparison (<3s) in `src/test/java/com/metadata/versioning/performance/VersionComparisonPerformanceTest.java`
+- [x] T093a Write concurrency test for 50 concurrent requests (SC-005) in `src/test/java/com/metadata/versioning/performance/ConcurrencyPerformanceTest.java`
+- [x] T094 Add custom error responses with field paths in `src/main/java/com/metadata/versioning/adapter/in/rest/exception/GlobalExceptionHandler.java`
+- [x] T095 Update OpenAPI specification with all endpoints in `specs/001-metadata-version-api/contracts/openapi.yaml`
+- [x] T096 Add API examples to OpenAPI spec in `specs/001-metadata-version-api/contracts/openapi.yaml`
+- [x] T097 Create README with quickstart instructions in `README.md`
 
 ---
 

@@ -16,6 +16,7 @@ public record VersionResponse(
         String author,
         Instant createdAt,
         String changeSummary,
+        String publishingState,
         boolean isActive
 ) {
     public static VersionResponse fromDomain(com.metadata.versioning.domain.model.Version version,
@@ -28,6 +29,25 @@ public record VersionResponse(
                 version.author(),
                 version.createdAt(),
                 version.changeSummary(),
+                version.publishingState().name(),
+                version.isActive()
+        );
+    }
+
+    /**
+     * Create response from Version domain model.
+     * Requires type and name to be provided in the context.
+     */
+    public static VersionResponse from(com.metadata.versioning.domain.model.Version version) {
+        return new VersionResponse(
+                null,  // Type will be set by caller if needed
+                null,  // Name will be set by caller if needed
+                version.versionNumber(),
+                version.content(),
+                version.author(),
+                version.createdAt(),
+                version.changeSummary(),
+                version.publishingState().name(),
                 version.isActive()
         );
     }

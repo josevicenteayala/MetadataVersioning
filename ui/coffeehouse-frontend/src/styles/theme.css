@@ -1,0 +1,60 @@
+@media (prefers-reduced-motion: no-preference) {
+  :root {
+    scroll-behavior: smooth;
+  }
+}
+
+body {
+  background: radial-gradient(circle at top, var(--coffee-color-crema), var(--coffee-color-foam));
+  color: var(--coffee-color-espresso);
+}
+
+#root {
+  min-height: 100vh;
+}
+
+.app-shell {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(180deg, rgba(64, 34, 24, 0.04), rgba(254, 249, 244, 0.94));
+}
+
+.app-shell__header {
+  padding: 1.5rem 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(42, 18, 10, 0.08);
+  font-family: var(--coffee-font-brand);
+}
+
+.app-shell__content {
+  flex: 1;
+  padding: 2rem;
+  display: grid;
+  gap: 1.5rem;
+  align-content: flex-start;
+}
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: var(--coffee-radius-card);
+  box-shadow: var(--coffee-shadow-card);
+  padding: 1.5rem;
+  border: 1px solid rgba(64, 34, 24, 0.08);
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.2rem 0.85rem;
+  border-radius: var(--coffee-radius-pill);
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  background-color: var(--coffee-color-latte);
+  color: var(--coffee-color-espresso);
+}

@@ -1,30 +1,29 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
 
-function App() {
-  const [count, setCount] = useState(0)
-
+const App = () => {
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>count is {count}</button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">Click on the Vite and React logos to learn more</p>
-    </>
+    <div className="app-shell">
+      <header className="app-shell__header">
+        <div>
+          <p className="badge">alpha</p>
+          <h1>Metadata Coffeehouse</h1>
+          <p className="subhead">Trace every schema sip without leaving the barista station.</p>
+        </div>
+        <div className="status-pill" aria-live="polite">
+          <span className="dot" />
+          Backend connected
+        </div>
+      </header>
+      <main className="app-shell__content">
+        <article className="glass-card">
+          <h2>Next steps</h2>
+          <p>
+            Phase 2 plumbing is ready. Start delivering dashboard, history, lifecycle, diff, and
+            auth experiences with confidence in the shared infrastructure.
+          </p>
+        </article>
+      </main>
+    </div>
   )
 }
 

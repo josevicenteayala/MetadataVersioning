@@ -13,6 +13,8 @@ pnpm install
 pnpm generate:client   # wraps openapi-typescript-codegen -> src/services/generated
 ```
 
+Re-run `pnpm generate:client` whenever the backend OpenAPI document (`specs/001-metadata-version-api/contracts/openapi.yaml`) changes so the typed client stays in sync.
+
 ## Run Dev Server
 ```bash
 pnpm dev

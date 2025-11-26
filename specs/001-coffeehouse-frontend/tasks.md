@@ -23,13 +23,13 @@
 
 **Purpose**: Shared infrastructure that all user stories depend on.
 
-- [ ] T006 Create OpenAPI generation script `ui/coffeehouse-frontend/scripts/generate-client.ts` wired to `specs/001-metadata-version-api/contracts/openapi.yaml`.
-- [ ] T007 [P] Add `generate:client` + build/test scripts to `ui/coffeehouse-frontend/package.json` and document in quickstart.
-- [ ] T008 [P] Implement axios client wrapper with Basic Auth header + correlation logging in `ui/coffeehouse-frontend/src/services/api/httpClient.ts`.
-- [ ] T009 [P] Configure TanStack Query provider + hydration utilities in `ui/coffeehouse-frontend/src/app/queryClient.tsx` and register in `src/main.tsx`.
-- [ ] T010 [P] Implement Zustand session credential store in `ui/coffeehouse-frontend/src/services/auth/sessionStore.ts` with auto-clear on 401.
-- [ ] T011 Build global theme files (`ui/coffeehouse-frontend/src/styles/tokens.css`, `ui/coffeehouse-frontend/src/styles/theme.css`) and wire fonts/animations per plan.
-- [ ] T012 Add toast + correlation ID notification service in `ui/coffeehouse-frontend/src/services/feedback/toastBus.ts` consumed by layout shell.
+- [X] T006 Create OpenAPI generation script `ui/coffeehouse-frontend/scripts/generate-client.ts` wired to `specs/001-metadata-version-api/contracts/openapi.yaml`.
+- [X] T007 [P] Add `generate:client` + build/test scripts to `ui/coffeehouse-frontend/package.json` and document in quickstart.
+- [X] T008 [P] Implement axios client wrapper with Basic Auth header + correlation logging in `ui/coffeehouse-frontend/src/services/api/httpClient.ts`.
+- [X] T009 [P] Configure TanStack Query provider + hydration utilities in `ui/coffeehouse-frontend/src/app/queryClient.tsx` and register in `src/main.tsx`.
+- [X] T010 [P] Implement Zustand session credential store in `ui/coffeehouse-frontend/src/services/auth/sessionStore.ts` with auto-clear on 401.
+- [X] T011 Build global theme files (`ui/coffeehouse-frontend/src/styles/tokens.css`, `ui/coffeehouse-frontend/src/styles/theme.css`) and wire fonts/animations per plan.
+- [X] T012 Add toast + correlation ID notification service in `ui/coffeehouse-frontend/src/services/feedback/toastBus.ts` consumed by layout shell.
 
 **Checkpoint**: Once Phase 2 completes, user stories can run in parallel.
 

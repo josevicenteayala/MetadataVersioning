@@ -5,7 +5,7 @@
 
 import { useQuery, useQueryClient, type UseQueryOptions } from '@tanstack/react-query'
 import { apiClient } from '@services/api/client'
-import type { VersionResponse } from '@services/api/generated'
+import type { VersionResponse } from '@services/generated'
 
 /** Maximum payload size in bytes (200KB) */
 const MAX_PAYLOAD_SIZE = 200 * 1024
@@ -65,6 +65,13 @@ async function computeDiff(left: unknown, right: unknown): Promise<unknown> {
   return diff(left, right)
 }
 
+async function fetchVersion(documentId: string, versionId: string): Promise<VersionResponse> {
+  const response = await apiClient.get<VersionResponse>(
+    `/api/v1/documents/${documentId}/versions/${versionId}`,
+  )
+  return response.data
+}
+
 /**
  * Fetch and compare two versions
  */
@@ -76,13 +83,10 @@ async function fetchVersionDiff(
   const startTime = performance.now()
 
   // Fetch both versions in parallel
-  const [leftResponse, rightResponse] = await Promise.all([
-    apiClient.get<VersionResponse>(`/api/v1/documents/${documentId}/versions/${leftVersionId}`),
-    apiClient.get<VersionResponse>(`/api/v1/documents/${documentId}/versions/${rightVersionId}`),
+  const [leftVersion, rightVersion]: [VersionResponse, VersionResponse] = await Promise.all([
+    fetchVersion(documentId, leftVersionId),
+    fetchVersion(documentId, rightVersionId),
   ])
-
-  const leftVersion = leftResponse.data
-  const rightVersion = rightResponse.data
 
   // Calculate payload sizes
   const leftPayloadSize = getPayloadSize(leftVersion.payload)

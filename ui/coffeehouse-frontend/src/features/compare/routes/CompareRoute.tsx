@@ -5,11 +5,11 @@
 
 import React, { useMemo } from 'react'
 import { useParams, useSearchParams, useNavigate } from 'react-router-dom'
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, type UseQueryResult } from '@tanstack/react-query'
 import { VersionComparePanel, DiffErrorBoundary } from '@features/compare/components'
 import type { VersionCompareOption } from '@features/compare/components'
 import { apiClient } from '@services/api/client'
-import type { VersionResponse } from '@services/api/generated'
+import type { VersionResponse } from '@services/generated'
 
 /**
  * Fetch versions for a document
@@ -39,23 +39,25 @@ export const CompareRoute: React.FC = () => {
     data: versions,
     isLoading,
     error,
-  } = useQuery({
+  }: UseQueryResult<VersionResponse[], Error> = useQuery<VersionResponse[], Error>({
     queryKey: ['document-versions', documentId],
     queryFn: () => fetchVersions(documentId!),
     enabled: !!documentId,
   })
 
+  const versionList: VersionResponse[] = useMemo(() => versions ?? [], [versions])
+
   // Transform versions to compare options
   const compareOptions: VersionCompareOption[] = useMemo(() => {
-    if (!versions) return []
-    return versions.map((v: VersionResponse) => ({
+    if (!versionList.length) return []
+    return versionList.map((v) => ({
       id: String(v.id),
       versionNumber: Number(v.versionNumber),
       label: String(v.summary ?? `Version ${v.versionNumber}`),
       createdAt: String(v.createdAt),
       isActive: Boolean(v.isActive),
     }))
-  }, [versions])
+  }, [versionList])
 
   // Handle selection change - update URL params
   const handleSelectionChange = (left: string, right: string) => {

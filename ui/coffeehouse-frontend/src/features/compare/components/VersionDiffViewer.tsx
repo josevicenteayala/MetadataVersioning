@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /**
  * T036: VersionDiffViewer Component
  * Renders JSON diff visualization using jsondiffpatch with coffeehouse theming
@@ -161,6 +160,9 @@ interface DiffEntry {
   newValue?: unknown
 }
 
+const isRecord = (value: unknown): value is Record<string, unknown> =>
+  typeof value === 'object' && value !== null && !Array.isArray(value)
+
 /**
  * Flatten jsondiffpatch delta into array of diff entries
  */
@@ -172,14 +174,16 @@ function flattenDelta(delta: unknown, left: unknown, right: unknown, path = ''):
   }
 
   const deltaObj = delta as Record<string, unknown>
+  const leftRecord = isRecord(left) ? left : {}
+  const rightRecord = isRecord(right) ? right : {}
 
   for (const [key, value] of Object.entries(deltaObj)) {
     // Skip internal jsondiffpatch properties
     if (key === '_t') continue
 
     const currentPath = path ? `${path}.${key}` : key
-    const leftVal = (left as Record<string, unknown>)?.[key]
-    const rightVal = (right as Record<string, unknown>)?.[key]
+    const leftVal = leftRecord[key]
+    const rightVal = rightRecord[key]
 
     if (Array.isArray(value)) {
       if (value.length === 1) {

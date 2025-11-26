@@ -89,6 +89,21 @@ client.interceptors.request.use((config) => {
   return config
 })
 
+/**
+ * T045 [US5]: Callback registry for 403 permission denied prompts
+ * Allows UI components to register handlers for forbidden access
+ */
+type ForbiddenCallback = (correlationId?: string) => void
+let onForbiddenCallback: ForbiddenCallback | undefined
+
+/**
+ * Register a callback to be invoked when 403 response is received
+ * Useful for triggering permission denied UI guidance
+ */
+export const onForbidden = (callback: ForbiddenCallback | undefined) => {
+  onForbiddenCallback = callback
+}
+
 client.interceptors.response.use(
   (response) => {
     setCorrelationId(response)
@@ -96,6 +111,19 @@ client.interceptors.response.use(
   },
   (error: AxiosError<unknown>) => {
     const { response } = error
+
+    // Handle JSON parsing errors (malformed responses)
+    if (error.code === 'ERR_BAD_RESPONSE' || error.message?.includes('JSON')) {
+      const correlationId = sessionStore.getState().correlationId
+      emitToast({
+        intent: 'error',
+        title: 'Invalid server response',
+        message: 'The server returned an unexpected response. Please try again or contact support.',
+        correlationId,
+      })
+      return Promise.reject(error)
+    }
+
     setCorrelationId(response)
 
     if (response?.status === 401) {
@@ -113,6 +141,34 @@ client.interceptors.response.use(
       if (onUnauthorizedCallback) {
         onUnauthorizedCallback(correlationId)
       }
+    }
+
+    // FR-015: Handle 403 Forbidden with permission denied message
+    if (response?.status === 403) {
+      const correlationId = readCorrelationId(response)
+
+      emitToast({
+        intent: 'error',
+        title: 'Permission denied',
+        message: 'You do not have permission to perform this action. Contact your administrator for access.',
+        correlationId,
+      })
+
+      if (onForbiddenCallback) {
+        onForbiddenCallback(correlationId)
+      }
+    }
+
+    // FR-016: Handle 5xx server errors with retry guidance
+    if (response?.status && response.status >= 500) {
+      const correlationId = readCorrelationId(response)
+
+      emitToast({
+        intent: 'error',
+        title: 'Server error',
+        message: 'A server error occurred. Please try again using the refresh button or reload the page.',
+        correlationId,
+      })
     }
 
     return Promise.reject(error)

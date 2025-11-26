@@ -147,6 +147,20 @@
 
 ---
 
+## Phase 9: Release Readiness Validation
+
+**Purpose**: Address specification gaps identified during release readiness checklist review.
+
+- [X] T063 Create release-readiness checklist in `specs/001-coffeehouse-frontend/checklists/release-readiness.md` validating 25 items across Error Handling, Security, Core Functionality, and User Experience.
+- [X] T064 Add FR-015, FR-016 and Edge Cases for 403 Forbidden, malformed JSON, and retry guidance to `spec.md`.
+- [X] T065 Implement 403 Forbidden handler in `ui/coffeehouse-frontend/src/services/api/httpClient.ts` with permission denied toast.
+- [X] T066 Implement 5xx server error handler in `ui/coffeehouse-frontend/src/services/api/httpClient.ts` with retry guidance.
+- [X] T067 Implement malformed JSON response handler in `ui/coffeehouse-frontend/src/services/api/httpClient.ts` with error toast.
+- [X] T068 Add httpClient error handling unit tests in `ui/coffeehouse-frontend/tests/unit/services/httpClientErrors.test.ts` (8 tests).
+- [X] T069 Validate all 150 unit tests pass and lint clean.
+
+---
+
 ## Dependencies & Execution Order
 
 1. **Phase 1 → Phase 2**: Setup must finish before foundational infra.
@@ -174,8 +188,10 @@
 4. **Quality Gates**: Every story includes failing tests before implementation plus final lint/test/build sweep (T050).
 
 ## Summary
-- Total tasks: 60
-- Task counts per story: US1 (9), US2 (6), US3 (8), US4 (11), US5 (8) — remaining tasks cover setup, foundation, and polish.
+- Total tasks: 69
+- Task counts per story: US1 (9), US2 (6), US3 (8), US4 (11), US5 (8) — remaining tasks cover setup, foundation, polish, and release readiness.
 - Parallel opportunities: 32 tasks marked [P] across setup, foundation, tests, and story implementations.
 - Independent Test Criteria: Each story lists explicit validation scenarios ensuring standalone verification.
 - Suggested MVP Scope: Complete through Phase 3 (US1). Subsequent phases extend functionality without blocking prior flows.
+- Release Readiness: Phase 9 (T063-T069) validates spec completeness and error handling coverage.
+- Test Coverage: 150 unit tests passing, 8 e2e test files.

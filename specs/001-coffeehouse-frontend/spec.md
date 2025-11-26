@@ -107,6 +107,9 @@ Users provide and test Basic Auth credentials once per session, ensuring all API
 - Invalid Basic Auth credentials must never be stored; prompt users with non-technical guidance before allowing retries.
 - Diff view must handle mismatched JSON structures gracefully, calling out unsupported comparisons instead of failing silently.
 - Mobile screens must collapse tables into cards without losing access to actions like Activate or Compare.
+- 403 Forbidden responses MUST display a permission denied message with guidance to contact an administrator for access.
+- When the API returns malformed or unparseable JSON responses, display a technical error toast with correlation-id and retry guidance.
+- Transient 5xx errors do not auto-retry; users must manually retry via UI controls (refresh button or page reload).
 
 ## Requirements *(mandatory)*
 
@@ -126,6 +129,8 @@ Users provide and test Basic Auth credentials once per session, ensuring all API
 - **FR-012**: Layouts MUST remain usable on mobile by stacking cards, collapsing tables, and retaining primary actions via menus or floating buttons.
 - **FR-013**: Users MUST be able to configure the API base URL from a single configuration surface referenced by the README instructions.
 - **FR-014**: Role permissions MUST ensure contributor-level users can create drafts while only admin-level users can activate or deactivate versions.
+- **FR-015**: 403 Forbidden responses MUST display a permission denied message with guidance to contact an administrator.
+- **FR-016**: Malformed API responses MUST trigger error toasts with correlation-id and manual retry guidance.
 
 ### Key Entities *(include if feature involves data)*
 
@@ -138,6 +143,8 @@ Users provide and test Basic Auth credentials once per session, ensuring all API
 
 - The existing Metadata Versioning API already enforces permissions; the frontend only needs to collect Basic Auth credentials and pass them through each call.
 - Users primarily access the tool from modern evergreen browsers, allowing CSS animations and variable fonts compatible with the coffeehouse-inspired design language.
+- All /api/* endpoints require authentication; no public endpoints are exposed by the frontend.
+- Sessions remain valid until the browser tab closes or the user explicitly logs out; no automatic session timeout is enforced by the frontend.
 - Correlation-ids are provided via the `X-Correlation-ID` header on every backend response; when absent, the UI omits the reference.
 - The coffeehouse-inspired palette and imagery are brand directions only; no licensed third-party assets are required or provided.
 

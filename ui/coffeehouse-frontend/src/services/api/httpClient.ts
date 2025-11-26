@@ -150,7 +150,8 @@ client.interceptors.response.use(
       emitToast({
         intent: 'error',
         title: 'Permission denied',
-        message: 'You do not have permission to perform this action. Contact your administrator for access.',
+        message:
+          'You do not have permission to perform this action. Contact your administrator for access.',
         correlationId,
       })
 
@@ -166,7 +167,8 @@ client.interceptors.response.use(
       emitToast({
         intent: 'error',
         title: 'Server error',
-        message: 'A server error occurred. Please try again using the refresh button or reload the page.',
+        message:
+          'A server error occurred. Please try again using the refresh button or reload the page.',
         correlationId,
       })
     }

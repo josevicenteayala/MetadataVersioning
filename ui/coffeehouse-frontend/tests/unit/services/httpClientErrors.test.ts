@@ -49,9 +49,13 @@ describe('httpClient error handling', () => {
       const { httpClient } = await import('../../../src/services/api/httpClient')
 
       const mockAdapter = new MockAdapter(httpClient)
-      mockAdapter.onGet('/test').reply(401, { message: 'Unauthorized' }, {
-        'x-correlation-id': 'corr-401',
-      })
+      mockAdapter.onGet('/test').reply(
+        401,
+        { message: 'Unauthorized' },
+        {
+          'x-correlation-id': 'corr-401',
+        },
+      )
 
       await expect(httpClient.get('/test')).rejects.toThrow()
 
@@ -60,7 +64,7 @@ describe('httpClient error handling', () => {
         expect.objectContaining({
           intent: 'warning',
           title: 'Session expired',
-        })
+        }),
       )
 
       mockAdapter.restore()
@@ -71,9 +75,13 @@ describe('httpClient error handling', () => {
       const { httpClient } = await import('../../../src/services/api/httpClient')
 
       const mockAdapter = new MockAdapter(httpClient)
-      mockAdapter.onGet('/admin-only').reply(403, { message: 'Forbidden' }, {
-        'x-correlation-id': 'corr-403',
-      })
+      mockAdapter.onGet('/admin-only').reply(
+        403,
+        { message: 'Forbidden' },
+        {
+          'x-correlation-id': 'corr-403',
+        },
+      )
 
       await expect(httpClient.get('/admin-only')).rejects.toThrow()
 
@@ -82,7 +90,7 @@ describe('httpClient error handling', () => {
           intent: 'error',
           title: 'Permission denied',
           message: expect.stringContaining('administrator'),
-        })
+        }),
       )
 
       mockAdapter.restore()
@@ -93,9 +101,13 @@ describe('httpClient error handling', () => {
       const { httpClient } = await import('../../../src/services/api/httpClient')
 
       const mockAdapter = new MockAdapter(httpClient)
-      mockAdapter.onGet('/server-error').reply(500, { message: 'Internal Server Error' }, {
-        'x-correlation-id': 'corr-500',
-      })
+      mockAdapter.onGet('/server-error').reply(
+        500,
+        { message: 'Internal Server Error' },
+        {
+          'x-correlation-id': 'corr-500',
+        },
+      )
 
       await expect(httpClient.get('/server-error')).rejects.toThrow()
 
@@ -104,7 +116,7 @@ describe('httpClient error handling', () => {
           intent: 'error',
           title: 'Server error',
           message: expect.stringContaining('try again'),
-        })
+        }),
       )
 
       mockAdapter.restore()
@@ -123,7 +135,7 @@ describe('httpClient error handling', () => {
         expect.objectContaining({
           intent: 'error',
           title: 'Server error',
-        })
+        }),
       )
 
       mockAdapter.restore()
@@ -142,7 +154,7 @@ describe('httpClient error handling', () => {
         expect.objectContaining({
           intent: 'error',
           title: 'Server error',
-        })
+        }),
       )
 
       mockAdapter.restore()
@@ -157,9 +169,13 @@ describe('httpClient error handling', () => {
       onUnauthorized(mockCallback)
 
       const mockAdapter = new MockAdapter(httpClient)
-      mockAdapter.onGet('/trigger-401').reply(401, {}, {
-        'x-correlation-id': 'callback-corr',
-      })
+      mockAdapter.onGet('/trigger-401').reply(
+        401,
+        {},
+        {
+          'x-correlation-id': 'callback-corr',
+        },
+      )
 
       await expect(httpClient.get('/trigger-401')).rejects.toThrow()
 
@@ -177,9 +193,13 @@ describe('httpClient error handling', () => {
       onForbidden(mockCallback)
 
       const mockAdapter = new MockAdapter(httpClient)
-      mockAdapter.onGet('/trigger-403').reply(403, {}, {
-        'x-correlation-id': 'forbidden-corr',
-      })
+      mockAdapter.onGet('/trigger-403').reply(
+        403,
+        {},
+        {
+          'x-correlation-id': 'forbidden-corr',
+        },
+      )
 
       await expect(httpClient.get('/trigger-403')).rejects.toThrow()
 
@@ -212,9 +232,13 @@ describe('httpClient error handling', () => {
       const { httpClient } = await import('../../../src/services/api/httpClient')
 
       const mockAdapter = new MockAdapter(httpClient)
-      mockAdapter.onGet('/with-correlation').reply(200, { success: true }, {
-        'x-correlation-id': 'success-corr-123',
-      })
+      mockAdapter.onGet('/with-correlation').reply(
+        200,
+        { success: true },
+        {
+          'x-correlation-id': 'success-corr-123',
+        },
+      )
 
       await httpClient.get('/with-correlation')
 

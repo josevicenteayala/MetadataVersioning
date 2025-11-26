@@ -5,6 +5,12 @@
 **Status**: Draft  
 **Input**: User description: "Build a coffeehouse-inspired frontend that consumes the Metadata Versioning API, covering document lists, version history, version creation/activation, diffing, and Basic Auth flows."
 
+## Clarifications
+
+### Session 2025-11-25
+
+- Q: Which user roles may create or activate versions? → A: Contributors can create drafts; only admins activate/deactivate versions.
+
 ## User Scenarios & Testing *(mandatory)*
 
 <!--
@@ -119,6 +125,7 @@ Users provide and test Basic Auth credentials once per session, ensuring all API
 - **FR-011**: All API errors MUST produce contextual toasts or inline alerts that include human-readable text and correlation-id when provided by the backend.
 - **FR-012**: Layouts MUST remain usable on mobile by stacking cards, collapsing tables, and retaining primary actions via menus or floating buttons.
 - **FR-013**: Users MUST be able to configure the API base URL from a single configuration surface referenced by the README instructions.
+- **FR-014**: Role permissions MUST ensure contributor-level users can create drafts while only admin-level users can activate or deactivate versions.
 
 ### Key Entities *(include if feature involves data)*
 

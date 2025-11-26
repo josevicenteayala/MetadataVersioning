@@ -1,5 +1,8 @@
 import { defineConfig, devices } from '@playwright/test'
+import path from 'node:path'
+import { fileURLToPath } from 'node:url'
 
+const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const PORT = Number(process.env.UI_PORT ?? 5173)
 
 export default defineConfig({

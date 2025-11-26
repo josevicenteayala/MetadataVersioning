@@ -1,0 +1,28 @@
+@import './styles/tokens.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  font-family: var(--coffee-font-sans);
+  font-weight: 400;
+  line-height: 1.5;
+  color: var(--coffee-color-espresso);
+  background-color: var(--coffee-color-foam);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background-color: var(--coffee-color-foam);
+  color: var(--coffee-color-espresso);
+}
+
+a {
+  color: inherit;
+}

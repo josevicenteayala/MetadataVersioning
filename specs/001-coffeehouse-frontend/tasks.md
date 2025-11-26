@@ -11,11 +11,11 @@
 
 **Purpose**: Initialize the frontend workspace and baseline tooling.
 
-- [ ] T001 Scaffold Vite React+TS workspace under `ui/coffeehouse-frontend/` with pnpm workspace entry and base `package.json`.
-- [ ] T002 Configure `ui/coffeehouse-frontend/tsconfig.json` with strict compiler options and path aliases from plan.md.
-- [ ] T003 [P] Add linting/formatting config (`ui/coffeehouse-frontend/.eslintrc.cjs`, `.prettierrc`, Husky pre-push hook).
-- [ ] T004 [P] Setup Tailwind + PostCSS pipeline in `ui/coffeehouse-frontend/tailwind.config.ts` with coffeehouse tokens placeholder file.
-- [ ] T005 [P] Create environment scaffolding (`ui/coffeehouse-frontend/.env.example`) documenting `VITE_API_BASE_URL` and timeout variables referenced in quickstart.
+- [X] T001 Scaffold Vite React+TS workspace under `ui/coffeehouse-frontend/` with pnpm workspace entry and base `package.json`.
+- [X] T002 Configure `ui/coffeehouse-frontend/tsconfig.json` with strict compiler options and path aliases from plan.md.
+- [X] T003 [P] Add linting/formatting config (`ui/coffeehouse-frontend/.eslintrc.cjs`, `.prettierrc`, Husky pre-push hook).
+- [X] T004 [P] Setup Tailwind + PostCSS pipeline in `ui/coffeehouse-frontend/tailwind.config.ts` with coffeehouse tokens placeholder file.
+- [X] T005 [P] Create environment scaffolding (`ui/coffeehouse-frontend/.env.example`) documenting `VITE_API_BASE_URL` and timeout variables referenced in quickstart.
 
 ---
 

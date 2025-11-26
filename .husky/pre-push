@@ -1,0 +1,5 @@
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+pnpm --filter coffeehouse-frontend lint
+pnpm --filter coffeehouse-frontend format:check

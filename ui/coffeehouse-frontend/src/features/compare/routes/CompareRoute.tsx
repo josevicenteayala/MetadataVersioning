@@ -1,6 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-unsafe-call */
 /**
  * T038: CompareRoute
  * Route component for version comparison page
@@ -21,7 +18,7 @@ async function fetchVersions(documentId: string): Promise<VersionResponse[]> {
   const response = await apiClient.get<VersionResponse[]>(
     `/api/v1/documents/${documentId}/versions`,
   )
-  return response.data as VersionResponse[]
+  return response.data
 }
 
 /**

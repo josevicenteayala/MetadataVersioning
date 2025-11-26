@@ -1,6 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-unsafe-call */
 /**
  * T035: Version Diff API Hook
  * TanStack Query hook for fetching version comparison data with 200KB guardrails
@@ -84,8 +81,8 @@ async function fetchVersionDiff(
     apiClient.get<VersionResponse>(`/api/v1/documents/${documentId}/versions/${rightVersionId}`),
   ])
 
-  const leftVersion = leftResponse.data as VersionResponse
-  const rightVersion = rightResponse.data as VersionResponse
+  const leftVersion = leftResponse.data
+  const rightVersion = rightResponse.data
 
   // Calculate payload sizes
   const leftPayloadSize = getPayloadSize(leftVersion.payload)

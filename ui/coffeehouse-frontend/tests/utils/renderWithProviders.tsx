@@ -23,10 +23,7 @@ const Providers = ({ children, client }: { children: ReactNode; client: QueryCli
   <QueryClientProvider client={client}>{children}</QueryClientProvider>
 )
 
-export const renderWithProviders = (
-  ui: ReactElement,
-  options?: RenderOptions & WrapperOptions,
-) => {
+export const renderWithProviders = (ui: ReactElement, options?: RenderOptions & WrapperOptions) => {
   const queryClient = options?.queryClient ?? createTestQueryClient()
   const result = render(ui, {
     wrapper: ({ children }) => <Providers client={queryClient}>{children}</Providers>,

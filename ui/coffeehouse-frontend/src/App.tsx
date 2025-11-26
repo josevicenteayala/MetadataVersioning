@@ -1,4 +1,5 @@
 import './App.css'
+import DashboardRoute from '@app/routes/DashboardRoute'
 
 const App = () => {
   return (
@@ -15,13 +16,7 @@ const App = () => {
         </div>
       </header>
       <main className="app-shell__content">
-        <article className="glass-card">
-          <h2>Next steps</h2>
-          <p>
-            Phase 2 plumbing is ready. Start delivering dashboard, history, lifecycle, diff, and
-            auth experiences with confidence in the shared infrastructure.
-          </p>
-        </article>
+        <DashboardRoute />
       </main>
     </div>
   )

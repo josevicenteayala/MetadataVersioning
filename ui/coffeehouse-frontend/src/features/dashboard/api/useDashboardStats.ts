@@ -11,6 +11,5 @@ export interface UseDashboardStatsResult {
   isError: boolean
 }
 
-export const useDashboardStats = (): UseDashboardStatsResult => {
-  throw new Error('useDashboardStats has not been implemented yet. Follow task T015. ')
-}
+// Re-export concrete implementation
+export { useDashboardStatsQuery as useDashboardStats } from './useDashboardStatsQuery'

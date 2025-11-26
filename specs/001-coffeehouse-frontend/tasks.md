@@ -41,17 +41,17 @@
 **Independent Test**: Using mocked API responses, verify users can load dashboard metrics, search/filter the list, and paginate without other flows.
 
 ### Tests (write first)
-- [ ] T013 [P] [US1] Create Vitest spec `ui/coffeehouse-frontend/tests/unit/dashboard/dashboardSummary.test.tsx` covering hero metrics rendering and empty states.
-- [ ] T014 [P] [US1] Add Playwright journey `ui/coffeehouse-frontend/tests/e2e/dashboard-list.spec.ts` that searches documents and verifies status chips + pagination.
+- [X] T013 [P] [US1] Create Vitest spec `ui/coffeehouse-frontend/tests/unit/dashboard/dashboardSummary.test.tsx` covering hero metrics rendering and empty states.
+- [X] T014 [P] [US1] Add Playwright journey `ui/coffeehouse-frontend/tests/e2e/dashboard-list.spec.ts` that searches documents and verifies status chips + pagination.
 
 ### Implementation
-- [ ] T015 [P] [US1] Build stats query + mapper in `ui/coffeehouse-frontend/src/features/dashboard/api/useDashboardStats.ts` consuming generated client.
-- [ ] T016 [P] [US1] Implement paginated documents hook with filters in `ui/coffeehouse-frontend/src/features/documents/api/useDocumentsPage.ts`.
-- [ ] T017 [US1] Create dashboard hero + KPI cards in `ui/coffeehouse-frontend/src/features/dashboard/components/DashboardHero.tsx` using coffeehouse tokens.
-- [ ] T018 [US1] Implement searchable document list with status chips and active badge in `ui/coffeehouse-frontend/src/features/documents/components/DocumentsTable.tsx`.
-- [ ] T019 [US1] Wire dashboard route + layout animations in `ui/coffeehouse-frontend/src/app/routes/DashboardRoute.tsx` including TanStack Query prefetch.
-- [ ] T051 [US1] Implement responsive breakpoints and stacked layouts across `ui/coffeehouse-frontend/src/features/dashboard/components/DashboardHero.tsx`, `.../DocumentsTable.tsx`, and `ui/coffeehouse-frontend/src/styles/tokens.css` to satisfy FR-012.
-- [ ] T052 [P] [US1] Add Playwright viewport regression suite `ui/coffeehouse-frontend/tests/e2e/dashboard-responsive.spec.ts` validating mobile/tablet stacking and action accessibility.
+- [X] T015 [P] [US1] Build stats query + mapper in `ui/coffeehouse-frontend/src/features/dashboard/api/useDashboardStats.ts` consuming generated client.
+- [X] T016 [P] [US1] Implement paginated documents hook with filters in `ui/coffeehouse-frontend/src/features/documents/api/useDocumentsPage.ts`.
+- [X] T017 [US1] Create dashboard hero + KPI cards in `ui/coffeehouse-frontend/src/features/dashboard/components/DashboardHero.tsx` using coffeehouse tokens.
+- [X] T018 [US1] Implement searchable document list with status chips and active badge in `ui/coffeehouse-frontend/src/features/documents/components/DocumentsTable.tsx`.
+- [X] T019 [US1] Wire dashboard route + layout animations in `ui/coffeehouse-frontend/src/app/routes/DashboardRoute.tsx` including TanStack Query prefetch.
+- [X] T051 [US1] Implement responsive breakpoints and stacked layouts across `ui/coffeehouse-frontend/src/features/dashboard/components/DashboardHero.tsx`, `.../DocumentsTable.tsx`, and `ui/coffeehouse-frontend/src/styles/tokens.css` to satisfy FR-012.
+- [X] T052 [P] [US1] Add Playwright viewport regression suite `ui/coffeehouse-frontend/tests/e2e/dashboard-responsive.spec.ts` validating mobile/tablet stacking and action accessibility.
 
 **Checkpoint**: Dashboard + list independently demoable (MVP scope).
 

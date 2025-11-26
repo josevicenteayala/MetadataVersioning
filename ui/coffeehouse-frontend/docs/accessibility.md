@@ -8,30 +8,30 @@ The Coffeehouse Frontend implements WCAG 2.1 Level AA compliance guidelines. Thi
 
 ### Coffeehouse Color Palette
 
-| Token | Hex | Use Case |
-|-------|-----|----------|
-| foam | `#FEF9F4` | Light backgrounds |
-| crema | `#F0DFCE` | Secondary backgrounds |
-| latte | `#E2C4A8` | Tertiary backgrounds |
-| espresso | `#402218` | Primary text |
-| mocha | `#6F4F37` | Secondary text, interactive |
-| bean | `#2A120A` | High contrast text |
-| moss | `#4E6F52` | Success/approved states |
-| matcha | `#7EA172` | Active badges |
-| cherry | `#C04B3E` | Error/archived states |
-| amber | `#D79F62` | Warning states |
+| Token    | Hex       | Use Case                    |
+| -------- | --------- | --------------------------- |
+| foam     | `#FEF9F4` | Light backgrounds           |
+| crema    | `#F0DFCE` | Secondary backgrounds       |
+| latte    | `#E2C4A8` | Tertiary backgrounds        |
+| espresso | `#402218` | Primary text                |
+| mocha    | `#6F4F37` | Secondary text, interactive |
+| bean     | `#2A120A` | High contrast text          |
+| moss     | `#4E6F52` | Success/approved states     |
+| matcha   | `#7EA172` | Active badges               |
+| cherry   | `#C04B3E` | Error/archived states       |
+| amber    | `#D79F62` | Warning states              |
 
 ### Contrast Ratios (Light Mode)
 
-| Combination | Ratio | WCAG AA | WCAG AAA | Use |
-|-------------|-------|---------|----------|-----|
-| espresso on foam | 12.1:1 | ✅ Pass | ✅ Pass | Primary text |
-| mocha on foam | 5.5:1 | ✅ Pass | ❌ Fail | Secondary text, buttons |
-| moss on foam | 4.8:1 | ✅ Pass (large) | ❌ Fail | Status badges |
-| cherry on foam | 5.2:1 | ✅ Pass | ❌ Fail | Error states |
-| matcha on white | 2.7:1 | ⚠️ Fail | ❌ Fail | Active badges |
-| white on matcha | 2.7:1 | ⚠️ Fail | ❌ Fail | Badge text |
-| white on mocha | 4.6:1 | ✅ Pass (large) | ❌ Fail | Primary buttons |
+| Combination      | Ratio  | WCAG AA         | WCAG AAA | Use                     |
+| ---------------- | ------ | --------------- | -------- | ----------------------- |
+| espresso on foam | 12.1:1 | ✅ Pass         | ✅ Pass  | Primary text            |
+| mocha on foam    | 5.5:1  | ✅ Pass         | ❌ Fail  | Secondary text, buttons |
+| moss on foam     | 4.8:1  | ✅ Pass (large) | ❌ Fail  | Status badges           |
+| cherry on foam   | 5.2:1  | ✅ Pass         | ❌ Fail  | Error states            |
+| matcha on white  | 2.7:1  | ⚠️ Fail         | ❌ Fail  | Active badges           |
+| white on matcha  | 2.7:1  | ⚠️ Fail         | ❌ Fail  | Badge text              |
+| white on mocha   | 4.6:1  | ✅ Pass (large) | ❌ Fail  | Primary buttons         |
 
 ### Fixes Applied
 
@@ -56,6 +56,7 @@ The Coffeehouse Frontend implements WCAG 2.1 Level AA compliance guidelines. Thi
 ```
 
 **Files affected:**
+
 - `src/styles/theme.css` - `.active-badge`, `.active-version-badge`, `.status-chip--active`
 
 #### 2. Status Chip Text Contrast
@@ -94,26 +95,26 @@ All interactive elements implement visible focus indicators:
 
 ### Focus Order Verification
 
-| Feature | Focus Order | Status |
-|---------|-------------|--------|
-| Dashboard | Header → Search → Table → Pagination | ✅ |
-| Document Detail | Breadcrumb → Header → History Table → Drawer | ✅ |
-| Version Drawer | Close → Content → Activation Button | ✅ |
-| Compare Panel | Close → Left Selector → Swap → Right Selector → Toggle → Diff | ✅ |
-| Settings | Header → Status → Username → Password → Buttons | ✅ |
+| Feature         | Focus Order                                                   | Status |
+| --------------- | ------------------------------------------------------------- | ------ |
+| Dashboard       | Header → Search → Table → Pagination                          | ✅     |
+| Document Detail | Breadcrumb → Header → History Table → Drawer                  | ✅     |
+| Version Drawer  | Close → Content → Activation Button                           | ✅     |
+| Compare Panel   | Close → Left Selector → Swap → Right Selector → Toggle → Diff | ✅     |
+| Settings        | Header → Status → Username → Password → Buttons               | ✅     |
 
 ### Keyboard Navigation
 
 All components support full keyboard navigation:
 
-| Component | Tab | Enter/Space | Escape | Arrow Keys |
-|-----------|-----|-------------|--------|------------|
-| DocumentsTable | Row focus | Row click | - | - |
-| VersionHistoryTable | Row focus | Row click | - | - |
-| VersionDetailDrawer | Interactive elements | Activate | Close drawer | - |
-| ActivationModal | Button focus | Confirm/Cancel | Close modal | - |
-| VersionComparePanel | Interactive elements | Select/Toggle | Close panel | - |
-| AuthSettingsPanel | Form fields | Submit/Action | - | - |
+| Component           | Tab                  | Enter/Space    | Escape       | Arrow Keys |
+| ------------------- | -------------------- | -------------- | ------------ | ---------- |
+| DocumentsTable      | Row focus            | Row click      | -            | -          |
+| VersionHistoryTable | Row focus            | Row click      | -            | -          |
+| VersionDetailDrawer | Interactive elements | Activate       | Close drawer | -          |
+| ActivationModal     | Button focus         | Confirm/Cancel | Close modal  | -          |
+| VersionComparePanel | Interactive elements | Select/Toggle  | Close panel  | -          |
+| AuthSettingsPanel   | Form fields          | Submit/Action  | -            | -          |
 
 ## ARIA Implementation
 
@@ -138,7 +139,7 @@ Dynamic content updates use appropriate live region announcements:
 // Status updates
 <p role="status" aria-live="polite">
 
-// Error messages  
+// Error messages
 <span role="alert" aria-live="assertive">
 
 // Toast notifications
@@ -166,7 +167,7 @@ Dynamic content updates use appropriate live region announcements:
 ```tsx
 // Sortable table headers
 <th role="columnheader" aria-sort="ascending|descending|none">
-  
+
 // Row interactions
 <tr tabIndex={0} role="row">
 ```
@@ -175,22 +176,22 @@ Dynamic content updates use appropriate live region announcements:
 
 ### Tested Screen Readers
 
-| Screen Reader | Browser | Status |
-|---------------|---------|--------|
-| VoiceOver | Safari (macOS) | ✅ |
-| NVDA | Firefox (Windows) | ✅ |
-| JAWS | Chrome (Windows) | ✅ |
+| Screen Reader | Browser           | Status |
+| ------------- | ----------------- | ------ |
+| VoiceOver     | Safari (macOS)    | ✅     |
+| NVDA          | Firefox (Windows) | ✅     |
+| JAWS          | Chrome (Windows)  | ✅     |
 
 ### Announcements
 
-| Action | Announcement |
-|--------|--------------|
-| Page load | Document title + main heading |
-| Table sort | "Sorted by [column], [direction]" |
-| Drawer open | "Version details drawer, press Escape to close" |
-| Modal open | "Confirm activation dialog" |
-| Toast display | Toast message content |
-| Form error | "Error: [field] [message]" |
+| Action        | Announcement                                    |
+| ------------- | ----------------------------------------------- |
+| Page load     | Document title + main heading                   |
+| Table sort    | "Sorted by [column], [direction]"               |
+| Drawer open   | "Version details drawer, press Escape to close" |
+| Modal open    | "Confirm activation dialog"                     |
+| Toast display | Toast message content                           |
+| Form error    | "Error: [field] [message]"                      |
 
 ## Color-Blind Considerations
 
@@ -198,13 +199,13 @@ Dynamic content updates use appropriate live region announcements:
 
 Status indicators do not rely solely on color:
 
-| Status | Color | Additional Indicator |
-|--------|-------|---------------------|
-| Draft | Crema (neutral) | Text "Draft" |
-| Approved | Green tint | Text "Approved" |
-| Published | Green | Text "Published" |
-| Active | Dark green | Text "Active" + checkmark |
-| Archived | Red tint | Text "Archived" |
+| Status    | Color           | Additional Indicator      |
+| --------- | --------------- | ------------------------- |
+| Draft     | Crema (neutral) | Text "Draft"              |
+| Approved  | Green tint      | Text "Approved"           |
+| Published | Green           | Text "Published"          |
+| Active    | Dark green      | Text "Active" + checkmark |
+| Archived  | Red tint        | Text "Archived"           |
 
 ### Icon Supplements
 
@@ -233,6 +234,7 @@ Users with motion sensitivity preferences are respected:
 ```
 
 Affected animations:
+
 - Skeleton loading shimmer
 - Drawer slide-in
 - Toast slide-in/fade-out
@@ -242,11 +244,11 @@ Affected animations:
 
 Dark mode maintains equivalent contrast ratios:
 
-| Combination | Light Mode | Dark Mode |
-|-------------|------------|-----------|
-| Primary text on bg | 12.1:1 | 11.8:1 |
-| Secondary text on bg | 5.5:1 | 5.3:1 |
-| Interactive elements | 4.6:1 | 4.8:1 |
+| Combination          | Light Mode | Dark Mode |
+| -------------------- | ---------- | --------- |
+| Primary text on bg   | 12.1:1     | 11.8:1    |
+| Secondary text on bg | 5.5:1      | 5.3:1     |
+| Interactive elements | 4.6:1      | 4.8:1     |
 
 ## Testing Checklist
 
@@ -300,8 +302,8 @@ Clickable table rows have `tabIndex={0}` and `onKeyDown` handlers for Enter/Spac
 
 ## Changelog
 
-| Date | Change | Author |
-|------|--------|--------|
-| 2025-01-XX | Initial accessibility audit | T046 |
-| 2025-01-XX | Fixed active badge contrast | T046 |
-| 2025-01-XX | Documented focus management | T046 |
+| Date       | Change                      | Author |
+| ---------- | --------------------------- | ------ |
+| 2025-01-XX | Initial accessibility audit | T046   |
+| 2025-01-XX | Fixed active badge contrast | T046   |
+| 2025-01-XX | Documented focus management | T046   |

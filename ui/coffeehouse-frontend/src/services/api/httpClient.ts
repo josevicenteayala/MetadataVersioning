@@ -101,7 +101,7 @@ client.interceptors.response.use(
     if (response?.status === 401) {
       const correlationId = readCorrelationId(response)
       sessionStore.getState().handleUnauthorized()
-      
+
       emitToast({
         intent: 'warning',
         title: 'Session expired',

@@ -6,7 +6,9 @@ import { ErrorBoundary } from '@app/components'
 // Lazy load route components for code splitting
 const DashboardRoute = lazy(() => import('@app/routes/DashboardRoute'))
 const DocumentRoute = lazy(() => import('@app/routes/DocumentRoute'))
-const SettingsRoute = lazy(() => import('@features/settings').then(m => ({ default: m.SettingsRoute })))
+const SettingsRoute = lazy(() =>
+  import('@features/settings').then((m) => ({ default: m.SettingsRoute })),
+)
 const CompareRoute = lazy(() => import('@features/compare/routes/CompareRoute'))
 
 // Loading fallback component

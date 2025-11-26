@@ -194,11 +194,7 @@ export const AuthSettingsPanel = () => {
         </div>
 
         <div className="auth-form-actions">
-          <button
-            type="submit"
-            className="auth-button auth-button-primary"
-            disabled={!isFormValid}
-          >
+          <button type="submit" className="auth-button auth-button-primary" disabled={!isFormValid}>
             Save Credentials
           </button>
 
@@ -212,11 +208,7 @@ export const AuthSettingsPanel = () => {
           </button>
 
           {credentials && (
-            <button
-              type="button"
-              className="auth-button auth-button-danger"
-              onClick={handleClear}
-            >
+            <button type="button" className="auth-button auth-button-danger" onClick={handleClear}>
               Clear Credentials
             </button>
           )}

@@ -124,14 +124,14 @@ ui/coffeehouse-frontend/
 
 The Coffeehouse theme uses a warm, inviting color palette:
 
-| Token | Light | Dark | Use |
-|-------|-------|------|-----|
-| foam | `#FEF9F4` | `#1B120C` | Background |
-| crema | `#F0DFCE` | `#2C1A13` | Secondary bg |
+| Token    | Light     | Dark      | Use          |
+| -------- | --------- | --------- | ------------ |
+| foam     | `#FEF9F4` | `#1B120C` | Background   |
+| crema    | `#F0DFCE` | `#2C1A13` | Secondary bg |
 | espresso | `#402218` | `#F2E7DC` | Primary text |
-| mocha | `#6F4F37` | `#F5D9C2` | Interactive |
-| moss | `#4E6F52` | `#8EC498` | Success |
-| cherry | `#C04B3E` | `#F08A76` | Error |
+| mocha    | `#6F4F37` | `#F5D9C2` | Interactive  |
+| moss     | `#4E6F52` | `#8EC498` | Success      |
+| cherry   | `#C04B3E` | `#F08A76` | Error        |
 
 ## Authentication
 
@@ -181,21 +181,21 @@ See [docs/accessibility.md](./docs/accessibility.md) for the full audit.
 
 ## Scripts Reference
 
-| Script | Description |
-|--------|-------------|
-| `pnpm dev` | Start dev server |
-| `pnpm build` | Production build |
-| `pnpm preview` | Preview prod build |
-| `pnpm test` | Run unit tests |
-| `pnpm test:watch` | Unit tests (watch) |
+| Script               | Description           |
+| -------------------- | --------------------- |
+| `pnpm dev`           | Start dev server      |
+| `pnpm build`         | Production build      |
+| `pnpm preview`       | Preview prod build    |
+| `pnpm test`          | Run unit tests        |
+| `pnpm test:watch`    | Unit tests (watch)    |
 | `pnpm test:coverage` | Unit tests (coverage) |
-| `pnpm test:e2e` | Run Playwright tests |
-| `pnpm test:e2e:ui` | Playwright with UI |
-| `pnpm lint` | ESLint check |
-| `pnpm lint:fix` | ESLint fix |
-| `pnpm format` | Prettier format |
-| `pnpm typecheck` | TypeScript check |
-| `pnpm generate:api` | Generate API client |
+| `pnpm test:e2e`      | Run Playwright tests  |
+| `pnpm test:e2e:ui`   | Playwright with UI    |
+| `pnpm lint`          | ESLint check          |
+| `pnpm lint:fix`      | ESLint fix            |
+| `pnpm format`        | Prettier format       |
+| `pnpm typecheck`     | TypeScript check      |
+| `pnpm generate:api`  | Generate API client   |
 
 ## Contributing
 

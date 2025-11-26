@@ -78,9 +78,7 @@ describe('AuthSettingsPanel', () => {
     it('displays guidance text about credential storage', () => {
       renderWithProviders(<AuthSettingsPanel />)
 
-      expect(
-        screen.getByText(/credentials are stored in session memory only/i),
-      ).toBeInTheDocument()
+      expect(screen.getByText(/credentials are stored in session memory only/i)).toBeInTheDocument()
     })
 
     it('shows password field as masked by default', () => {

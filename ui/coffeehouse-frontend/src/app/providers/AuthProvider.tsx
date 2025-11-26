@@ -47,14 +47,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       isAdmin: role === 'admin',
       canEdit: role === 'admin' || role === 'contributor',
     }),
-    [
-      credentials,
-      role,
-      validatedAt,
-      setCredentialsStore,
-      clearCredentialsStore,
-      hasRole,
-    ],
+    [credentials, role, validatedAt, setCredentialsStore, clearCredentialsStore, hasRole],
   )
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>

@@ -1,10 +1,10 @@
 /**
  * T062: SC-004 Supportability Telemetry
- * 
+ *
  * Tracks user interactions to measure success criteria SC-004:
  * "Support inquiries related to 'What changed between versions?' decrease by 50%
  * within one quarter of launch, indicating adoption of the comparison experience."
- * 
+ *
  * This module captures:
  * - Diff comparisons initiated and completed
  * - Self-service resolution metrics (user found info without support)
@@ -78,7 +78,7 @@ const MAX_EVENTS_IN_MEMORY = 1000
  */
 const recordEvent = (event: TelemetryEvent): void => {
   telemetryState.events.push(event)
-  
+
   // Trim events to prevent memory leaks
   if (telemetryState.events.length > MAX_EVENTS_IN_MEMORY) {
     telemetryState.events = telemetryState.events.slice(-MAX_EVENTS_IN_MEMORY / 2)
@@ -164,7 +164,7 @@ export const trackSelfServiceResolution = (
   correlationId?: string,
 ): void => {
   const sessionDurationMs = Date.now() - new Date(telemetryState.sessionStart).getTime()
-  
+
   recordEvent({
     eventType: 'self_service_resolution',
     action,
@@ -216,10 +216,7 @@ export const trackActivationAttempt = (
 /**
  * Track authentication failures
  */
-export const trackAuthFailure = (
-  correlationId?: string,
-  errorMessage?: string,
-): void => {
+export const trackAuthFailure = (correlationId?: string, errorMessage?: string): void => {
   recordEvent({
     eventType: 'auth_failure',
     success: false,
@@ -232,10 +229,7 @@ export const trackAuthFailure = (
 /**
  * Track when error is displayed to user
  */
-export const trackErrorDisplayed = (
-  errorMessage: string,
-  correlationId?: string,
-): void => {
+export const trackErrorDisplayed = (errorMessage: string, correlationId?: string): void => {
   recordEvent({
     eventType: 'error_displayed',
     success: false,
@@ -260,31 +254,30 @@ export const getTelemetrySummary = (): {
   averageDiffDurationMs: number | null
 } => {
   const diffEvents = telemetryState.events.filter(
-    (e): e is DiffComparisonEvent => 
+    (e): e is DiffComparisonEvent =>
       e.eventType === 'diff_comparison_initiated' ||
       e.eventType === 'diff_comparison_completed' ||
-      e.eventType === 'diff_comparison_failed'
+      e.eventType === 'diff_comparison_failed',
   )
-  
-  const completedDiffs = diffEvents.filter(e => e.eventType === 'diff_comparison_completed')
-  const failedDiffs = diffEvents.filter(e => e.eventType === 'diff_comparison_failed')
+
+  const completedDiffs = diffEvents.filter((e) => e.eventType === 'diff_comparison_completed')
+  const failedDiffs = diffEvents.filter((e) => e.eventType === 'diff_comparison_failed')
   const selfServiceEvents = telemetryState.events.filter(
-    (e): e is SelfServiceResolutionEvent => e.eventType === 'self_service_resolution'
+    (e): e is SelfServiceResolutionEvent => e.eventType === 'self_service_resolution',
   )
-  
+
   const durations = completedDiffs
-    .map(e => e.durationMs)
+    .map((e) => e.durationMs)
     .filter((d): d is number => d !== undefined)
-  
-  const averageDiffDurationMs = durations.length > 0
-    ? durations.reduce((sum, d) => sum + d, 0) / durations.length
-    : null
+
+  const averageDiffDurationMs =
+    durations.length > 0 ? durations.reduce((sum, d) => sum + d, 0) / durations.length : null
 
   return {
     sessionId: telemetryState.sessionId,
     sessionStart: telemetryState.sessionStart,
     eventCount: telemetryState.events.length,
-    diffComparisons: diffEvents.filter(e => e.eventType === 'diff_comparison_initiated').length,
+    diffComparisons: diffEvents.filter((e) => e.eventType === 'diff_comparison_initiated').length,
     successfulDiffs: completedDiffs.length,
     failedDiffs: failedDiffs.length,
     selfServiceActions: selfServiceEvents.length,

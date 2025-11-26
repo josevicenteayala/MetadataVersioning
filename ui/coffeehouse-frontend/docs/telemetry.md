@@ -10,19 +10,20 @@ This document describes the telemetry instrumentation for measuring **SC-004** s
 
 ### Diff Comparison Events
 
-| Event | Description | Fields |
-|-------|-------------|--------|
-| `diff_comparison_initiated` | User started a version comparison | documentId, leftVersionId, rightVersionId, timestamp, correlationId |
-| `diff_comparison_completed` | Diff rendered successfully | documentId, leftVersionId, rightVersionId, durationMs, payloadSizeBytes, viewMode, correlationId |
-| `diff_comparison_failed` | Diff failed to render | documentId, leftVersionId, rightVersionId, errorCode, correlationId |
+| Event                       | Description                       | Fields                                                                                           |
+| --------------------------- | --------------------------------- | ------------------------------------------------------------------------------------------------ |
+| `diff_comparison_initiated` | User started a version comparison | documentId, leftVersionId, rightVersionId, timestamp, correlationId                              |
+| `diff_comparison_completed` | Diff rendered successfully        | documentId, leftVersionId, rightVersionId, durationMs, payloadSizeBytes, viewMode, correlationId |
+| `diff_comparison_failed`    | Diff failed to render             | documentId, leftVersionId, rightVersionId, errorCode, correlationId                              |
 
 ### Self-Service Resolution Events
 
-| Event | Description | Fields |
-|-------|-------------|--------|
+| Event                     | Description                                       | Fields                                               |
+| ------------------------- | ------------------------------------------------- | ---------------------------------------------------- |
 | `self_service_resolution` | User found information without contacting support | action, documentId, sessionDurationMs, correlationId |
 
 Actions tracked:
+
 - `view_history` - User viewed version history
 - `view_diff` - User completed a diff comparison
 - `view_version_detail` - User inspected version details
@@ -30,23 +31,19 @@ Actions tracked:
 
 ### Supportability Metrics
 
-| Event | Description | Fields |
-|-------|-------------|--------|
-| `version_lookup` | Version lookup attempt | success, durationMs, correlationId, errorMessage |
+| Event                | Description                | Fields                                           |
+| -------------------- | -------------------------- | ------------------------------------------------ |
+| `version_lookup`     | Version lookup attempt     | success, durationMs, correlationId, errorMessage |
 | `activation_attempt` | Version activation attempt | success, durationMs, correlationId, errorMessage |
-| `auth_failure` | Authentication failure | correlationId, errorMessage |
-| `error_displayed` | Error shown to user | errorMessage, correlationId |
+| `auth_failure`       | Authentication failure     | correlationId, errorMessage                      |
+| `error_displayed`    | Error shown to user        | errorMessage, correlationId                      |
 
 ## Usage
 
 ### Tracking Diff Comparisons
 
 ```typescript
-import { 
-  trackDiffInitiated,
-  trackDiffCompleted,
-  trackDiffFailed 
-} from '@services/analytics'
+import { trackDiffInitiated, trackDiffCompleted, trackDiffFailed } from '@services/analytics'
 
 // When user starts comparison
 trackDiffInitiated(documentId, leftVersionId, rightVersionId, correlationId)
@@ -54,12 +51,12 @@ trackDiffInitiated(documentId, leftVersionId, rightVersionId, correlationId)
 // When diff completes
 trackDiffCompleted(
   documentId,
-  leftVersionId, 
+  leftVersionId,
   rightVersionId,
   durationMs,
   payloadSizeBytes,
   'inline', // or 'split'
-  correlationId
+  correlationId,
 )
 
 // When diff fails
@@ -92,12 +89,12 @@ console.log({
 
 ### Recommended Alerts
 
-| Alert | Condition | Severity | Action |
-|-------|-----------|----------|--------|
-| High Diff Failure Rate | `failedDiffs / diffComparisons > 0.1` | Warning | Investigate error codes |
-| Slow Diff Performance | `averageDiffDurationMs > 3000` | Warning | Review payload sizes |
-| Zero Diff Usage | `diffComparisons == 0` in 24h | Info | Check feature visibility |
-| Auth Failures Spike | `auth_failure > 10` in 1h | Warning | Check backend health |
+| Alert                  | Condition                             | Severity | Action                   |
+| ---------------------- | ------------------------------------- | -------- | ------------------------ |
+| High Diff Failure Rate | `failedDiffs / diffComparisons > 0.1` | Warning  | Investigate error codes  |
+| Slow Diff Performance  | `averageDiffDurationMs > 3000`        | Warning  | Review payload sizes     |
+| Zero Diff Usage        | `diffComparisons == 0` in 24h         | Info     | Check feature visibility |
+| Auth Failures Spike    | `auth_failure > 10` in 1h             | Warning  | Check backend health     |
 
 ### Dashboard Metrics
 
@@ -128,12 +125,12 @@ import { exportEvents, flushEvents } from '@services/analytics'
 const sendToAnalytics = async () => {
   const events = exportEvents()
   if (events.length === 0) return
-  
+
   try {
     await fetch('/api/analytics/events', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ events })
+      body: JSON.stringify({ events }),
     })
     flushEvents()
   } catch (error) {
@@ -160,12 +157,14 @@ window.addEventListener('beforeunload', sendToAnalytics)
 ### Baseline (Pre-Launch)
 
 Capture:
+
 - Support ticket count tagged "version comparison" or "what changed"
 - Average time to resolution for comparison questions
 
 ### Post-Launch Metrics
 
 Monitor weekly:
+
 1. Support tickets with comparison-related tags
 2. Self-service resolution events
 3. Diff completion rate
@@ -173,7 +172,7 @@ Monitor weekly:
 ### Success Calculation
 
 ```
-SC-004 Success = 
+SC-004 Success =
   (Baseline Support Tickets - Current Support Tickets) / Baseline Support Tickets >= 0.5
 ```
 
@@ -181,11 +180,11 @@ If `SC-004 Success >= 50%`, the criteria is met.
 
 ## Implementation Status
 
-| Component | Instrumented | Status |
-|-----------|--------------|--------|
-| VersionComparePanel | Yes | ✅ |
-| VersionDiffViewer | Yes | ✅ |
-| DiffErrorState | Yes | ✅ |
-| VersionHistoryTable | Planned | ⏳ |
-| ActivationControls | Planned | ⏳ |
-| AuthSettingsPanel | Planned | ⏳ |
+| Component           | Instrumented | Status |
+| ------------------- | ------------ | ------ |
+| VersionComparePanel | Yes          | ✅     |
+| VersionDiffViewer   | Yes          | ✅     |
+| DiffErrorState      | Yes          | ✅     |
+| VersionHistoryTable | Planned      | ⏳     |
+| ActivationControls  | Planned      | ⏳     |
+| AuthSettingsPanel   | Planned      | ⏳     |

@@ -39,7 +39,7 @@ class ErrorBoundary extends Component<Props, State> {
   override componentDidCatch(error: Error, errorInfo: ErrorInfo) {
     // Log error for debugging
     console.error('ErrorBoundary caught an error:', error, errorInfo)
-    
+
     this.setState({
       errorInfo,
     })
@@ -105,11 +105,12 @@ const ErrorFallback = ({
         <div className="error-boundary__icon" aria-hidden="true">
           ☕
         </div>
-        
+
         <h1 className="error-boundary__title">Something went wrong</h1>
-        
+
         <p className="error-boundary__message">
-          We've encountered an unexpected error. Please try again or contact support if the problem persists.
+          We've encountered an unexpected error. Please try again or contact support if the problem
+          persists.
         </p>
 
         {correlationId && (
@@ -127,16 +128,10 @@ const ErrorFallback = ({
         )}
 
         <div className="error-boundary__actions">
-          <button
-            className="btn btn--primary"
-            onClick={onReset}
-          >
+          <button className="btn btn--primary" onClick={onReset}>
             Try Again
           </button>
-          <button
-            className="btn btn--outline"
-            onClick={onReload}
-          >
+          <button className="btn btn--outline" onClick={onReload}>
             Reload Page
           </button>
         </div>

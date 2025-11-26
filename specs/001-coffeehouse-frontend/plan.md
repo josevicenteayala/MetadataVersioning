@@ -18,7 +18,7 @@ Deliver a branded React + TypeScript single-page application under `/ui/coffeeho
 **Target Platform**: Modern evergreen browsers (Chromium, Firefox, Safari) with responsive layouts; deployable via static hosting/CDN  
 **Project Type**: Web SPA sharing repo with Spring Boot backend  
 **Performance Goals**: Dashboard/doc list requests ≤1s p95; diff loads ≤3s p95 for 200 KB payloads; interactions sustain 60 fps animations  
-**Constraints**: Basic Auth credentials never persisted; correlation IDs surfaced in UI; coffeehouse palette adherence; mobile-first responsive rules; respect constitution’s Hexagonal + testing mandates  
+**Constraints**: Basic Auth credentials never persisted; correlation IDs surfaced in UI; coffeehouse palette adherence; mobile-first responsive rules with breakpoint automation; lifecycle + diff interactions instrumented for latency/step metrics; respect constitution’s Hexagonal + testing mandates  
 **Scale/Scope**: Initial release focuses on ~500 documents / 5k versions, concurrent usage by 50 analysts; pages include dashboard, list, detail, compare, settings
 
 ## Constitution Check
@@ -96,6 +96,7 @@ See [`research.md`](./research.md) for full ADR-style entries.
 - **API Contracts**: [`contracts/coffeehouse-frontend.yaml`](./contracts/coffeehouse-frontend.yaml) maps each UI flow to REST endpoints aligned with the existing backend.
 - **Quickstart**: [`quickstart.md`](./quickstart.md) documents toolchain setup, scripts, env vars, and deployment checklist.
 - **Agent Context**: `.specify/scripts/bash/update-agent-context.sh copilot` executed to sync Copilot instructions with new tech stack.
+- **Quality Hooks**: Instrumentation plan established to log lifecycle step counts, diff latency (Performance API), and viewport coverage; responsive breakpoints validated via scripted Playwright viewport suite.
 
 ## Constitution Re-Check (Post-Design)
 

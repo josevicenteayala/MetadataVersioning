@@ -1,9 +1,12 @@
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import DashboardHero from '@features/dashboard/components/DashboardHero'
 import DocumentsTable from '@features/documents/components/DocumentsTable'
 import { useDocumentsPage } from '@features/documents/api/useDocumentsPage'
+import type { MetadataDocumentResponse } from '@services/generated/models/MetadataDocumentResponse'
 
 const DashboardRoute = () => {
+  const navigate = useNavigate()
   const [cursor, setCursor] = useState<string | null>(null)
   const { data, isLoading, isFetching } = useDocumentsPage({ limit: 20, cursor })
 
@@ -18,6 +21,13 @@ const DashboardRoute = () => {
     // For a real implementation, track page stack or switch to offset pagination
     setCursor(null)
   }
+
+  const handleRowClick = useCallback(
+    (doc: MetadataDocumentResponse) => {
+      void navigate(`/documents/${doc.id}`)
+    },
+    [navigate],
+  )
 
   return (
     <div className="dashboard-route">
@@ -35,7 +45,11 @@ const DashboardRoute = () => {
           />
         </header>
 
-        <DocumentsTable documents={data?.documents ?? []} isLoading={isLoading} />
+        <DocumentsTable
+          documents={data?.documents ?? []}
+          isLoading={isLoading}
+          onRowClick={handleRowClick}
+        />
 
         <nav className="dashboard-route__pagination" aria-label="Pagination">
           <button type="button" onClick={handlePrev} disabled={!cursor || isFetching}>

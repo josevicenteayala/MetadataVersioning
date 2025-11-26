@@ -63,14 +63,14 @@
 **Independent Test**: Deep-link to document detail and verify history table + detail drawer render without other stories.
 
 ### Tests (write first)
-- [ ] T020 [P] [US2] Add Vitest spec `ui/coffeehouse-frontend/tests/unit/versions/versionHistoryTable.test.tsx` validating sorting, status chips, and empty rows.
-- [ ] T021 [P] [US2] Extend Playwright journey `ui/coffeehouse-frontend/tests/e2e/document-history.spec.ts` to open detail, verify correlation ID display.
+- [X] T020 [P] [US2] Add Vitest spec `ui/coffeehouse-frontend/tests/unit/versions/versionHistoryTable.test.tsx` validating sorting, status chips, and empty rows.
+- [X] T021 [P] [US2] Extend Playwright journey `ui/coffeehouse-frontend/tests/e2e/document-history.spec.ts` to open detail, verify correlation ID display.
 
 ### Implementation
-- [ ] T022 [P] [US2] Implement history query hook `ui/coffeehouse-frontend/src/features/versions/api/useVersionHistory.ts` with cached responses per document.
-- [ ] T023 [US2] Build version history table component `ui/coffeehouse-frontend/src/features/versions/components/VersionHistoryTable.tsx` with sticky headers + tags.
-- [ ] T024 [US2] Implement version detail drawer `ui/coffeehouse-frontend/src/features/versions/components/VersionDetailDrawer.tsx` showing eligibility + payload preview.
-- [ ] T025 [US2] Add document detail route `ui/coffeehouse-frontend/src/app/routes/DocumentRoute.tsx` handling deep links and query prefetch.
+- [X] T022 [P] [US2] Implement history query hook `ui/coffeehouse-frontend/src/features/versions/api/useVersionHistory.ts` with cached responses per document.
+- [X] T023 [US2] Build version history table component `ui/coffeehouse-frontend/src/features/versions/components/VersionHistoryTable.tsx` with sticky headers + tags.
+- [X] T024 [US2] Implement version detail drawer `ui/coffeehouse-frontend/src/features/versions/components/VersionDetailDrawer.tsx` showing eligibility + payload preview.
+- [X] T025 [US2] Add document detail route `ui/coffeehouse-frontend/src/app/routes/DocumentRoute.tsx` handling deep links and query prefetch.
 
 ---
 

@@ -1,5 +1,7 @@
+import { Routes, Route, Navigate } from 'react-router-dom'
 import './App.css'
 import DashboardRoute from '@app/routes/DashboardRoute'
+import DocumentRoute from '@app/routes/DocumentRoute'
 
 const App = () => {
   return (
@@ -16,7 +18,11 @@ const App = () => {
         </div>
       </header>
       <main className="app-shell__content">
-        <DashboardRoute />
+        <Routes>
+          <Route path="/" element={<Navigate to="/dashboard" replace />} />
+          <Route path="/dashboard" element={<DashboardRoute />} />
+          <Route path="/documents/:documentId" element={<DocumentRoute />} />
+        </Routes>
       </main>
     </div>
   )

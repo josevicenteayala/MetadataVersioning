@@ -80,16 +80,16 @@
 **Independent Test**: Submit new version form and activate a draft using mocked APIs while previous stories remain unaffected.
 
 ### Tests (write first)
-- [ ] T026 [P] [US3] Write Vitest spec `ui/coffeehouse-frontend/tests/unit/versions/versionForm.test.tsx` covering JSON validation + toast errors.
-- [ ] T027 [P] [US3] Add Playwright scenario `ui/coffeehouse-frontend/tests/e2e/version-activation.spec.ts` for create → activate flow including role guard.
+- [X] T026 [P] [US3] Write Vitest spec `ui/coffeehouse-frontend/tests/unit/versions/versionForm.test.tsx` covering JSON validation + toast errors.
+- [X] T027 [P] [US3] Add Playwright scenario `ui/coffeehouse-frontend/tests/e2e/version-activation.spec.ts` for create → activate flow including role guard.
 
 ### Implementation
-- [ ] T028 [P] [US3] Implement create-version mutation + optimistic cache update in `ui/coffeehouse-frontend/src/features/versions/api/useCreateVersion.ts`.
-- [ ] T029 [US3] Build JSON payload editor + summary form `ui/coffeehouse-frontend/src/features/versions/forms/NewVersionForm.tsx` with client-side validation.
-- [ ] T030 [US3] Implement activation mutation/service `ui/coffeehouse-frontend/src/features/versions/api/useActivateVersion.ts` enforcing admin role.
-- [ ] T031 [US3] Add activation confirmation modal + progress indicator `ui/coffeehouse-frontend/src/features/versions/components/ActivationControls.tsx`.
-- [ ] T032 [US3] Refresh dashboard + history caches after mutations via shared `ui/coffeehouse-frontend/src/features/versions/utils/cacheInvalidation.ts`.
-- [ ] T055 [US3] Instrument lifecycle flow metrics in `ui/coffeehouse-frontend/src/features/versions/telemetry/versionLifecycleMetrics.ts` to record step counts and duration for SC-002 reporting.
+- [X] T028 [P] [US3] Implement create-version mutation + optimistic cache update in `ui/coffeehouse-frontend/src/features/versions/api/useCreateVersion.ts`.
+- [X] T029 [US3] Build JSON payload editor + summary form `ui/coffeehouse-frontend/src/features/versions/forms/NewVersionForm.tsx` with client-side validation.
+- [X] T030 [US3] Implement activation mutation/service `ui/coffeehouse-frontend/src/features/versions/api/useActivateVersion.ts` enforcing admin role.
+- [X] T031 [US3] Add activation confirmation modal + progress indicator `ui/coffeehouse-frontend/src/features/versions/components/ActivationControls.tsx`.
+- [X] T032 [US3] Refresh dashboard + history caches after mutations via shared `ui/coffeehouse-frontend/src/features/versions/utils/cacheInvalidation.ts`.
+- [X] T055 [US3] Instrument lifecycle flow metrics in `ui/coffeehouse-frontend/src/features/versions/telemetry/versionLifecycleMetrics.ts` to record step counts and duration for SC-002 reporting.
 
 ---
 

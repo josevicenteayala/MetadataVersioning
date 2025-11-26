@@ -99,19 +99,19 @@
 **Independent Test**: Select two versions and ensure diff loads under 3 seconds with accessible highlighting.
 
 ### Tests (write first)
-- [ ] T033 [P] [US4] Author Vitest spec `ui/coffeehouse-frontend/tests/unit/compare/diffRenderer.test.tsx` ensuring color tokens + inline/split toggles behave.
-- [ ] T034 [P] [US4] Add Playwright spec `ui/coffeehouse-frontend/tests/e2e/version-compare.spec.ts` selecting versions and verifying summary metadata.
-- [ ] T056 [P] [US4] Create Vitest spec `ui/coffeehouse-frontend/tests/unit/compare/diffErrorStates.test.ts` covering mismatched JSON structures and error fallbacks.
-- [ ] T057 [P] [US4] Add Playwright spec `ui/coffeehouse-frontend/tests/e2e/version-compare-errors.spec.ts` asserting error toasts + guidance when backend returns incompatible payloads.
+- [X] T033 [P] [US4] Author Vitest spec `ui/coffeehouse-frontend/tests/unit/compare/diffRenderer.test.tsx` ensuring color tokens + inline/split toggles behave.
+- [X] T034 [P] [US4] Add Playwright spec `ui/coffeehouse-frontend/tests/e2e/version-compare.spec.ts` selecting versions and verifying summary metadata.
+- [X] T056 [P] [US4] Create Vitest spec `ui/coffeehouse-frontend/tests/unit/compare/diffErrorStates.test.tsx` covering mismatched JSON structures and error fallbacks.
+- [X] T057 [P] [US4] Add Playwright spec `ui/coffeehouse-frontend/tests/e2e/version-compare-errors.spec.ts` asserting error toasts + guidance when backend returns incompatible payloads.
 
 ### Implementation
-- [ ] T035 [P] [US4] Implement diff API hook `ui/coffeehouse-frontend/src/features/compare/api/useVersionDiff.ts` with TanStack Query caching and 200 KB guardrails.
-- [ ] T036 [US4] Integrate jsondiffpatch + Monaco diff component in `ui/coffeehouse-frontend/src/features/compare/components/VersionDiffViewer.tsx`.
-- [ ] T037 [US4] Build compare selector UI `ui/coffeehouse-frontend/src/features/compare/components/VersionComparePanel.tsx` enabling inline/split toggle + metadata badges.
-- [ ] T038 [US4] Add compare route or modal `ui/coffeehouse-frontend/src/app/routes/CompareRoute.tsx` (or nested route) linking from history table.
-- [ ] T039 [US4] Surface diff-breaking-change warnings via toast bus `ui/coffeehouse-frontend/src/services/feedback/toastBus.ts`.
-- [ ] T058 [US4] Implement diff latency instrumentation + Performance API markers inside `ui/coffeehouse-frontend/src/features/compare/api/useVersionDiff.ts` and stream metrics to telemetry store for SC-003.
-- [ ] T059 [US4] Create error boundary / fallback component `ui/coffeehouse-frontend/src/features/compare/components/DiffErrorState.tsx` to present guidance when mismatched JSON payloads occur.
+- [X] T035 [P] [US4] Implement diff API hook `ui/coffeehouse-frontend/src/features/compare/api/useVersionDiff.ts` with TanStack Query caching and 200 KB guardrails.
+- [X] T036 [US4] Integrate jsondiffpatch + diff component in `ui/coffeehouse-frontend/src/features/compare/components/VersionDiffViewer.tsx`.
+- [X] T037 [US4] Build compare selector UI `ui/coffeehouse-frontend/src/features/compare/components/VersionComparePanel.tsx` enabling inline/split toggle + metadata badges.
+- [X] T038 [US4] Add compare route or modal `ui/coffeehouse-frontend/src/features/compare/routes/CompareRoute.tsx` (or nested route) linking from history table.
+- [X] T039 [US4] Surface diff-breaking-change warnings via toast bus `ui/coffeehouse-frontend/src/services/feedback/toastBus.ts`.
+- [X] T058 [US4] Implement diff latency instrumentation + Performance API markers inside `ui/coffeehouse-frontend/src/features/compare/telemetry/diffLatencyMetrics.ts` and stream metrics to telemetry store for SC-003.
+- [X] T059 [US4] Create error boundary / fallback component `ui/coffeehouse-frontend/src/features/compare/components/DiffErrorState.tsx` to present guidance when mismatched JSON payloads occur.
 
 ---
 

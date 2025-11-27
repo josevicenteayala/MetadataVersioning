@@ -28,4 +28,9 @@ public interface JpaMetadataDocumentRepository extends JpaRepository<MetadataDoc
      * Find all documents of a specific type with pagination.
      */
     Page<MetadataDocumentEntity> findAllByType(String type, Pageable pageable);
+
+    /**
+     * Find all documents with name containing the search string (case insensitive).
+     */
+    Page<MetadataDocumentEntity> findAllByNameContainingIgnoreCase(String name, Pageable pageable);
 }

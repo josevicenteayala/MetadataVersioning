@@ -221,6 +221,31 @@ public class MetadataController {
     }
 
     /**
+     * Get metadata document details.
+     */
+    @GetMapping("/{type}/{name}")
+    @Operation(summary = "Get metadata document details")
+    @ApiResponse(responseCode = "200", description = "Document details")
+    @ApiResponse(responseCode = "404", description = "Document not found")
+    public ResponseEntity<MetadataDocumentSummary> getMetadataDocument(
+            @PathVariable String type,
+            @PathVariable String name) {
+
+        return metadataQueryService.getMetadataDocument(type, name)
+                .map(doc -> new MetadataDocumentSummary(
+                    doc.getType() + "/" + doc.getName(),
+                    doc.getType(),
+                    doc.getName(),
+                    doc.getVersionCount(),
+                    doc.getActiveVersion().map(com.metadata.versioning.domain.model.Version::versionNumber).orElse(null),
+                    doc.getCreatedAt(),
+                    doc.getUpdatedAt()
+                ))
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    /**
      * List all metadata documents with pagination (FR-015).
      * Public access - no authentication required (FR-026).
      */
@@ -233,24 +258,29 @@ public class MetadataController {
     public ResponseEntity<org.springframework.data.domain.Page<MetadataDocumentSummary>> listDocuments(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "20") int size,
-            @RequestParam(required = false) String type) {
+            @RequestParam(required = false) String type,
+            @RequestParam(required = false) String search) {
 
         org.springframework.data.domain.Pageable pageable =
-                org.springframework.data.domain.PageRequest.of(page, size);
+                org.springframework.data.domain.PageRequest.of(page, size, 
+                    org.springframework.data.domain.Sort.by("createdAt").descending());
 
         org.springframework.data.domain.Page<MetadataDocument> documents;
         if (type != null && !type.isBlank()) {
             documents = metadataQueryService.listDocumentsByType(type, pageable);
+        } else if (search != null && !search.isBlank()) {
+            documents = metadataQueryService.listDocumentsByName(search, pageable);
         } else {
             documents = metadataQueryService.listDocuments(pageable);
         }
 
         org.springframework.data.domain.Page<MetadataDocumentSummary> response =
                 documents.map(doc -> new MetadataDocumentSummary(
+                    doc.getType() + "/" + doc.getName(),
                     doc.getType(),
                     doc.getName(),
                     doc.getVersionCount(),
-                    doc.hasActiveVersion(),
+                    doc.getActiveVersion().map(com.metadata.versioning.domain.model.Version::versionNumber).orElse(null),
                     doc.getCreatedAt(),
                     doc.getUpdatedAt()
                 ));
@@ -262,10 +292,11 @@ public class MetadataController {
      * DTO for document list summary.
      */
     public record MetadataDocumentSummary(
+            String id,
             String type,
             String name,
             int versionCount,
-            boolean hasActiveVersion,
+            Integer activeVersion,
             java.time.Instant createdAt,
             java.time.Instant updatedAt
     ) {}

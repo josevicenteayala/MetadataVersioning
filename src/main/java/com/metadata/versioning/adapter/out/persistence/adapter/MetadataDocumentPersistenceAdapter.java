@@ -82,6 +82,12 @@ public class MetadataDocumentPersistenceAdapter implements MetadataDocumentRepos
                 .map(this::toDomain);
     }
 
+    @Override
+    public Page<MetadataDocument> findAllByNameContainingIgnoreCase(String name, Pageable pageable) {
+        return jpaRepository.findAllByNameContainingIgnoreCase(name, pageable)
+                .map(this::toDomain);
+    }
+
     /**
      * Convert domain model to JPA entity.
      */

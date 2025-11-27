@@ -61,7 +61,7 @@ const App = () => {
             <Routes>
               <Route path="/" element={<Navigate to="/dashboard" replace />} />
               <Route path="/dashboard" element={<DashboardRoute />} />
-              <Route path="/documents/:documentId" element={<DocumentRoute />} />
+              <Route path="/documents/:type/:name" element={<DocumentRoute />} />
               <Route path="/compare" element={<CompareRoute />} />
               <Route path="/settings" element={<SettingsRoute />} />
             </Routes>

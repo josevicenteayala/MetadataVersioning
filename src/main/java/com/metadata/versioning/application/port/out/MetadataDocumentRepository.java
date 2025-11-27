@@ -63,4 +63,13 @@ public interface MetadataDocumentRepository {
      * @return Page of documents
      */
     Page<MetadataDocument> findAllByType(String type, Pageable pageable);
+
+    /**
+     * Find all metadata documents with name containing the search string (case insensitive).
+     * 
+     * @param name Search string
+     * @param pageable Pagination parameters
+     * @return Page of documents
+     */
+    Page<MetadataDocument> findAllByNameContainingIgnoreCase(String name, Pageable pageable);
 }

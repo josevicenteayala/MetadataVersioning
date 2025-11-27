@@ -1,17 +1,18 @@
 import { useQuery, keepPreviousData } from '@tanstack/react-query'
 import { httpClient } from '@services/api/httpClient'
-import type { MetadataDocumentList } from '@services/generated/models/MetadataDocumentList'
 import type { MetadataDocumentResponse } from '@services/generated/models/MetadataDocumentResponse'
 
 export interface DocumentsPageParams {
   type?: string
-  limit?: number
-  cursor?: string | null
+  page?: number
+  size?: number
+  search?: string
 }
 
 export interface DocumentsPageResult {
   documents: MetadataDocumentResponse[]
-  cursor: string | null
+  totalPages: number
+  totalElements: number
   hasMore: boolean
 }
 
@@ -26,25 +27,28 @@ export interface UseDocumentsPageResult {
 const DOCUMENTS_QUERY_KEY_BASE = ['documents', 'page'] as const
 
 const fetchDocumentsPage = async (params: DocumentsPageParams): Promise<DocumentsPageResult> => {
-  const { data } = await httpClient.get<MetadataDocumentList>('/api/v1/metadata', {
+  // The backend returns a Spring Data Page object
+  const { data } = await httpClient.get<any>('/api/v1/metadata', {
     params: {
       type: params.type,
-      limit: params.limit ?? 20,
-      cursor: params.cursor ?? undefined,
+      page: params.page ?? 0,
+      size: params.size ?? 20,
+      search: params.search || undefined,
     },
   })
 
   return {
-    documents: data.documents ?? [],
-    cursor: data.cursor ?? null,
-    hasMore: data.hasMore ?? false,
+    documents: data.content ?? [],
+    totalPages: data.totalPages ?? 0,
+    totalElements: data.totalElements ?? 0,
+    hasMore: !data.last,
   }
 }
 
 /**
  * Paginated document list hook (T016).
  *
- * Supports cursor-based pagination with type filter. Results stay on screen
+ * Supports page-based pagination with type and search filters. Results stay on screen
  * while the next page is being fetched via `placeholderData: keepPreviousData`.
  */
 export const useDocumentsPage = (params: DocumentsPageParams): UseDocumentsPageResult => {

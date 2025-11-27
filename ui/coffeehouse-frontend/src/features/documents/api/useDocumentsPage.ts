@@ -24,16 +24,23 @@ export interface UseDocumentsPageResult {
   error: unknown
 }
 
+interface PagedDocumentResponse {
+  content?: MetadataDocumentResponse[]
+  totalPages?: number
+  totalElements?: number
+  last?: boolean
+}
+
 const DOCUMENTS_QUERY_KEY_BASE = ['documents', 'page'] as const
 
 const fetchDocumentsPage = async (params: DocumentsPageParams): Promise<DocumentsPageResult> => {
   // The backend returns a Spring Data Page object
-  const { data } = await httpClient.get<any>('/api/v1/metadata', {
+  const { data } = await httpClient.get<PagedDocumentResponse>('/api/v1/metadata', {
     params: {
       type: params.type,
       page: params.page ?? 0,
       size: params.size ?? 20,
-      search: params.search || undefined,
+      search: params.search ?? undefined,
     },
   })
 
@@ -41,7 +48,7 @@ const fetchDocumentsPage = async (params: DocumentsPageParams): Promise<Document
     documents: data.content ?? [],
     totalPages: data.totalPages ?? 0,
     totalElements: data.totalElements ?? 0,
-    hasMore: !data.last,
+    hasMore: Boolean(!data.last),
   }
 }
 

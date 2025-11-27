@@ -170,8 +170,8 @@
 ### Tests (write first)
 - [x] T071 [P] [US6] Create Vitest spec `ui/coffeehouse-frontend/tests/unit/documents/createDocumentForm.test.tsx` covering field validation, JSON syntax errors, and submit state management. ✅
 - [x] T072 [P] [US6] Create Vitest spec `ui/coffeehouse-frontend/tests/unit/documents/createDocumentMutation.test.tsx` covering 201/400/409/5xx response handling and cache invalidation. ✅
-- [ ] T073 [P] [US6] Add Playwright journey `ui/coffeehouse-frontend/tests/e2e/create-document.spec.ts` covering happy path from dashboard CTA → form → submit → detail page navigation.
-- [ ] T074 [P] [US6] Add Playwright scenario `ui/coffeehouse-frontend/tests/e2e/create-document-errors.spec.ts` covering validation errors, conflict errors, and network failure recovery.
+- [x] T073 [P] [US6] Add Playwright journey `ui/coffeehouse-frontend/tests/e2e/create-document.spec.ts` covering happy path from dashboard CTA → form → submit → detail page navigation. ✅
+- [x] T074 [P] [US6] Add Playwright scenario `ui/coffeehouse-frontend/tests/e2e/create-document-errors.spec.ts` covering validation errors, conflict errors, and network failure recovery. ✅
 
 ### Implementation
 - [x] T075 [P] [US6] Implement create document mutation hook `ui/coffeehouse-frontend/src/features/documents/api/useCreateDocument.ts` with TanStack Query mutation and dashboard stats invalidation. ✅
@@ -218,11 +218,11 @@
 5. **Quality Gates**: Every story includes failing tests before implementation plus final lint/test/build sweep (T050, T085).
 
 ## Summary
-- Total tasks: 85 (70 Phases 1-9 complete + 13/15 Phase 10 complete)
+- Total tasks: 85 (70 Phases 1-9 complete + 15 Phase 10 complete) ✅
 - Task counts per story: US1 (9), US2 (6), US3 (8), US4 (11), US5 (8), US6 (15) — remaining tasks cover setup, foundation, polish, and release readiness.
 - Parallel opportunities: 36 tasks marked [P] across setup, foundation, tests, and story implementations.
 - Independent Test Criteria: Each story lists explicit validation scenarios ensuring standalone verification.
 - Suggested MVP Scope: Complete through Phase 3 (US1). Subsequent phases extend functionality without blocking prior flows.
 - Release Readiness: Phase 9 (T063-T070) validates spec completeness, error handling coverage, and documentation.
-- Test Coverage: 194 unit tests passing, E2E tests pending for US6.
-- Phase 10 Status: 13/15 tasks complete (T073, T074 E2E tests pending).
+- Test Coverage: 194 unit tests passing, E2E tests complete for US6.
+- Phase 10 Status: 15/15 tasks complete. ✅

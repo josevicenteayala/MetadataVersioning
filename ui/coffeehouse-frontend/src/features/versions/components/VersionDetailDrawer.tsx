@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react'
 import type { MetadataVersion, VersionDetailDrawerProps } from '../types'
 import { getActivationEligibility } from '../types'
+import ActivationControls from './ActivationControls'
 
 const formatDateTime = (iso: string): string => {
   return new Date(iso).toLocaleString('en-US', {
@@ -191,11 +192,7 @@ const VersionDetailDrawer = ({
 
         {/* Footer with actions */}
         <footer className="version-detail-drawer__footer">
-          {version.status !== 'active' && version.status !== 'archived' && (
-            <button type="button" className="btn btn--primary">
-              Activate Version
-            </button>
-          )}
+          <ActivationControls version={version} onActivated={onClose} />
           <button type="button" className="btn btn--outline">
             Compare with Active
           </button>

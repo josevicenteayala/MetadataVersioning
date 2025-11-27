@@ -118,12 +118,12 @@ const ActivationControls = ({ version, onActivated }: ActivationControlsProps) =
     try {
       await mutateAsync({
         documentId: version.documentId,
-        versionId: version.versionId,
+        versionId: version.versionNumber.toString(),
       })
     } catch {
       // Error handled by mutation
     }
-  }, [mutateAsync, version.documentId, version.versionId])
+  }, [mutateAsync, version.documentId, version.versionNumber])
 
   const handleCancel = useCallback(() => {
     setShowConfirmation(false)

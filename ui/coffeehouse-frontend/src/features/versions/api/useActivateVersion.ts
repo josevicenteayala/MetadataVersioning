@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { httpClient } from '@services/api/httpClient'
 import { emitToast } from '@services/feedback/toastBus'
-import { sessionStore } from '@services/auth/sessionStore'
+import { sessionStore, useSessionStore } from '@services/auth/sessionStore'
 import { versionHistoryKeys } from './useVersionHistory'
 
 export interface ActivateVersionRequest {
@@ -23,8 +23,14 @@ export interface ActivateVersionResponse {
 const activateVersion = async (
   request: ActivateVersionRequest,
 ): Promise<ActivateVersionResponse> => {
+  // Split documentId (e.g., "config/app-settings") into type and name
+  const [type, name] = request.documentId.split('/')
+  if (!type || !name) {
+    throw new Error(`Invalid documentId format: ${request.documentId}. Expected format: type/name`)
+  }
+
   const response = await httpClient.post<ActivateVersionResponse>(
-    `/api/v1/metadata/${request.documentId}/versions/${request.versionId}/activate`,
+    `/api/v1/metadata/${type}/${name}/versions/${request.versionId}/activate`,
   )
 
   const correlationId = response.headers['x-correlation-id'] as string | undefined
@@ -120,7 +126,7 @@ export const useActivateVersion = (options?: UseActivateVersionOptions) => {
  * Checks if the current user can activate versions.
  */
 export const useCanActivate = (): boolean => {
-  const role = sessionStore.getState().role
+  const role = useSessionStore((state) => state.role)
   return role === 'admin'
 }
 

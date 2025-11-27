@@ -3,6 +3,7 @@ package com.metadata.versioning.adapter.in.rest;
 import com.metadata.versioning.adapter.in.rest.dto.CreateMetadataRequest;
 import com.metadata.versioning.adapter.in.rest.dto.CreateVersionRequest;
 import com.metadata.versioning.adapter.in.rest.dto.VersionResponse;
+import com.metadata.versioning.application.port.in.ActivateVersionUseCase;
 import com.metadata.versioning.application.port.in.CreateVersionUseCase;
 import com.metadata.versioning.application.port.in.GetActiveVersionUseCase;
 import com.metadata.versioning.application.port.in.GetVersionHistoryUseCase;
@@ -34,15 +35,18 @@ public class MetadataController {
     private final CreateVersionUseCase createVersionUseCase;
     private final GetVersionHistoryUseCase getVersionHistoryUseCase;
     private final GetActiveVersionUseCase getActiveVersionUseCase;
+    private final ActivateVersionUseCase activateVersionUseCase;
     private final MetadataQueryService metadataQueryService;
 
     public MetadataController(CreateVersionUseCase createVersionUseCase,
                              GetVersionHistoryUseCase getVersionHistoryUseCase,
                              GetActiveVersionUseCase getActiveVersionUseCase,
+                             ActivateVersionUseCase activateVersionUseCase,
                              MetadataQueryService metadataQueryService) {
         this.createVersionUseCase = createVersionUseCase;
         this.getVersionHistoryUseCase = getVersionHistoryUseCase;
         this.getActiveVersionUseCase = getActiveVersionUseCase;
+        this.activateVersionUseCase = activateVersionUseCase;
         this.metadataQueryService = metadataQueryService;
     }
 
@@ -121,6 +125,38 @@ public class MetadataController {
         VersionResponse response = VersionResponse.fromDomain(version, type, name);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+
+    /**
+     * Activate a specific version (FR-006).
+     * Requires authentication.
+     */
+    @PostMapping("/{type}/{name}/versions/{versionNumber}/activate")
+    @Operation(
+        summary = "Activate a version",
+        description = "Make a specific version the active one",
+        security = @SecurityRequirement(name = "BasicAuth")
+    )
+    @ApiResponse(responseCode = "200", description = "Version activated")
+    @ApiResponse(responseCode = "404", description = "Version or document not found")
+    @ApiResponse(responseCode = "401", description = "Authentication required")
+    public ResponseEntity<ActivateVersionResponse> activateVersion(
+            @PathVariable String type,
+            @PathVariable String name,
+            @PathVariable Integer versionNumber) {
+
+        activateVersionUseCase.activateVersion(type, name, versionNumber);
+        
+        ActivateVersionResponse response = new ActivateVersionResponse(
+            type + "/" + name,
+            "v" + versionNumber,
+            null,
+            java.util.UUID.randomUUID().toString()
+        );
+        
+        return ResponseEntity.ok()
+                .header("X-Correlation-ID", response.correlationId())
+                .body(response);
     }
 
     /**
@@ -238,6 +274,7 @@ public class MetadataController {
                     doc.getName(),
                     doc.getVersionCount(),
                     doc.getActiveVersion().map(com.metadata.versioning.domain.model.Version::versionNumber).orElse(null),
+                    doc.getActiveVersion().isPresent(),
                     doc.getCreatedAt(),
                     doc.getUpdatedAt()
                 ))
@@ -281,6 +318,7 @@ public class MetadataController {
                     doc.getName(),
                     doc.getVersionCount(),
                     doc.getActiveVersion().map(com.metadata.versioning.domain.model.Version::versionNumber).orElse(null),
+                    doc.getActiveVersion().isPresent(),
                     doc.getCreatedAt(),
                     doc.getUpdatedAt()
                 ));
@@ -297,7 +335,18 @@ public class MetadataController {
             String name,
             int versionCount,
             Integer activeVersion,
+            boolean hasActiveVersion,
             java.time.Instant createdAt,
             java.time.Instant updatedAt
+    ) {}
+
+    /**
+     * DTO for activation response.
+     */
+    public record ActivateVersionResponse(
+        String documentId,
+        String activatedVersionId,
+        String previousActiveVersionId,
+        String correlationId
     ) {}
 }

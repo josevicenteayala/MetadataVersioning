@@ -81,6 +81,14 @@ public class TestPersistenceConfig {
         }
 
         @Override
+        public Page<MetadataDocument> findAllByNameContainingIgnoreCase(String name, Pageable pageable) {
+            List<MetadataDocument> filtered = store.values().stream()
+                    .filter(doc -> doc.getName().toLowerCase().contains(name.toLowerCase()))
+                    .toList();
+            return toPage(filtered, pageable);
+        }
+
+        @Override
         public boolean existsByTypeAndName(String type, String name) {
             return store.containsKey(toKey(type, name));
         }

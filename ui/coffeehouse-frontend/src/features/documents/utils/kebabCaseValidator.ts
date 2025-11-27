@@ -67,11 +67,17 @@ export const validateDocumentType = (type: string): ValidationResult => {
   }
 
   if (/[_\s]/.test(trimmed)) {
-    return { valid: false, error: 'Type must be kebab-case: use hyphens instead of underscores or spaces' }
+    return {
+      valid: false,
+      error: 'Type must be kebab-case: use hyphens instead of underscores or spaces',
+    }
   }
 
   if (!TYPE_PATTERN.test(trimmed)) {
-    return { valid: false, error: 'Type must be kebab-case (lowercase letters separated by hyphens)' }
+    return {
+      valid: false,
+      error: 'Type must be kebab-case (lowercase letters separated by hyphens)',
+    }
   }
 
   return { valid: true }
@@ -118,11 +124,17 @@ export const validateDocumentName = (name: string): ValidationResult => {
   }
 
   if (/[_\s]/.test(trimmed)) {
-    return { valid: false, error: 'Name must be kebab-case: use hyphens instead of underscores or spaces' }
+    return {
+      valid: false,
+      error: 'Name must be kebab-case: use hyphens instead of underscores or spaces',
+    }
   }
 
   if (!NAME_PATTERN.test(trimmed)) {
-    return { valid: false, error: 'Name must be kebab-case (lowercase letters/numbers separated by hyphens)' }
+    return {
+      valid: false,
+      error: 'Name must be kebab-case (lowercase letters/numbers separated by hyphens)',
+    }
   }
 
   return { valid: true }
@@ -197,7 +209,10 @@ export const validateJsonPayload = (payload: string): ValidationResult => {
  */
 export const validateChangeSummary = (summary: string): ValidationResult => {
   if (summary.length > 500) {
-    return { valid: false, error: `Change summary must be 500 characters or less (currently ${summary.length})` }
+    return {
+      valid: false,
+      error: `Change summary must be 500 characters or less (currently ${summary.length})`,
+    }
   }
 
   return { valid: true }

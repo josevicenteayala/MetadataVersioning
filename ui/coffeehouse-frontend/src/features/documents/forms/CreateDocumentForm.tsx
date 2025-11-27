@@ -1,5 +1,8 @@
 import { useCallback, useId, useState } from 'react'
-import { useCreateDocument, type CreateDocumentResponse } from '@features/documents/api/useCreateDocument'
+import {
+  useCreateDocument,
+  type CreateDocumentResponse,
+} from '@features/documents/api/useCreateDocument'
 import {
   validateDocumentType,
   validateDocumentName,
@@ -246,7 +249,11 @@ export const CreateDocumentForm = ({ onSuccess, onCancel }: CreateDocumentFormPr
   const canSubmit = isFormValid() && !isPending
 
   return (
-    <form onSubmit={handleSubmit} className="create-document-form" aria-labelledby={`${formId}-title`}>
+    <form
+      onSubmit={handleSubmit}
+      className="create-document-form"
+      aria-labelledby={`${formId}-title`}
+    >
       <h2 id={`${formId}-title`} className="create-document-form__title">
         Create New Document
       </h2>

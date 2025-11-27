@@ -80,10 +80,7 @@ const DashboardRoute = () => {
       </section>
 
       {/* Create Document Modal */}
-      <CreateDocumentModal
-        isOpen={isCreateModalOpen}
-        onClose={handleCloseCreateModal}
-      />
+      <CreateDocumentModal isOpen={isCreateModalOpen} onClose={handleCloseCreateModal} />
     </div>
   )
 }

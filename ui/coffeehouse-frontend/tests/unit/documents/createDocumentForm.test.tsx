@@ -401,7 +401,10 @@ describe('CreateDocumentForm', () => {
       }
       conflictError.response = {
         status: 409,
-        data: { error: 'CONFLICT', message: 'Metadata document already exists: loyalty-program:spring-bonus' },
+        data: {
+          error: 'CONFLICT',
+          message: 'Metadata document already exists: loyalty-program:spring-bonus',
+        },
       }
 
       mockMutateAsync = vi.fn().mockImplementation(() => {
@@ -434,7 +437,14 @@ describe('CreateDocumentForm', () => {
     it('displays validation errors for 400 response', async () => {
       const user = userEvent.setup()
       const validationError = new Error('Validation failed') as Error & {
-        response?: { status: number; data: { error: string; message: string; details?: { field: string; constraint: string }[] } }
+        response?: {
+          status: number
+          data: {
+            error: string
+            message: string
+            details?: { field: string; constraint: string }[]
+          }
+        }
       }
       validationError.response = {
         status: 400,

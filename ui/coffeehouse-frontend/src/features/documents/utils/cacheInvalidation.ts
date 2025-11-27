@@ -52,8 +52,5 @@ export const invalidateDocumentDetail = async (
  * Invalidates document list and dashboard stats.
  */
 export const invalidateAfterDocumentCreation = async (queryClient: QueryClient): Promise<void> => {
-  await Promise.all([
-    invalidateDocumentList(queryClient),
-    invalidateDashboardStats(queryClient),
-  ])
+  await Promise.all([invalidateDocumentList(queryClient), invalidateDashboardStats(queryClient)])
 }

@@ -123,11 +123,7 @@ export const CreateDocumentModal = ({ isOpen, onClose }: CreateDocumentModalProp
       aria-modal="true"
       aria-labelledby="create-document-modal-title"
     >
-      <div
-        ref={modalRef}
-        className="create-document-modal__content"
-        role="document"
-      >
+      <div ref={modalRef} className="create-document-modal__content" role="document">
         {/* Close button */}
         <button
           type="button"
@@ -139,10 +135,7 @@ export const CreateDocumentModal = ({ isOpen, onClose }: CreateDocumentModalProp
         </button>
 
         {/* Form */}
-        <CreateDocumentForm
-          onSuccess={handleSuccess}
-          onCancel={onClose}
-        />
+        <CreateDocumentForm onSuccess={handleSuccess} onCancel={onClose} />
       </div>
 
       <style>{`

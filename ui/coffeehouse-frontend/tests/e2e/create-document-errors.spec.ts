@@ -114,7 +114,8 @@ test.describe('Create Document Flow - Error Handling', () => {
             contentType: 'application/json',
             body: JSON.stringify({
               error: 'Conflict',
-              message: 'Document with type "loyalty-program" and name "existing-doc" already exists',
+              message:
+                'Document with type "loyalty-program" and name "existing-doc" already exists',
               code: 'DUPLICATE_DOCUMENT',
               field: 'name',
             }),
@@ -373,9 +374,7 @@ test.describe('Create Document Flow - Error Handling', () => {
       await modal.getByRole('button', { name: /create/i }).click()
 
       // Should show auth error or redirect to settings
-      await expect(
-        page.getByText(/unauthorized|authentication|credentials|sign in/i),
-      ).toBeVisible()
+      await expect(page.getByText(/unauthorized|authentication|credentials|sign in/i)).toBeVisible()
     })
   })
 

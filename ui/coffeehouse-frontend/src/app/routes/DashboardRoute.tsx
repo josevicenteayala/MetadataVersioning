@@ -22,10 +22,10 @@ const DashboardRoute = () => {
     return () => clearTimeout(timer)
   }, [searchTerm])
 
-  const { data, isLoading, isFetching } = useDocumentsPage({ 
-    page, 
-    size: 20, 
-    search: debouncedSearch 
+  const { data, isLoading, isFetching } = useDocumentsPage({
+    page,
+    size: 20,
+    search: debouncedSearch,
   })
 
   const handleNext = () => {

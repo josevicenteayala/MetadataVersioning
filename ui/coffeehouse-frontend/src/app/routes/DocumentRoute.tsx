@@ -8,7 +8,9 @@ import type { MetadataVersion, SortColumn, SortDirection } from '@features/versi
 import type { MetadataDocumentResponse } from '@services/generated/models/MetadataDocumentResponse'
 
 const fetchDocument = async (type: string, name: string): Promise<MetadataDocumentResponse> => {
-  const response = await httpClient.get<MetadataDocumentResponse>(`/api/v1/metadata/${type}/${name}`)
+  const response = await httpClient.get<MetadataDocumentResponse>(
+    `/api/v1/metadata/${type}/${name}`,
+  )
   return response.data
 }
 

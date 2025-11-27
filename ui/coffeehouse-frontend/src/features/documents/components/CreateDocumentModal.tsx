@@ -155,11 +155,7 @@ export const CreateDocumentModal = ({ isOpen, onClose }: CreateDocumentModalProp
               >
                 Go to Settings
               </button>
-              <button
-                type="button"
-                className="create-document-modal__button"
-                onClick={onClose}
-              >
+              <button type="button" className="create-document-modal__button" onClick={onClose}>
                 Cancel
               </button>
             </div>

@@ -35,14 +35,14 @@ export const httpClient = axios.create({
 // Request interceptor - Add auth and correlation ID
 httpClient.interceptors.request.use((config) => {
   const { username, password } = sessionStore.getState()
-  
+
   if (username && password) {
     const credentials = btoa(`${username}:${password}`)
     config.headers.Authorization = `Basic ${credentials}`
   }
-  
+
   config.headers['X-Correlation-ID'] = uuidv4()
-  
+
   return config
 })
 
@@ -54,7 +54,7 @@ httpClient.interceptors.response.use(
       sessionStore.getState().clearCredentials()
     }
     return Promise.reject(error)
-  }
+  },
 )
 ```
 
@@ -88,9 +88,9 @@ export interface ActivateVersionRequest {
 
 // Example generated API methods
 export const MetadataApi = {
-  getVersions: (type: string, name: string) => 
+  getVersions: (type: string, name: string) =>
     httpClient.get<Version[]>(`/api/v1/metadata/${type}/${name}/versions`),
-    
+
   activateVersion: (type: string, name: string, versionNumber: string) =>
     httpClient.post(`/api/v1/metadata/${type}/${name}/versions/${versionNumber}/activate`),
 }
@@ -108,11 +108,11 @@ export const sessionStore = create<SessionStore>((set) => ({
   username: null,
   password: null,
   role: null,
-  
+
   setCredentials: (username, password, role) => {
     set({ username, password, role })
   },
-  
+
   clearCredentials: () => {
     set({ username: null, password: null, role: null })
   },
@@ -128,7 +128,7 @@ Credentials are entered via the Settings page:
 const handleSave = (credentials: Credentials) => {
   const { setCredentials } = sessionStore.getState()
   setCredentials(credentials.username, credentials.password, credentials.role)
-  
+
   // Test connection
   testConnection().then((result) => {
     if (result.success) {
@@ -195,18 +195,18 @@ Use TanStack Query mutations for data modifications:
 // features/version-history/hooks/useActivateVersion.ts
 export function useActivateVersion() {
   const queryClient = useQueryClient()
-  
+
   return useMutation({
     mutationFn: async (request: ActivateVersionRequest) => {
       const [type, name] = request.documentId.split('/')
-      
+
       if (!type || !name) {
         throw new Error('Invalid documentId format. Expected "type/name".')
       }
-      
+
       await MetadataApi.activateVersion(type, name, request.versionNumber)
     },
-    
+
     onSuccess: (data, variables) => {
       // Invalidate affected queries
       queryClient.invalidateQueries({
@@ -216,7 +216,7 @@ export function useActivateVersion() {
         queryKey: ['documents'],
       })
     },
-    
+
     onError: (error) => {
       console.error('Failed to activate version:', error)
     },
@@ -239,10 +239,10 @@ const VersionDetailDrawer = ({ documentId, versionNumber, isOpen, onClose }) => 
     },
     enabled: isOpen && !!documentId && !!versionNumber,
   })
-  
+
   // Mutation for activation
   const activateMutation = useActivateVersion()
-  
+
   const handleActivate = async () => {
     try {
       await activateMutation.mutateAsync({
@@ -255,10 +255,10 @@ const VersionDetailDrawer = ({ documentId, versionNumber, isOpen, onClose }) => 
       toast.error('Failed to activate version')
     }
   }
-  
+
   if (isLoading) return <Spinner />
   if (error) return <ErrorMessage error={error} />
-  
+
   return (
     <Drawer isOpen={isOpen} onClose={onClose}>
       <VersionDetails version={version} />
@@ -299,7 +299,7 @@ const { data, error, isError } = useQuery({
 
 if (isError) {
   const correlationId = error.response?.headers['x-correlation-id']
-  
+
   return (
     <ErrorMessage
       message={error.message}
@@ -317,18 +317,15 @@ const mutation = useMutation({
   mutationFn: activateVersion,
   onError: (error, variables, context) => {
     const correlationId = error.response?.headers['x-correlation-id']
-    
-    toast.error(
-      `Failed to activate version. Correlation ID: ${correlationId}`,
-      {
-        duration: 5000,
-        action: {
-          label: 'Retry',
-          onClick: () => mutation.mutate(variables),
-        },
-      }
-    )
-    
+
+    toast.error(`Failed to activate version. Correlation ID: ${correlationId}`, {
+      duration: 5000,
+      action: {
+        label: 'Retry',
+        onClick: () => mutation.mutate(variables),
+      },
+    })
+
     // Log for debugging
     console.error('Activation failed:', {
       error,
@@ -350,16 +347,16 @@ httpClient.interceptors.response.use(
     if (error.response?.status === 401) {
       // Clear session
       sessionStore.getState().clearCredentials()
-      
+
       // Show notification
       toast.error('Session expired. Please log in again.')
-      
+
       // Redirect to settings
       window.location.href = '/settings'
     }
-    
+
     return Promise.reject(error)
-  }
+  },
 )
 ```
 
@@ -405,9 +402,7 @@ queryClient.invalidateQueries({
 
 // Invalidate with predicate
 queryClient.invalidateQueries({
-  predicate: (query) =>
-    query.queryKey[0] === 'versions' &&
-    query.queryKey[1] === documentId,
+  predicate: (query) => query.queryKey[0] === 'versions' && query.queryKey[1] === documentId,
 })
 ```
 
@@ -418,18 +413,18 @@ Update cache immediately before API call:
 ```typescript
 const mutation = useMutation({
   mutationFn: activateVersion,
-  
+
   onMutate: async (variables) => {
     // Cancel outgoing refetches
     await queryClient.cancelQueries({
       queryKey: versionHistoryKeys.byDocument(variables.documentId),
     })
-    
+
     // Snapshot previous value
     const previousVersions = queryClient.getQueryData(
-      versionHistoryKeys.byDocument(variables.documentId)
+      versionHistoryKeys.byDocument(variables.documentId),
     )
-    
+
     // Optimistically update
     queryClient.setQueryData(
       versionHistoryKeys.byDocument(variables.documentId),
@@ -437,24 +432,24 @@ const mutation = useMutation({
         old.map((v) =>
           v.versionNumber.toString() === variables.versionNumber
             ? { ...v, isActive: true }
-            : { ...v, isActive: false }
-        )
+            : { ...v, isActive: false },
+        ),
     )
-    
+
     // Return context for rollback
     return { previousVersions }
   },
-  
+
   onError: (err, variables, context) => {
     // Rollback on error
     if (context?.previousVersions) {
       queryClient.setQueryData(
         versionHistoryKeys.byDocument(variables.documentId),
-        context.previousVersions
+        context.previousVersions,
       )
     }
   },
-  
+
   onSettled: (data, error, variables) => {
     // Refetch to ensure consistency
     queryClient.invalidateQueries({
@@ -526,7 +521,7 @@ const handleBulkActivation = async (versionIds: string[]) => {
       // Continue with remaining versions
     }
   }
-  
+
   queryClient.invalidateQueries({ queryKey: ['versions'] })
 }
 ```
@@ -535,17 +530,15 @@ const handleBulkActivation = async (versionIds: string[]) => {
 
 ```typescript
 const handleBulkDelete = async (versionIds: string[]) => {
-  const deletePromises = versionIds.map((id) =>
-    deleteMutation.mutateAsync({ versionId: id })
-  )
-  
+  const deletePromises = versionIds.map((id) => deleteMutation.mutateAsync({ versionId: id }))
+
   try {
     await Promise.all(deletePromises)
     toast.success('All versions deleted')
   } catch (error) {
     toast.error('Some deletions failed')
   }
-  
+
   queryClient.invalidateQueries({ queryKey: ['versions'] })
 }
 ```
@@ -572,16 +565,13 @@ export const handlers = [
           isActive: true,
           metadata: { key: 'value' },
         },
-      ])
+      ]),
     )
   }),
-  
-  rest.post(
-    '/api/v1/metadata/:type/:name/versions/:versionNumber/activate',
-    (req, res, ctx) => {
-      return res(ctx.status(204))
-    }
-  ),
+
+  rest.post('/api/v1/metadata/:type/:name/versions/:versionNumber/activate', (req, res, ctx) => {
+    return res(ctx.status(204))
+  }),
 ]
 ```
 
@@ -599,14 +589,14 @@ describe('useVersionHistory', () => {
         {children}
       </QueryClientProvider>
     )
-    
+
     const { result } = renderHook(
       () => useVersionHistory('config/app-settings'),
       { wrapper }
     )
-    
+
     await waitFor(() => expect(result.current.isSuccess).toBe(true))
-    
+
     expect(result.current.data).toHaveLength(1)
     expect(result.current.data[0].versionNumber).toBe(1)
   })
@@ -626,18 +616,18 @@ describe('useActivateVersion', () => {
         {children}
       </QueryClientProvider>
     )
-    
+
     const { result } = renderHook(() => useActivateVersion(), { wrapper })
-    
+
     await act(async () => {
       await result.current.mutateAsync({
         documentId: 'config/app-settings',
         versionNumber: '2',
       })
     })
-    
+
     expect(result.current.isSuccess).toBe(true)
-    
+
     // Verify cache invalidation
     const invalidatedQueries = queryClient.getQueryCache().findAll({
       queryKey: ['versions'],
@@ -653,15 +643,13 @@ describe('useActivateVersion', () => {
 ```typescript
 it('should handle 401 error and clear credentials', async () => {
   server.use(
-    rest.post('/api/v1/metadata/:type/:name/versions/:versionNumber/activate', 
-      (req, res, ctx) => {
-        return res(ctx.status(401))
-      }
-    )
+    rest.post('/api/v1/metadata/:type/:name/versions/:versionNumber/activate', (req, res, ctx) => {
+      return res(ctx.status(401))
+    }),
   )
-  
+
   const { result } = renderHook(() => useActivateVersion(), { wrapper })
-  
+
   await act(async () => {
     try {
       await result.current.mutateAsync({
@@ -672,7 +660,7 @@ it('should handle 401 error and clear credentials', async () => {
       expect(error.response.status).toBe(401)
     }
   })
-  
+
   // Verify credentials cleared
   const { username } = sessionStore.getState()
   expect(username).toBeNull()

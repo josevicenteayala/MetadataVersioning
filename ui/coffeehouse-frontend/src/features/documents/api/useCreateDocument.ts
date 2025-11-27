@@ -95,9 +95,7 @@ const createDocument = async (request: CreateDocumentRequest): Promise<CreateDoc
 
   const correlationId = extractCorrelationId(response)
 
-  return correlationId
-    ? { ...response.data, correlationId }
-    : response.data
+  return correlationId ? { ...response.data, correlationId } : response.data
 }
 
 export interface UseCreateDocumentOptions {

@@ -134,7 +134,7 @@ function greetUser(user) {
 // ✅ Good
 const VersionCard: React.FC<VersionCardProps> = ({ version }) => {
   const [isExpanded, setIsExpanded] = useState(false)
-  
+
   return (
     <Card>
       <CardHeader>{version.versionNumber}</CardHeader>
@@ -146,7 +146,7 @@ const VersionCard: React.FC<VersionCardProps> = ({ version }) => {
 // ❌ Bad
 class VersionCard extends React.Component<VersionCardProps> {
   state = { isExpanded: false }
-  
+
   render() {
     return <Card>...</Card>
   }
@@ -171,25 +171,18 @@ interface VersionCardProps {
 const MAX_DESCRIPTION_LENGTH = 100
 
 // 4. Component
-export const VersionCard: React.FC<VersionCardProps> = ({ 
-  version, 
-  onActivate 
-}) => {
+export const VersionCard: React.FC<VersionCardProps> = ({ version, onActivate }) => {
   // 4a. Hooks
   const [isExpanded, setIsExpanded] = useState(false)
-  
+
   // 4b. Derived state
   const truncatedDesc = version.description.slice(0, MAX_DESCRIPTION_LENGTH)
-  
+
   // 4c. Event handlers
-  const handleToggle = () => setIsExpanded(prev => !prev)
-  
+  const handleToggle = () => setIsExpanded((prev) => !prev)
+
   // 4d. Render
-  return (
-    <Card>
-      {/* JSX */}
-    </Card>
-  )
+  return <Card>{/* JSX */}</Card>
 }
 
 // 5. Exports
@@ -310,12 +303,12 @@ describe('useActivateVersion', () => {
   it('should activate version successfully', async () => {
     // Arrange
     const mockVersion = createMockVersion()
-    
+
     // Act
     const { result } = renderHook(() => useActivateVersion(), {
       wrapper: createQueryWrapper(),
     })
-    
+
     await act(async () => {
       await result.current.mutateAsync({
         documentId: 'config/app',
@@ -375,7 +368,7 @@ test.describe('Version Activation Flow', () => {
   test.beforeEach(async ({ page }) => {
     // Navigate to app
     await page.goto('http://localhost:5173')
-    
+
     // Login
     await page.getByLabel('Username').fill('admin')
     await page.getByLabel('Password').fill('password')
@@ -584,13 +577,13 @@ export interface VersionRepository {
 // features/version-history/adapters/ApiVersionRepository.ts
 export class ApiVersionRepository implements VersionRepository {
   constructor(private httpClient: HttpClient) {}
-  
+
   async findByDocument(documentId: string): Promise<Version[]> {
     const [type, name] = documentId.split('/')
     const response = await this.httpClient.get(`/metadata/${type}/${name}/versions`)
     return response.data
   }
-  
+
   async activate(documentId: string, versionNumber: string): Promise<void> {
     const [type, name] = documentId.split('/')
     await this.httpClient.post(`/metadata/${type}/${name}/versions/${versionNumber}/activate`)
@@ -604,7 +597,7 @@ export class ApiVersionRepository implements VersionRepository {
 // features/version-history/hooks/useActivateVersion.ts
 export function useActivateVersion() {
   const queryClient = useQueryClient()
-  
+
   return useMutation({
     mutationFn: async (request: ActivateVersionRequest) => {
       const repository = new ApiVersionRepository(httpClient)
@@ -640,7 +633,7 @@ return (
     <Button onClick={() => setShowConfirmation(true)}>
       Activate
     </Button>
-    
+
     <ConfirmationModal
       isOpen={showConfirmation}
       onClose={() => setShowConfirmation(false)}

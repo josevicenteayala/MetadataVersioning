@@ -127,16 +127,16 @@ Review these:
 
 ### Common Tasks
 
-| Task                          | Documentation                                                |
-| ----------------------------- | ------------------------------------------------------------ |
-| Set up development environment| [Frontend README](../README.md)                              |
-| Understand architecture       | [Architecture Guide](./ARCHITECTURE.md)                      |
-| Make API calls                | [API Integration Guide](./API_INTEGRATION.md)                |
-| Write tests                   | [Contributing Guide](./CONTRIBUTING.md)                      |
-| Fix build errors              | [Troubleshooting Guide](./TROUBLESHOOTING.md)                |
-| Submit a pull request         | [Contributing Guide](./CONTRIBUTING.md)                      |
-| Debug authentication issues   | [Troubleshooting Guide](./TROUBLESHOOTING.md)                |
-| Improve accessibility         | [Accessibility Guide](./accessibility.md)                    |
+| Task                           | Documentation                                 |
+| ------------------------------ | --------------------------------------------- |
+| Set up development environment | [Frontend README](../README.md)               |
+| Understand architecture        | [Architecture Guide](./ARCHITECTURE.md)       |
+| Make API calls                 | [API Integration Guide](./API_INTEGRATION.md) |
+| Write tests                    | [Contributing Guide](./CONTRIBUTING.md)       |
+| Fix build errors               | [Troubleshooting Guide](./TROUBLESHOOTING.md) |
+| Submit a pull request          | [Contributing Guide](./CONTRIBUTING.md)       |
+| Debug authentication issues    | [Troubleshooting Guide](./TROUBLESHOOTING.md) |
+| Improve accessibility          | [Accessibility Guide](./accessibility.md)     |
 
 ### Code Examples
 
@@ -194,16 +194,16 @@ Found an error or want to improve the documentation?
 
 ## Documentation Metadata
 
-| Document                          | Lines | Last Updated | Status    |
-| --------------------------------- | ----- | ------------ | --------- |
-| Frontend README                   | 231   | 2025-01-XX   | ✅ Current |
-| Architecture Guide                | 565   | 2025-01-XX   | ✅ Current |
-| API Integration Guide             | ~600  | 2025-01-XX   | ✅ Current |
-| Contributing Guide                | ~700  | 2025-01-XX   | ✅ Current |
-| Troubleshooting Guide             | ~500  | 2025-01-XX   | ✅ Current |
-| Accessibility Guide               | TBD   | Earlier      | ✅ Current |
-| Telemetry Documentation           | TBD   | Earlier      | ✅ Current |
-| Documentation Review Summary      | ~300  | 2025-01-XX   | ✅ Current |
+| Document                     | Lines | Last Updated | Status     |
+| ---------------------------- | ----- | ------------ | ---------- |
+| Frontend README              | 231   | 2025-01-XX   | ✅ Current |
+| Architecture Guide           | 565   | 2025-01-XX   | ✅ Current |
+| API Integration Guide        | ~600  | 2025-01-XX   | ✅ Current |
+| Contributing Guide           | ~700  | 2025-01-XX   | ✅ Current |
+| Troubleshooting Guide        | ~500  | 2025-01-XX   | ✅ Current |
+| Accessibility Guide          | TBD   | Earlier      | ✅ Current |
+| Telemetry Documentation      | TBD   | Earlier      | ✅ Current |
+| Documentation Review Summary | ~300  | 2025-01-XX   | ✅ Current |
 
 ## Need Help?
 

@@ -202,7 +202,13 @@ export function trackActivateFailed(
   const durationMs = endTiming(`activate-${correlationId}`)
   recordLifecycleMetric(
     'version.activate.failed',
-    { documentId, versionId, ...(durationMs !== undefined && { durationMs }), errorCode, errorMessage },
+    {
+      documentId,
+      versionId,
+      ...(durationMs !== undefined && { durationMs }),
+      errorCode,
+      errorMessage,
+    },
     correlationId,
   )
 }

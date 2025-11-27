@@ -35,9 +35,7 @@ const activateVersion = async (
 
   const correlationId = response.headers['x-correlation-id'] as string | undefined
 
-  return correlationId
-    ? { ...response.data, correlationId }
-    : response.data
+  return correlationId ? { ...response.data, correlationId } : response.data
 }
 
 export interface UseActivateVersionOptions {

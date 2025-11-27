@@ -119,10 +119,10 @@ Open browser DevTools Console and check for:
 
 ```javascript
 // Session cleared message
-"Session credentials cleared due to 401 response"
+'Session credentials cleared due to 401 response'
 
 // Correlation ID from failed request
-"X-Correlation-ID: abc-123-def"
+'X-Correlation-ID: abc-123-def'
 ```
 
 ### Version Activation
@@ -237,11 +237,11 @@ spring:
   web:
     cors:
       allowed-origins:
-        - "http://localhost:5173"
-        - "http://127.0.0.1:5173"
-      allowed-methods: ["GET", "POST", "PUT", "DELETE"]
-      allowed-headers: ["*"]
-      expose-headers: ["X-Correlation-ID"]
+        - 'http://localhost:5173'
+        - 'http://127.0.0.1:5173'
+      allowed-methods: ['GET', 'POST', 'PUT', 'DELETE']
+      allowed-headers: ['*']
+      expose-headers: ['X-Correlation-ID']
 ```
 
 #### Issue: API responses missing data
@@ -366,7 +366,7 @@ httpClient.interceptors.response.use(
   (error) => {
     console.error('❌ ERROR:', error.response?.status, error.config.url)
     return Promise.reject(error)
-  }
+  },
 )
 ```
 
@@ -426,7 +426,7 @@ httpClient.interceptors.response.use(
 
 Create a GitHub issue with:
 
-```markdown
+````markdown
 ## Bug Description
 
 [Clear description of the problem]
@@ -465,7 +465,7 @@ Create a GitHub issue with:
 \```
 [Paste relevant console output]
 \```
-```
+````
 
 ### Getting Support
 

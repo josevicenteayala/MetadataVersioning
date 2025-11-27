@@ -55,28 +55,48 @@ export const sessionStore = create<SessionState>((set, get) => ({
     ),
   setRole: (role) => {
     if (role === undefined) {
-      set(
-        (state) => {
-          const { setCredentials, clearCredentials, setRole, setCorrelationId, markValidated, handleUnauthorized } =
-            state
-          return { setCredentials, clearCredentials, setRole, setCorrelationId, markValidated, handleUnauthorized }
-        },
-        true,
-      )
+      set((state) => {
+        const {
+          setCredentials,
+          clearCredentials,
+          setRole,
+          setCorrelationId,
+          markValidated,
+          handleUnauthorized,
+        } = state
+        return {
+          setCredentials,
+          clearCredentials,
+          setRole,
+          setCorrelationId,
+          markValidated,
+          handleUnauthorized,
+        }
+      }, true)
     } else {
       set({ role })
     }
   },
   setCorrelationId: (correlationId) => {
     if (correlationId === undefined) {
-      set(
-        (state) => {
-          const { setCredentials, clearCredentials, setRole, setCorrelationId, markValidated, handleUnauthorized } =
-            state
-          return { setCredentials, clearCredentials, setRole, setCorrelationId, markValidated, handleUnauthorized }
-        },
-        true,
-      )
+      set((state) => {
+        const {
+          setCredentials,
+          clearCredentials,
+          setRole,
+          setCorrelationId,
+          markValidated,
+          handleUnauthorized,
+        } = state
+        return {
+          setCredentials,
+          clearCredentials,
+          setRole,
+          setCorrelationId,
+          markValidated,
+          handleUnauthorized,
+        }
+      }, true)
     } else {
       set({ correlationId })
     }

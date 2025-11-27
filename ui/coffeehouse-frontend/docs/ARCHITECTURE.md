@@ -9,6 +9,7 @@ The Coffeehouse Frontend is a modern React single-page application (SPA) built w
 ### 1. Feature-First Organization
 
 Each feature is self-contained with its own:
+
 - UI components
 - API hooks (TanStack Query)
 - Types and interfaces
@@ -29,16 +30,19 @@ features/
 The frontend respects Hexagonal principles:
 
 **Domain Layer** (Pure business logic)
+
 - `types.ts` - Domain entities and business rules
 - `utils/` - Pure functions, calculations
 - No framework dependencies
 
 **Application Layer** (Use cases)
+
 - `api/*.ts` - Query/mutation hooks
 - `hooks/*.ts` - Custom React hooks
 - Orchestrates domain with UI
 
 **Adapter Layer** (Infrastructure)
+
 - `services/api/` - HTTP client
 - `services/auth/` - Session storage
 - `services/feedback/` - Toast notifications
@@ -47,22 +51,26 @@ The frontend respects Hexagonal principles:
 ### 3. State Management Strategy
 
 **Server State**: TanStack Query
+
 - API data caching
 - Background refetching
 - Optimistic updates
 - Automatic retries
 
 **Session State**: Zustand
+
 - Auth credentials (in-memory only)
 - User role
 - Correlation IDs
 
 **UI State**: React hooks
+
 - Form state (local)
 - Modal visibility
 - Sort/filter preferences
 
 **No Persistent Storage**
+
 - No localStorage/sessionStorage for credentials
 - Credentials cleared on 401 responses
 - All session data cleared on browser close
@@ -110,7 +118,7 @@ httpClient.interceptors.response.use(
       // Redirect to login
     }
     return Promise.reject(error)
-  }
+  },
 )
 ```
 
@@ -230,21 +238,23 @@ Feature/
 ### Component Best Practices
 
 **1. Single Responsibility**
+
 - Each component does one thing well
 - Extract reusable logic to hooks
 - Keep components < 300 lines
 
 **2. Props Interface**
+
 ```typescript
 export interface ComponentProps {
   // Required props first
   value: string
   onChange: (value: string) => void
-  
+
   // Optional props second
   disabled?: boolean
   className?: string
-  
+
   // Callbacks last
   onBlur?: () => void
   onFocus?: () => void
@@ -252,6 +262,7 @@ export interface ComponentProps {
 ```
 
 **3. Accessibility**
+
 ```typescript
 <button
   type="button"
@@ -295,7 +306,7 @@ const handleRowClick = (documentId: string) => {
     queryKey: versionHistoryKeys.byDocument(documentId),
     queryFn: () => fetchVersionHistory(documentId),
   })
-  
+
   navigate(`/documents/${documentId}`)
 }
 ```
@@ -306,30 +317,24 @@ const handleRowClick = (documentId: string) => {
 const { mutate } = useActivateVersion({
   onMutate: async (variables) => {
     // Cancel outgoing refetches
-    await queryClient.cancelQueries({ 
-      queryKey: versionHistoryKeys.byDocument(variables.documentId) 
+    await queryClient.cancelQueries({
+      queryKey: versionHistoryKeys.byDocument(variables.documentId),
     })
-    
+
     // Snapshot current value
-    const previous = queryClient.getQueryData(
-      versionHistoryKeys.byDocument(variables.documentId)
-    )
-    
+    const previous = queryClient.getQueryData(versionHistoryKeys.byDocument(variables.documentId))
+
     // Optimistically update
-    queryClient.setQueryData(
-      versionHistoryKeys.byDocument(variables.documentId),
-      (old) => updateVersionStatus(old, variables.versionId, 'active')
+    queryClient.setQueryData(versionHistoryKeys.byDocument(variables.documentId), (old) =>
+      updateVersionStatus(old, variables.versionId, 'active'),
     )
-    
+
     return { previous }
   },
-  
+
   onError: (err, variables, context) => {
     // Rollback on error
-    queryClient.setQueryData(
-      versionHistoryKeys.byDocument(variables.documentId),
-      context.previous
-    )
+    queryClient.setQueryData(versionHistoryKeys.byDocument(variables.documentId), context.previous)
   },
 })
 ```
@@ -339,12 +344,14 @@ const { mutate } = useActivateVersion({
 ### 1. Credential Management
 
 **✅ DO:**
+
 - Store credentials in memory only (Zustand)
 - Clear credentials on 401 responses
 - Clear credentials on browser close
 - Validate credentials server-side
 
 **❌ DON'T:**
+
 - Store credentials in localStorage
 - Store credentials in sessionStorage
 - Log credentials to console
@@ -360,15 +367,16 @@ const { mutate } = useActivateVersion({
 ### 3. CORS Configuration
 
 Handled by backend:
+
 ```yaml
 # application.yaml
 spring:
   web:
     cors:
-      allowed-origins: "http://localhost:5173"
-      allowed-methods: ["GET", "POST", "PUT", "DELETE"]
-      allowed-headers: ["Authorization", "Content-Type"]
-      expose-headers: ["X-Correlation-ID"]
+      allowed-origins: 'http://localhost:5173'
+      allowed-methods: ['GET', 'POST', 'PUT', 'DELETE']
+      allowed-headers: ['Authorization', 'Content-Type']
+      expose-headers: ['X-Correlation-ID']
 ```
 
 ## Testing Strategy
@@ -382,7 +390,7 @@ describe('VersionDetailDrawer', () => {
   it('displays version metadata correctly', () => {
     const version = mockVersion()
     render(<VersionDetailDrawer version={version} isOpen={true} />)
-    
+
     expect(screen.getByText(`v${version.versionNumber}`)).toBeInTheDocument()
     expect(screen.getByText(version.createdBy)).toBeInTheDocument()
   })
@@ -397,7 +405,7 @@ Mock API responses:
 const server = setupServer(
   http.post('/api/v1/metadata/:type/:name/versions/:id/activate', () => {
     return HttpResponse.json({ success: true })
-  })
+  }),
 )
 
 beforeAll(() => server.listen())
@@ -415,7 +423,7 @@ test('user can activate version', async ({ page }) => {
   await page.click('[data-testid="version-row"]')
   await page.click('button:has-text("Activate Version")')
   await page.click('button:has-text("Confirm")')
-  
+
   await expect(page.getByRole('status')).toContainText('Version activated')
 })
 ```
@@ -463,6 +471,7 @@ VITE_API_TIMEOUT_MS=5000
 ### Static Hosting
 
 Compatible with:
+
 - Azure Static Web Apps
 - Netlify
 - Vercel
@@ -470,6 +479,7 @@ Compatible with:
 - GitHub Pages
 
 Configure reverse proxy for API requests:
+
 ```nginx
 location /api {
     proxy_pass http://backend:8080;
@@ -483,21 +493,25 @@ location /api {
 ### Common Issues
 
 **1. API requests fail with 401**
+
 - Check credentials in Settings
 - Verify backend is running
 - Check CORS configuration
 
 **2. Version activation doesn't work**
+
 - Ensure user has admin role
 - Check API endpoint URL construction
 - Verify confirmation modal appears
 
 **3. Diff visualization shows errors**
+
 - Check JSON payload format
 - Verify both versions exist
 - Check browser console for errors
 
 **4. Tests fail with "Cannot find module"**
+
 - Run `pnpm generate:api` first
 - Clear node_modules and reinstall
 - Check tsconfig path aliases

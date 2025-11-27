@@ -130,7 +130,7 @@ export const useCanActivate = (): boolean => {
   if (!role) {
     // If role has not been validated yet, allow and let API enforce permissions
     return true
-    }
+  }
   return role === 'admin'
 }
 

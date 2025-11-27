@@ -38,6 +38,8 @@ export const CreateDocumentModal = ({ isOpen, onClose }: CreateDocumentModalProp
   const hasCredentials = credentials !== undefined
 
   // Check auth and redirect if not authenticated
+  // Removed auto-redirect to allow user to see the modal with guidance
+  /*
   useEffect(() => {
     if (isOpen && !hasCredentials) {
       emitToast({
@@ -49,6 +51,7 @@ export const CreateDocumentModal = ({ isOpen, onClose }: CreateDocumentModalProp
       void navigate('/settings')
     }
   }, [isOpen, hasCredentials, navigate, onClose])
+  */
 
   // Handle ESC key to close modal
   useEffect(() => {
@@ -134,8 +137,34 @@ export const CreateDocumentModal = ({ isOpen, onClose }: CreateDocumentModalProp
           ×
         </button>
 
-        {/* Form */}
-        <CreateDocumentForm onSuccess={handleSuccess} onCancel={onClose} />
+        {/* Form or Auth Warning */}
+        {hasCredentials ? (
+          <CreateDocumentForm onSuccess={handleSuccess} onCancel={onClose} />
+        ) : (
+          <div className="create-document-modal__auth-warning">
+            <h2 className="create-document-modal__title">Authentication Required</h2>
+            <p>Please enter your credentials in Settings before creating documents.</p>
+            <div className="create-document-modal__actions">
+              <button
+                type="button"
+                className="create-document-modal__button create-document-modal__button--primary"
+                onClick={() => {
+                  onClose()
+                  void navigate('/settings')
+                }}
+              >
+                Go to Settings
+              </button>
+              <button
+                type="button"
+                className="create-document-modal__button"
+                onClick={onClose}
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        )}
       </div>
 
       <style>{`
@@ -209,6 +238,49 @@ export const CreateDocumentModal = ({ isOpen, onClose }: CreateDocumentModalProp
         .create-document-modal__close:focus {
           outline: 2px solid var(--color-primary, #6b4423);
           outline-offset: 2px;
+        }
+
+        .create-document-modal__auth-warning {
+          padding: var(--space-xl, 2rem);
+          text-align: center;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: var(--space-lg, 1.5rem);
+        }
+
+        .create-document-modal__title {
+          font-size: 1.5rem;
+          font-weight: 600;
+          color: var(--color-text-primary, #1a1a1a);
+          margin: 0;
+        }
+
+        .create-document-modal__actions {
+          display: flex;
+          gap: var(--space-md, 1rem);
+          margin-top: var(--space-md, 1rem);
+        }
+
+        .create-document-modal__button {
+          padding: 0.75rem 1.5rem;
+          border-radius: var(--radius-md, 0.375rem);
+          font-weight: 500;
+          cursor: pointer;
+          transition: all 0.2s ease;
+          border: 1px solid var(--color-border, #e5e7eb);
+          background: white;
+          color: var(--color-text-primary, #1a1a1a);
+        }
+
+        .create-document-modal__button--primary {
+          background: var(--color-primary, #6b4423);
+          color: white;
+          border-color: var(--color-primary, #6b4423);
+        }
+
+        .create-document-modal__button:hover {
+          opacity: 0.9;
         }
 
         /* Responsive: full screen on mobile */

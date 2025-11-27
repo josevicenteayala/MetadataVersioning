@@ -26,6 +26,34 @@ test.describe('Create Document Flow - Error Handling', () => {
         await route.continue()
       }
     })
+
+    // Setup authentication
+    await page.goto('/settings')
+    await page.getByLabel(/username/i).fill('testuser')
+    await page.getByLabel(/password/i).fill('testpass')
+    await page.getByRole('button', { name: /save credentials/i }).click()
+    await expect(page.getByRole('status')).toContainText(/saved/i)
+  })
+
+  test.describe('Missing Credentials', () => {
+    test('shows authentication warning when credentials are not set', async ({ page }) => {
+      // Clear credentials by reloading (since they are in-memory only)
+      await page.reload()
+
+      await page.goto('/')
+      await page.getByRole('button', { name: /create.*document/i }).click()
+
+      const modal = page.getByRole('dialog')
+      await expect(modal).toBeVisible()
+
+      // Should show warning instead of form
+      await expect(modal.getByRole('heading', { name: /authentication required/i })).toBeVisible()
+      await expect(modal.getByText(/please enter your credentials/i)).toBeVisible()
+      await expect(modal.getByRole('button', { name: /go to settings/i })).toBeVisible()
+
+      // Form fields should NOT be visible
+      await expect(modal.getByLabelText(/document type/i)).not.toBeVisible()
+    })
   })
 
   test.describe('Client-side Validation Errors', () => {

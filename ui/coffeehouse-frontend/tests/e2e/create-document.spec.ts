@@ -63,6 +63,13 @@ test.describe('Create Document Flow - Success Path', () => {
         await route.continue()
       }
     })
+
+    // Setup authentication
+    await page.goto('/settings')
+    await page.getByLabel(/username/i).fill('testuser')
+    await page.getByLabel(/password/i).fill('testpass')
+    await page.getByRole('button', { name: /save credentials/i }).click()
+    await expect(page.getByRole('status')).toContainText(/saved/i)
   })
 
   test('opens create document modal from dashboard CTA', async ({ page }) => {

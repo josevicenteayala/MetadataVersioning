@@ -71,7 +71,8 @@ public class MetadataController {
                         request.type(),
                         request.name(),
                         request.content(),
-                        author
+                        author,
+                        request.changeSummary()
                 );
 
         Version version = createVersionUseCase.createFirstVersion(command);

@@ -50,10 +50,14 @@ public class VersionManagementService implements CreateVersionUseCase, GetVersio
         }
 
         // Create first version
+        String summary = command.changeSummary() != null && !command.changeSummary().isBlank()
+                ? command.changeSummary()
+                : "Initial version";
+
         Version firstVersion = Version.createFirst(
                 command.content(),
                 command.author(),
-                "Initial version"
+                summary
         );
 
         // Create document with first version

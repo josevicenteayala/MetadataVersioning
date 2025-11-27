@@ -129,21 +129,16 @@ public class MetadataDocumentPersistenceAdapter implements MetadataDocumentRepos
      * Convert Version domain model to JPA entity.
      */
     private VersionEntity toVersionEntity(Version version) {
-        try {
-            String contentJson = objectMapper.writeValueAsString(version.content());
-            VersionEntity entity = new VersionEntity(
-                    version.versionNumber(),
-                    contentJson,
-                    version.author(),
-                    version.changeSummary()
-            );
-            entity.setCreatedAt(version.createdAt());
-            entity.setActive(version.isActive());
-            entity.setPublishingState(version.publishingState().name());
-            return entity;
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException("Failed to serialize version content", e);
-        }
+        VersionEntity entity = new VersionEntity(
+                version.versionNumber(),
+                version.content(),
+                version.author(),
+                version.changeSummary()
+        );
+        entity.setCreatedAt(version.createdAt());
+        entity.setActive(version.isActive());
+        entity.setPublishingState(version.publishingState().name());
+        return entity;
     }
 
     /**
@@ -167,21 +162,17 @@ public class MetadataDocumentPersistenceAdapter implements MetadataDocumentRepos
      * Convert VersionEntity to Version domain model.
      */
     private Version toVersionDomain(VersionEntity entity) {
-        try {
-            JsonNode content = objectMapper.readTree(entity.getContent());
-            PublishingState state = PublishingState.fromString(entity.getPublishingState());
-            
-            return new Version(
-                    entity.getVersionNumber(),
-                    content,
-                    entity.getAuthor(),
-                    entity.getCreatedAt(),
-                    entity.getChangeSummary(),
-                    state,
-                    entity.isActive()
-            );
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException("Failed to deserialize version content", e);
-        }
+        JsonNode content = entity.getContent();
+        PublishingState state = PublishingState.fromString(entity.getPublishingState());
+        
+        return new Version(
+                entity.getVersionNumber(),
+                content,
+                entity.getAuthor(),
+                entity.getCreatedAt(),
+                entity.getChangeSummary(),
+                state,
+                entity.isActive()
+        );
     }
 }

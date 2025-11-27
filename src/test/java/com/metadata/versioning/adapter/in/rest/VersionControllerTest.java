@@ -61,7 +61,7 @@ class VersionControllerTest {
                 .put("tier", "silver")
                 .put("discount", 10);
         
-        CreateMetadataRequest request1 = new CreateMetadataRequest(type, name, content1);
+        CreateMetadataRequest request1 = new CreateMetadataRequest(type, name, content1, "Initial version");
         mockMvc.perform(post("/api/v1/metadata")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(request1)))
@@ -116,7 +116,7 @@ class VersionControllerTest {
                 .put("name", "Summer Sale")
                 .put("discount", 20);
         
-        CreateMetadataRequest request = new CreateMetadataRequest(type, name, content);
+        CreateMetadataRequest request = new CreateMetadataRequest(type, name, content, "Initial version");
         mockMvc.perform(post("/api/v1/metadata")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(request)))

@@ -36,7 +36,8 @@ public interface CreateVersionUseCase {
             String type,
             String name,
             JsonNode content,
-            String author
+            String author,
+            String changeSummary
     ) {
         public CreateFirstVersionCommand {
             if (type == null || type.isBlank()) {

@@ -68,7 +68,8 @@ class MetadataControllerTest {
         CreateMetadataRequest request = new CreateMetadataRequest(
                 "loyalty-program",
                 "spring-bonus",
-                objectMapper.readTree(sampleJsonContent)
+                objectMapper.readTree(sampleJsonContent),
+                "Initial version"
         );
 
         mockMvc.perform(post("/api/v1/metadata")
@@ -95,7 +96,8 @@ class MetadataControllerTest {
         CreateMetadataRequest request = new CreateMetadataRequest(
                 "loyalty-program",
                 "duplicate-test",
-                objectMapper.readTree(sampleJsonContent)
+                objectMapper.readTree(sampleJsonContent),
+                "Initial version"
         );
 
         // Create first document
@@ -132,7 +134,8 @@ class MetadataControllerTest {
         CreateMetadataRequest request = new CreateMetadataRequest(
                 "loyalty-program",
                 "invalid-json-test",
-                objectMapper.readTree(deepJson.toString())
+                objectMapper.readTree(deepJson.toString()),
+                "Initial version"
         );
 
         mockMvc.perform(post("/api/v1/metadata")
@@ -151,7 +154,8 @@ class MetadataControllerTest {
         CreateMetadataRequest request = new CreateMetadataRequest(
                 "InvalidType",  // Not kebab-case
                 "spring-bonus",
-                objectMapper.readTree(sampleJsonContent)
+                objectMapper.readTree(sampleJsonContent),
+                "Initial version"
         );
 
         mockMvc.perform(post("/api/v1/metadata")
@@ -172,7 +176,8 @@ class MetadataControllerTest {
         CreateMetadataRequest initialRequest = new CreateMetadataRequest(
                 "loyalty-program",
                 "versioning-test",
-                objectMapper.readTree(sampleJsonContent)
+                objectMapper.readTree(sampleJsonContent),
+                "Initial version"
         );
 
         mockMvc.perform(post("/api/v1/metadata")
@@ -217,7 +222,8 @@ class MetadataControllerTest {
         CreateMetadataRequest request = new CreateMetadataRequest(
                 "campaign",
                 "immutable-test",
-                objectMapper.readTree(sampleJsonContent)
+                objectMapper.readTree(sampleJsonContent),
+                "Initial version"
         );
         mockMvc.perform(post("/api/v1/metadata")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -256,7 +262,8 @@ class MetadataControllerTest {
         CreateMetadataRequest initialRequest = new CreateMetadataRequest(
                 "offer",
                 "history-test",
-                objectMapper.readTree(sampleJsonContent)
+                objectMapper.readTree(sampleJsonContent),
+                "Initial version"
         );
         mockMvc.perform(post("/api/v1/metadata")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -309,7 +316,8 @@ class MetadataControllerTest {
                 "specific-version-test",
                 objectMapper.readTree("""
                 {"campaignId": "C001", "budget": 1000}
-                """)
+                """),
+                "Initial version"
         );
         mockMvc.perform(post("/api/v1/metadata")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -346,7 +354,8 @@ class MetadataControllerTest {
         CreateMetadataRequest request = new CreateMetadataRequest(
                 "loyalty-program",
                 "audit-test",
-                objectMapper.readTree(sampleJsonContent)
+                objectMapper.readTree(sampleJsonContent),
+                "Initial version"
         );
 
         mockMvc.perform(post("/api/v1/metadata")
@@ -371,7 +380,8 @@ class MetadataControllerTest {
         CreateMetadataRequest request1 = new CreateMetadataRequest(
                 type,
                 name,
-                objectMapper.readTree(sampleJsonContent)
+                objectMapper.readTree(sampleJsonContent),
+                "Initial version"
         );
 
         mockMvc.perform(post("/api/v1/metadata")
@@ -415,7 +425,8 @@ class MetadataControllerTest {
         CreateMetadataRequest request = new CreateMetadataRequest(
                 type,
                 name,
-                objectMapper.readTree("{\"name\": \"Test Campaign\"}")
+                objectMapper.readTree("{\"name\": \"Test Campaign\"}"),
+                "Initial version"
         );
 
         mockMvc.perform(post("/api/v1/metadata")
@@ -441,7 +452,8 @@ class MetadataControllerTest {
             CreateMetadataRequest request = new CreateMetadataRequest(
                     "loyalty-program",
                     "list-test-" + timestamp + "-" + i,
-                    objectMapper.readTree("{\"tier\": \"silver\", \"id\": " + i + "}")
+                    objectMapper.readTree("{\"tier\": \"silver\", \"id\": " + i + "}"),
+                    "Initial version"
             );
             mockMvc.perform(post("/api/v1/metadata")
                             .contentType(MediaType.APPLICATION_JSON)

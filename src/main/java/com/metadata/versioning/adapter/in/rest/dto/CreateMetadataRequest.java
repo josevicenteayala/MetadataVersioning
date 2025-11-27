@@ -20,6 +20,8 @@ public record CreateMetadataRequest(
         String name,
 
         @NotNull(message = "Content cannot be null")
-        JsonNode content
+        JsonNode content,
+
+        String changeSummary
 ) {
 }

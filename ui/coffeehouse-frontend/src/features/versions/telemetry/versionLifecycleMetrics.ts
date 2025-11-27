@@ -130,7 +130,7 @@ export function trackCreateSucceeded(
       documentId,
       versionId,
       versionNumber,
-      durationMs,
+      ...(durationMs !== undefined && { durationMs }),
       payloadSizeBytes,
       summaryLength,
     },
@@ -147,7 +147,7 @@ export function trackCreateFailed(
   const durationMs = endTiming(`create-${correlationId}`)
   recordLifecycleMetric(
     'version.create.failed',
-    { documentId, durationMs, errorCode, errorMessage },
+    { documentId, ...(durationMs !== undefined && { durationMs }), errorCode, errorMessage },
     correlationId,
   )
 }
@@ -187,7 +187,7 @@ export function trackActivateSucceeded(
   const durationMs = endTiming(`activate-${correlationId}`)
   recordLifecycleMetric(
     'version.activate.succeeded',
-    { documentId, versionId, versionNumber, durationMs },
+    { documentId, versionId, versionNumber, ...(durationMs !== undefined && { durationMs }) },
     correlationId,
   )
 }
@@ -202,7 +202,7 @@ export function trackActivateFailed(
   const durationMs = endTiming(`activate-${correlationId}`)
   recordLifecycleMetric(
     'version.activate.failed',
-    { documentId, versionId, durationMs, errorCode, errorMessage },
+    { documentId, versionId, ...(durationMs !== undefined && { durationMs }), errorCode, errorMessage },
     correlationId,
   )
 }

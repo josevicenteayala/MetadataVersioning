@@ -35,10 +35,9 @@ const activateVersion = async (
 
   const correlationId = response.headers['x-correlation-id'] as string | undefined
 
-  return {
-    ...response.data,
-    correlationId,
-  }
+  return correlationId
+    ? { ...response.data, correlationId }
+    : response.data
 }
 
 export interface UseActivateVersionOptions {
@@ -101,7 +100,7 @@ export const useActivateVersion = (options?: UseActivateVersionOptions) => {
         message: data.previousActiveVersionId
           ? `Version activated. Previous active version has been demoted.`
           : 'Version is now active.',
-        correlationId: data.correlationId,
+        ...(data.correlationId && { correlationId: data.correlationId }),
       })
 
       options?.onSuccess?.(data)
@@ -114,7 +113,7 @@ export const useActivateVersion = (options?: UseActivateVersionOptions) => {
         intent: 'error',
         title: 'Activation failed',
         message: error.message,
-        correlationId,
+        ...(correlationId && { correlationId }),
       })
 
       options?.onError?.(error)

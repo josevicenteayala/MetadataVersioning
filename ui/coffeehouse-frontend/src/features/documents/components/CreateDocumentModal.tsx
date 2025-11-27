@@ -98,7 +98,7 @@ export const CreateDocumentModal = ({ isOpen, onClose }: CreateDocumentModalProp
         intent: 'success',
         title: 'Document created',
         message: `Successfully created ${document.type}/${document.name}`,
-        correlationId: document.correlationId,
+        ...(document.correlationId && { correlationId: document.correlationId }),
       })
     },
     [navigate, onClose],

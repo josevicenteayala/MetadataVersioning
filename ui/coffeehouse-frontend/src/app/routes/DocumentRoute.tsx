@@ -255,7 +255,7 @@ const DocumentRoute = () => {
           onSort={handleSort}
           sortBy={sortBy}
           sortDir={sortDir}
-          highlightedVersionId={linkedVersionId ?? undefined}
+          {...(linkedVersionId && { highlightedVersionId: linkedVersionId })}
         />
       </section>
 

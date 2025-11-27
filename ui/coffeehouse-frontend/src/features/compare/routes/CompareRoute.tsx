@@ -16,7 +16,7 @@ import type { VersionResponse } from '@services/generated'
  */
 async function fetchVersions(documentId: string): Promise<VersionResponse[]> {
   const response = await apiClient.get<VersionResponse[]>(
-    `/api/v1/documents/${documentId}/versions`,
+    `/api/v1/metadata/${documentId}/versions`,
   )
   return response.data
 }
@@ -55,7 +55,7 @@ export const CompareRoute: React.FC = () => {
     return versionList.map((v) => ({
       id: String(v.id),
       versionNumber: Number(v.versionNumber),
-      label: String(v.summary ?? `Version ${v.versionNumber}`),
+      label: String(v.changeSummary ?? `Version ${v.versionNumber}`),
       createdAt: String(v.createdAt),
       isActive: Boolean(v.isActive),
     }))

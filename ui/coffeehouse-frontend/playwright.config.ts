@@ -3,7 +3,7 @@ import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
-const PORT = Number(process.env.UI_PORT ?? 5173)
+const PORT = Number(process.env['UI_PORT'] ?? 5173)
 
 export default defineConfig({
   testDir: './tests/e2e',
@@ -12,10 +12,10 @@ export default defineConfig({
     timeout: 10_000,
   },
   fullyParallel: false,
-  retries: process.env.CI ? 2 : 0,
+  retries: process.env['CI'] ? 2 : 0,
   reporter: 'list',
   use: {
-    baseURL: process.env.PLAYWRIGHT_BASE_URL ?? `http://127.0.0.1:${PORT}`,
+    baseURL: process.env['PLAYWRIGHT_BASE_URL'] ?? `http://127.0.0.1:${PORT}`,
     trace: 'retain-on-failure',
     video: 'retain-on-failure',
     screenshot: 'only-on-failure',
@@ -35,6 +35,6 @@ export default defineConfig({
     command: `pnpm dev -- --host 127.0.0.1 --port ${PORT}`,
     cwd: __dirname,
     port: PORT,
-    reuseExistingServer: !process.env.CI,
+    reuseExistingServer: !process.env['CI'],
   },
 })

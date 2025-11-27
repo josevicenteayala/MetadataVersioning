@@ -209,7 +209,7 @@ export class DiffErrorBoundary extends React.Component<
     return { hasError: true, error }
   }
 
-  componentDidCatch(error: Error, errorInfo: React.ErrorInfo): void {
+  override componentDidCatch(error: Error, errorInfo: React.ErrorInfo): void {
     console.error('DiffErrorBoundary caught error:', error, errorInfo)
     this.props.onError?.(error)
   }
@@ -218,7 +218,7 @@ export class DiffErrorBoundary extends React.Component<
     this.setState({ hasError: false, error: null })
   }
 
-  render(): React.ReactNode {
+  override render(): React.ReactNode {
     if (this.state.hasError) {
       if (this.props.fallback) {
         return this.props.fallback

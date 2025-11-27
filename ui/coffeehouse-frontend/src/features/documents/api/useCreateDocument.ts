@@ -95,10 +95,9 @@ const createDocument = async (request: CreateDocumentRequest): Promise<CreateDoc
 
   const correlationId = extractCorrelationId(response)
 
-  return {
-    ...response.data,
-    correlationId,
-  }
+  return correlationId
+    ? { ...response.data, correlationId }
+    : response.data
 }
 
 export interface UseCreateDocumentOptions {
@@ -176,7 +175,7 @@ export const useCreateDocument = (options?: UseCreateDocumentOptions) => {
         intent: 'success',
         title: 'Document created',
         message: `${data.type}/${data.name} created successfully`,
-        correlationId: data.correlationId,
+        ...(data.correlationId && { correlationId: data.correlationId }),
       })
 
       options?.onSuccess?.(data)
@@ -191,12 +190,14 @@ export const useCreateDocument = (options?: UseCreateDocumentOptions) => {
         intent: 'error',
         title: 'Failed to create document',
         message,
-        correlationId,
+        ...(correlationId && { correlationId }),
       })
 
       // Enhance error with correlation ID for form error handling
       const enhancedError = error as CreateDocumentError
-      enhancedError.correlationId = correlationId
+      if (correlationId) {
+        enhancedError.correlationId = correlationId
+      }
 
       options?.onError?.(enhancedError)
     },

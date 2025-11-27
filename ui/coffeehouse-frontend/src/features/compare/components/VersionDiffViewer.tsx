@@ -257,8 +257,8 @@ export const VersionDiffViewer: React.FC<VersionDiffViewerProps> = ({
     if (!diffResult?.delta) return []
     return flattenDelta(
       diffResult.delta,
-      diffResult.leftVersion.payload as Record<string, unknown>,
-      diffResult.rightVersion.payload as Record<string, unknown>,
+      diffResult.leftVersion.content as Record<string, unknown>,
+      diffResult.rightVersion.content as Record<string, unknown>,
     )
   }, [diffResult])
 

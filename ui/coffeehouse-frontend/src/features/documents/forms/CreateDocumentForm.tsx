@@ -145,12 +145,20 @@ export const CreateDocumentForm = ({ onSuccess, onCancel }: CreateDocumentFormPr
 
       // Clear error when user starts typing
       if (errors[field]) {
-        setErrors((prev) => ({ ...prev, [field]: undefined }))
+        setErrors((prev) => {
+          const newErrors = { ...prev }
+          delete newErrors[field]
+          return newErrors
+        })
       }
 
       // Clear general error on any change
       if (errors.general) {
-        setErrors((prev) => ({ ...prev, general: undefined }))
+        setErrors((prev) => {
+          const newErrors = { ...prev }
+          delete newErrors.general
+          return newErrors
+        })
         reset()
       }
     },
@@ -163,11 +171,19 @@ export const CreateDocumentForm = ({ onSuccess, onCancel }: CreateDocumentFormPr
       setFormState((prev) => ({ ...prev, payload: value }))
 
       if (errors.payload) {
-        setErrors((prev) => ({ ...prev, payload: undefined }))
+        setErrors((prev) => {
+          const newErrors = { ...prev }
+          delete newErrors.payload
+          return newErrors
+        })
       }
 
       if (errors.general) {
-        setErrors((prev) => ({ ...prev, general: undefined }))
+        setErrors((prev) => {
+          const newErrors = { ...prev }
+          delete newErrors.general
+          return newErrors
+        })
         reset()
       }
     },
@@ -208,10 +224,10 @@ export const CreateDocumentForm = ({ onSuccess, onCancel }: CreateDocumentFormPr
 
       if (typeError || nameError || payloadError || summaryError) {
         setErrors({
-          type: typeError,
-          name: nameError,
-          payload: payloadError,
-          changeSummary: summaryError,
+          ...(typeError && { type: typeError }),
+          ...(nameError && { name: nameError }),
+          ...(payloadError && { payload: payloadError }),
+          ...(summaryError && { changeSummary: summaryError }),
         })
         return
       }
@@ -237,7 +253,7 @@ export const CreateDocumentForm = ({ onSuccess, onCancel }: CreateDocumentFormPr
           type: formState.type.trim(),
           name: formState.name.trim(),
           content,
-          changeSummary: formState.changeSummary.trim() || undefined,
+          ...(formState.changeSummary.trim() && { changeSummary: formState.changeSummary.trim() }),
         })
       } catch {
         // Error is handled by onError callback
@@ -329,7 +345,7 @@ export const CreateDocumentForm = ({ onSuccess, onCancel }: CreateDocumentFormPr
           value={formState.payload}
           onChange={handlePayloadChange}
           onBlur={handleBlur('payload')}
-          error={touched.payload ? errors.payload : undefined}
+          {...(touched.payload && errors.payload && { error: errors.payload })}
           disabled={isPending}
           aria-label="JSON Payload"
         />

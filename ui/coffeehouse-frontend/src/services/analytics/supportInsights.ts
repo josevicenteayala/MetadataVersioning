@@ -105,7 +105,7 @@ export const trackDiffInitiated = (
     leftVersionId,
     rightVersionId,
     timestamp: new Date().toISOString(),
-    correlationId,
+    ...(correlationId && { correlationId }),
   })
 }
 
@@ -130,7 +130,7 @@ export const trackDiffCompleted = (
     durationMs,
     payloadSizeBytes,
     viewMode,
-    correlationId,
+    ...(correlationId && { correlationId }),
   })
 }
 
@@ -151,7 +151,7 @@ export const trackDiffFailed = (
     rightVersionId,
     timestamp: new Date().toISOString(),
     errorCode,
-    correlationId,
+    ...(correlationId && { correlationId }),
   })
 }
 
@@ -168,10 +168,10 @@ export const trackSelfServiceResolution = (
   recordEvent({
     eventType: 'self_service_resolution',
     action,
-    documentId,
+    ...(documentId && { documentId }),
     timestamp: new Date().toISOString(),
     sessionDurationMs,
-    correlationId,
+    ...(correlationId && { correlationId }),
   })
 }
 
@@ -189,8 +189,8 @@ export const trackVersionLookup = (
     success,
     timestamp: new Date().toISOString(),
     durationMs,
-    correlationId,
-    errorMessage,
+    ...(correlationId && { correlationId }),
+    ...(errorMessage && { errorMessage }),
   })
 }
 
@@ -208,8 +208,8 @@ export const trackActivationAttempt = (
     success,
     timestamp: new Date().toISOString(),
     durationMs,
-    correlationId,
-    errorMessage,
+    ...(correlationId && { correlationId }),
+    ...(errorMessage && { errorMessage }),
   })
 }
 
@@ -221,8 +221,8 @@ export const trackAuthFailure = (correlationId?: string, errorMessage?: string):
     eventType: 'auth_failure',
     success: false,
     timestamp: new Date().toISOString(),
-    correlationId,
-    errorMessage,
+    ...(correlationId && { correlationId }),
+    ...(errorMessage && { errorMessage }),
   })
 }
 
@@ -235,7 +235,7 @@ export const trackErrorDisplayed = (errorMessage: string, correlationId?: string
     success: false,
     timestamp: new Date().toISOString(),
     errorMessage,
-    correlationId,
+    ...(correlationId && { correlationId }),
   })
 }
 

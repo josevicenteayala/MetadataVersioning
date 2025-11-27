@@ -74,12 +74,16 @@ const NewVersionForm = ({ documentId, onSuccess, onCancel }: NewVersionFormProps
 
   const handlePayloadBlur = useCallback(() => {
     const error = validatePayload(payload)
-    setErrors((prev) => ({ ...prev, payload: error }))
+    if (error) {
+      setErrors((prev) => ({ ...prev, payload: error }))
+    }
   }, [payload, validatePayload])
 
   const handleSummaryBlur = useCallback(() => {
     const error = validateSummary(changeSummary)
-    setErrors((prev) => ({ ...prev, changeSummary: error }))
+    if (error) {
+      setErrors((prev) => ({ ...prev, changeSummary: error }))
+    }
   }, [changeSummary, validateSummary])
 
   const handlePayloadChange = useCallback(
@@ -87,7 +91,11 @@ const NewVersionForm = ({ documentId, onSuccess, onCancel }: NewVersionFormProps
       setPayload(value)
       // Clear error when user starts typing
       if (errors.payload) {
-        setErrors((prev) => ({ ...prev, payload: undefined }))
+        setErrors((prev) => {
+          const newErrors = { ...prev }
+          delete newErrors.payload
+          return newErrors
+        })
       }
     },
     [errors.payload],
@@ -97,7 +105,11 @@ const NewVersionForm = ({ documentId, onSuccess, onCancel }: NewVersionFormProps
     (value: string) => {
       setChangeSummary(value)
       if (errors.changeSummary && value.length <= MAX_SUMMARY_LENGTH) {
-        setErrors((prev) => ({ ...prev, changeSummary: undefined }))
+        setErrors((prev) => {
+          const newErrors = { ...prev }
+          delete newErrors.changeSummary
+          return newErrors
+        })
       } else if (value.length > MAX_SUMMARY_LENGTH) {
         setErrors((prev) => ({
           ...prev,
@@ -126,8 +138,8 @@ const NewVersionForm = ({ documentId, onSuccess, onCancel }: NewVersionFormProps
       const summaryError = validateSummary(changeSummary)
 
       const newErrors: FormErrors = {
-        payload: payloadError,
-        changeSummary: summaryError,
+        ...(payloadError && { payload: payloadError }),
+        ...(summaryError && { changeSummary: summaryError }),
       }
 
       setErrors(newErrors)

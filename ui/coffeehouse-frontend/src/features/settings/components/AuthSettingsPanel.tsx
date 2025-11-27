@@ -151,7 +151,11 @@ export const AuthSettingsPanel = () => {
             onChange={(e) => {
               setUsername(e.target.value)
               if (errors.username) {
-                setErrors((prev) => ({ ...prev, username: undefined }))
+                setErrors((prev) => {
+                  const newErrors = { ...prev }
+                  delete newErrors.username
+                  return newErrors
+                })
               }
             }}
             placeholder="Enter username"
@@ -178,7 +182,11 @@ export const AuthSettingsPanel = () => {
             onChange={(e) => {
               setPassword(e.target.value)
               if (errors.password) {
-                setErrors((prev) => ({ ...prev, password: undefined }))
+                setErrors((prev) => {
+                  const newErrors = { ...prev }
+                  delete newErrors.password
+                  return newErrors
+                })
               }
             }}
             placeholder="Enter password"

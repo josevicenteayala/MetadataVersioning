@@ -60,7 +60,7 @@ export const useAuthCheck = () => {
         title: 'Connection Failed',
         message,
         intent: 'error',
-        correlationId: error.correlationId,
+        ...(error.correlationId && { correlationId: error.correlationId }),
       })
     },
   })

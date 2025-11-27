@@ -71,7 +71,7 @@ class ErrorBoundary extends Component<Props, State> {
         <ErrorFallback
           error={this.state.error}
           correlationId={this.state.correlationId}
-          componentStack={this.state.errorInfo?.componentStack ?? undefined}
+          {...(this.state.errorInfo?.componentStack && { componentStack: this.state.errorInfo.componentStack })}
           onReset={this.handleReset}
           onReload={this.handleReload}
         />

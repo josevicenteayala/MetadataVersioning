@@ -36,11 +36,11 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
   const value = useMemo<AuthContextValue>(
     () => ({
-      username: credentials?.username,
+      ...(credentials?.username && { username: credentials.username }),
       isAuthenticated: !!credentials,
-      role,
+      ...(role && { role }),
       isValidated: !!validatedAt,
-      validatedAt,
+      ...(validatedAt && { validatedAt }),
       setCredentials: setCredentialsStore,
       clearCredentials: clearCredentialsStore,
       hasRole,

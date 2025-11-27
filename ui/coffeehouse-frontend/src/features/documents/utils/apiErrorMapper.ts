@@ -155,7 +155,7 @@ export const mapApiErrorToFormError = (error: unknown): MappedFormError => {
       isValidation: false,
       isServerError: false,
       isNetworkError: true,
-      correlationId,
+      ...(correlationId && { correlationId }),
     }
   }
 
@@ -171,7 +171,7 @@ export const mapApiErrorToFormError = (error: unknown): MappedFormError => {
       isValidation: false,
       isServerError: false,
       isNetworkError: false,
-      correlationId,
+      ...(correlationId && { correlationId }),
     }
   }
 
@@ -188,7 +188,7 @@ export const mapApiErrorToFormError = (error: unknown): MappedFormError => {
       isValidation: true,
       isServerError: false,
       isNetworkError: false,
-      correlationId,
+      ...(correlationId && { correlationId }),
     }
   }
 
@@ -201,7 +201,7 @@ export const mapApiErrorToFormError = (error: unknown): MappedFormError => {
       isValidation: false,
       isServerError: false,
       isNetworkError: false,
-      correlationId,
+      ...(correlationId && { correlationId }),
     }
   }
 
@@ -214,7 +214,7 @@ export const mapApiErrorToFormError = (error: unknown): MappedFormError => {
       isValidation: false,
       isServerError: false,
       isNetworkError: false,
-      correlationId,
+      ...(correlationId && { correlationId }),
     }
   }
 
@@ -227,7 +227,7 @@ export const mapApiErrorToFormError = (error: unknown): MappedFormError => {
       isValidation: false,
       isServerError: true,
       isNetworkError: false,
-      correlationId,
+      ...(correlationId && { correlationId }),
     }
   }
 
@@ -239,7 +239,7 @@ export const mapApiErrorToFormError = (error: unknown): MappedFormError => {
     isValidation: false,
     isServerError: false,
     isNetworkError: false,
-    correlationId,
+    ...(correlationId && { correlationId }),
   }
 }
 

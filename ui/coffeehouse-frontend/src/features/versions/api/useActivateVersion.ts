@@ -72,6 +72,12 @@ export const useActivateVersion = (options?: UseActivateVersionOptions) => {
         throw new Error('Only administrators can activate versions')
       }
 
+      // Require credentials for activation (backend enforces auth)
+      const credentials = sessionStore.getState().credentials
+      if (!credentials) {
+        throw new Error('Credentials are required to activate versions. Add them in Settings.')
+      }
+
       return activateVersion(request)
     },
 

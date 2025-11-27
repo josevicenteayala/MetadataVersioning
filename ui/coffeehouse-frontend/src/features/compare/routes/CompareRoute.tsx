@@ -15,7 +15,10 @@ import type { VersionResponse } from '@services/generated'
  * Fetch versions for a document
  */
 async function fetchVersions(documentId: string): Promise<VersionResponse[]> {
-  const response = await apiClient.get<VersionResponse[]>(`/api/v1/metadata/${documentId}/versions`)
+  const [type, name] = documentId.split('/')
+  const response = await apiClient.get<VersionResponse[]>(
+    `/api/v1/metadata/${type}/${name}/versions`,
+  )
   return response.data
 }
 

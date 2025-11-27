@@ -27,9 +27,11 @@ async function fetchVersions(documentId: string): Promise<VersionResponse[]> {
  * URL: /documents/:documentId/compare?left=<versionId>&right=<versionId>
  */
 export const CompareRoute: React.FC = () => {
-  const { documentId } = useParams<{ documentId: string }>()
+  const { documentId: documentIdParam } = useParams<{ documentId: string }>()
   const [searchParams, setSearchParams] = useSearchParams()
   const navigate = useNavigate()
+
+  const documentId = documentIdParam ?? searchParams.get('documentId') ?? ''
 
   const leftVersionId = searchParams.get('left') ?? ''
   const rightVersionId = searchParams.get('right') ?? ''
@@ -41,7 +43,7 @@ export const CompareRoute: React.FC = () => {
     error,
   }: UseQueryResult<VersionResponse[], Error> = useQuery<VersionResponse[], Error>({
     queryKey: ['document-versions', documentId],
-    queryFn: () => fetchVersions(documentId!),
+    queryFn: () => fetchVersions(documentId),
     enabled: !!documentId,
   })
 
@@ -62,6 +64,7 @@ export const CompareRoute: React.FC = () => {
   // Handle selection change - update URL params
   const handleSelectionChange = (left: string, right: string) => {
     const params = new URLSearchParams()
+    if (documentId) params.set('documentId', documentId)
     if (left) params.set('left', left)
     if (right) params.set('right', right)
     setSearchParams(params, { replace: true })
@@ -69,7 +72,11 @@ export const CompareRoute: React.FC = () => {
 
   // Handle close - navigate back to document
   const handleClose = () => {
-    void navigate(`/documents/${documentId}`)
+    if (documentId) {
+      void navigate(`/documents/${documentId}`)
+    } else {
+      void navigate('/dashboard')
+    }
   }
 
   if (!documentId) {

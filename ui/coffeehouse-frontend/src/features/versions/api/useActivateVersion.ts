@@ -71,7 +71,7 @@ export const useActivateVersion = (options?: UseActivateVersionOptions) => {
     mutationFn: async (request: ActivateVersionRequest) => {
       // Check role before making request
       const role = sessionStore.getState().role
-      if (role !== 'admin') {
+      if (role && role !== 'admin') {
         throw new Error('Only administrators can activate versions')
       }
 
@@ -127,6 +127,10 @@ export const useActivateVersion = (options?: UseActivateVersionOptions) => {
  */
 export const useCanActivate = (): boolean => {
   const role = useSessionStore((state) => state.role)
+  if (!role) {
+    // If role has not been validated yet, allow and let API enforce permissions
+    return true
+    }
   return role === 'admin'
 }
 

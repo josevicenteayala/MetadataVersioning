@@ -71,6 +71,8 @@ const VersionDetailDrawer = ({
   isOpen,
   onClose,
   correlationId,
+  onCompare,
+  hasActiveVersion = false,
 }: VersionDetailDrawerProps) => {
   const drawerRef = useRef<HTMLDivElement>(null)
   const closeButtonRef = useRef<HTMLButtonElement>(null)
@@ -193,7 +195,13 @@ const VersionDetailDrawer = ({
         {/* Footer with actions */}
         <footer className="version-detail-drawer__footer">
           <ActivationControls version={version} onActivated={onClose} />
-          <button type="button" className="btn btn--outline">
+          <button
+            type="button"
+            className="btn btn--outline"
+            onClick={() => onCompare?.(version)}
+            disabled={!onCompare || !hasActiveVersion}
+            title={!hasActiveVersion ? 'No active version to compare against' : undefined}
+          >
             Compare with Active
           </button>
           <button type="button" className="btn btn--ghost" onClick={onClose}>

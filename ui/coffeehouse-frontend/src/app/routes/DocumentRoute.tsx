@@ -105,6 +105,7 @@ const DocumentRoute = () => {
 
   // Use linked version as initial selection when drawer is closed
   const effectiveSelectedVersion = selectedVersion ?? linkedVersion
+  const activeVersion = versions.find((v) => v.status === 'active')
 
   // Handle sort
   const handleSort = useCallback(
@@ -137,6 +138,21 @@ const DocumentRoute = () => {
     setSearchParams({})
     setCorrelationId(null)
   }, [setSearchParams])
+
+  const navigateToCompare = useCallback(
+    (version: MetadataVersion) => {
+      if (!documentId || !activeVersion) {
+        return
+      }
+      const params = new URLSearchParams({
+        documentId,
+        left: activeVersion.versionNumber.toString(),
+        right: version.versionNumber.toString(),
+      })
+      void navigate(`/compare?${params.toString()}`)
+    },
+    [activeVersion, documentId, navigate],
+  )
 
   // Navigate back to dashboard
   const handleBackToDashboard = useCallback(() => {
@@ -249,6 +265,8 @@ const DocumentRoute = () => {
         isOpen={effectiveSelectedVersion !== null}
         onClose={handleCloseDrawer}
         correlationId={correlationId}
+        onCompare={navigateToCompare}
+        hasActiveVersion={Boolean(activeVersion)}
       />
     </div>
   )

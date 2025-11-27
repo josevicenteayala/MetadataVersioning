@@ -2,12 +2,14 @@ import { useCallback, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import DashboardHero from '@features/dashboard/components/DashboardHero'
 import DocumentsTable from '@features/documents/components/DocumentsTable'
+import CreateDocumentModal from '@features/documents/components/CreateDocumentModal'
 import { useDocumentsPage } from '@features/documents/api/useDocumentsPage'
 import type { MetadataDocumentResponse } from '@services/generated/models/MetadataDocumentResponse'
 
 const DashboardRoute = () => {
   const navigate = useNavigate()
   const [cursor, setCursor] = useState<string | null>(null)
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false)
   const { data, isLoading, isFetching } = useDocumentsPage({ limit: 20, cursor })
 
   const handleNext = () => {
@@ -29,9 +31,17 @@ const DashboardRoute = () => {
     [navigate],
   )
 
+  const handleOpenCreateModal = useCallback(() => {
+    setIsCreateModalOpen(true)
+  }, [])
+
+  const handleCloseCreateModal = useCallback(() => {
+    setIsCreateModalOpen(false)
+  }, [])
+
   return (
     <div className="dashboard-route">
-      <DashboardHero />
+      <DashboardHero onCreateDocument={handleOpenCreateModal} />
 
       <section className="dashboard-route__list">
         <header className="dashboard-route__list-header">
@@ -68,6 +78,12 @@ const DashboardRoute = () => {
           </button>
         </nav>
       </section>
+
+      {/* Create Document Modal */}
+      <CreateDocumentModal
+        isOpen={isCreateModalOpen}
+        onClose={handleCloseCreateModal}
+      />
     </div>
   )
 }

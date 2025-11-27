@@ -15,6 +15,13 @@ hs_err_pid*
 mvnw
 mvnw.cmd
 
+# Node / Frontend
+node_modules/
+dist/
+pnpm-debug.log
+npm-debug.log
+yarn-error.log
+
 # Gradle
 .gradle/
 build/

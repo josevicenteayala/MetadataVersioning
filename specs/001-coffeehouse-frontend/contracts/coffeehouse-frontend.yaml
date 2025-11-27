@@ -1,0 +1,296 @@
+openapi: 3.0.3
+info:
+  title: Coffeehouse Metadata Frontend Contracts
+  version: 0.1.0
+  description: |
+    Contract surface consumed by the React SPA when interacting with the Metadata Versioning API.
+servers:
+  - url: https://metadata.local/api
+    description: Local gateway proxied via Vite dev server
+  - url: https://metadata.prod/api
+    description: Production deployment
+security:
+  - basicAuth: []
+paths:
+  /documents:
+    get:
+      summary: List metadata documents
+      parameters:
+        - in: query
+          name: query
+          schema:
+            type: string
+          description: Free-text search across name and tags
+        - in: query
+          name: status
+          schema:
+            type: string
+            enum: [draft, approved, published, archived]
+        - in: query
+          name: page
+          schema:
+            type: integer
+            minimum: 0
+          required: true
+        - in: query
+          name: size
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+          required: true
+      responses:
+        '200':
+          description: Paginated documents
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DocumentPage'
+  /documents/{documentId}:
+    get:
+      summary: Fetch a single document summary
+      parameters:
+        - $ref: '#/components/parameters/DocumentId'
+      responses:
+        '200':
+          description: Document loaded
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DocumentSummary'
+  /documents/{documentId}/versions:
+    get:
+      summary: List versions for a document
+      parameters:
+        - $ref: '#/components/parameters/DocumentId'
+      responses:
+        '200':
+          description: Ordered version history
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MetadataVersion'
+    post:
+      summary: Create a new version draft
+      parameters:
+        - $ref: '#/components/parameters/DocumentId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateVersionRequest'
+      responses:
+        '201':
+          description: Draft created
+          headers:
+            X-Correlation-ID:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MetadataVersion'
+  /documents/{documentId}/versions/{versionId}/activate:
+    post:
+      summary: Activate a version (admin only)
+      parameters:
+        - $ref: '#/components/parameters/DocumentId'
+        - $ref: '#/components/parameters/VersionId'
+      responses:
+        '200':
+          description: Version activated
+          headers:
+            X-Correlation-ID:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ActivationResult'
+  /versions/compare:
+    post:
+      summary: Compare two versions and return JSON diff
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CompareRequest'
+      responses:
+        '200':
+          description: Diff payload
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DiffResult'
+  /auth/check:
+    post:
+      summary: Validate Basic Auth credentials
+      responses:
+        '200':
+          description: Credentials valid
+          headers:
+            X-Correlation-ID:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthStatus'
+components:
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+  parameters:
+    DocumentId:
+      name: documentId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    VersionId:
+      name: versionId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+  schemas:
+    DocumentPage:
+      type: object
+      properties:
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/DocumentSummary'
+        page:
+          type: integer
+        size:
+          type: integer
+        totalElements:
+          type: integer
+        totalPages:
+          type: integer
+    DocumentSummary:
+      type: object
+      required: [documentId, name, status, lastUpdatedAt]
+      properties:
+        documentId:
+          type: string
+          format: uuid
+        name:
+          type: string
+        status:
+          type: string
+          enum: [draft, approved, published, archived]
+        activeVersionId:
+          type: string
+          format: uuid
+          nullable: true
+        lastUpdatedAt:
+          type: string
+          format: date-time
+        versionCount:
+          type: integer
+        tags:
+          type: array
+          items:
+            type: string
+    MetadataVersion:
+      type: object
+      required: [versionId, documentId, status, createdAt, payload]
+      properties:
+        versionId:
+          type: string
+          format: uuid
+        documentId:
+          type: string
+          format: uuid
+        versionNumber:
+          type: integer
+        status:
+          type: string
+          enum: [draft, approved, published, archived, active]
+        createdBy:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        activatedAt:
+          type: string
+          format: date-time
+          nullable: true
+        changeSummary:
+          type: string
+        payload:
+          type: object
+          additionalProperties: true
+    CreateVersionRequest:
+      type: object
+      required: [payload, changeSummary]
+      properties:
+        payload:
+          type: object
+          additionalProperties: true
+        changeSummary:
+          type: string
+          maxLength: 500
+    ActivationResult:
+      type: object
+      properties:
+        documentId:
+          type: string
+          format: uuid
+        activatedVersionId:
+          type: string
+          format: uuid
+        previousActiveVersionId:
+          type: string
+          format: uuid
+          nullable: true
+    CompareRequest:
+      type: object
+      required: [fromVersionId, toVersionId]
+      properties:
+        fromVersionId:
+          type: string
+          format: uuid
+        toVersionId:
+          type: string
+          format: uuid
+    DiffResult:
+      type: object
+      properties:
+        addedPaths:
+          type: array
+          items:
+            type: string
+        removedPaths:
+          type: array
+          items:
+            type: string
+        changedPaths:
+          type: array
+          items:
+            type: string
+        breakingChanges:
+          type: boolean
+        diff:
+          type: object
+          description: Raw jsondiffpatch delta payload
+    AuthStatus:
+      type: object
+      properties:
+        role:
+          type: string
+          enum: [admin, contributor, viewer]
+        expiresAt:
+          type: string
+          format: date-time
+        correlationId:
+          type: string

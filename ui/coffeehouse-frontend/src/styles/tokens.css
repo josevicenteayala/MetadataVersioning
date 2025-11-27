@@ -1,0 +1,33 @@
+:root {
+  --coffee-font-sans: 'Inter', 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  --coffee-font-brand: 'Playfair Display', 'Times New Roman', serif;
+  --coffee-font-mono: 'JetBrains Mono', 'SFMono-Regular', 'Consolas', monospace;
+
+  --coffee-color-foam: #fef9f4;
+  --coffee-color-crema: #f0dfce;
+  --coffee-color-latte: #e2c4a8;
+  --coffee-color-espresso: #402218;
+  --coffee-color-mocha: #6f4f37;
+  --coffee-color-bean: #2a120a;
+  --coffee-color-moss: #4e6f52;
+  --coffee-color-matcha: #7ea172;
+  --coffee-color-cherry: #c04b3e;
+  --coffee-color-amber: #d79f62;
+
+  --coffee-radius-card: 24px;
+  --coffee-radius-pill: 999px;
+  --coffee-shadow-card: 0 10px 25px rgba(42, 18, 10, 0.08);
+}
+
+[data-theme='dark'] {
+  --coffee-color-foam: #1b120c;
+  --coffee-color-crema: #2c1a13;
+  --coffee-color-latte: #3a2419;
+  --coffee-color-espresso: #f2e7dc;
+  --coffee-color-mocha: #f5d9c2;
+  --coffee-color-bean: #fdf6ef;
+  --coffee-color-moss: #8ec498;
+  --coffee-color-matcha: #a8d6a8;
+  --coffee-color-cherry: #f08a76;
+  --coffee-color-amber: #ffc084;
+}

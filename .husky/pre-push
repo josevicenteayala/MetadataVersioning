@@ -1,0 +1,2 @@
+pnpm --filter coffeehouse-frontend lint
+pnpm --filter coffeehouse-frontend format:check

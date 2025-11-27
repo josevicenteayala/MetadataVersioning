@@ -6,6 +6,7 @@ import jakarta.persistence.PersistenceContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Async;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
  * Uses separate transaction to avoid impacting main business transactions.
  */
 @Component
+@Profile("!test")
 public class AuditPersistenceAdapter {
 
     private static final Logger logger = LoggerFactory.getLogger(AuditPersistenceAdapter.class);

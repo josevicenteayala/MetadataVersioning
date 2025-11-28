@@ -203,7 +203,7 @@ All paths relative to repository root `/Users/Jose_Ayala/Documents/GitHub/Metada
 - [X] T094 Test accessibility: Keyboard navigation, screen reader announcements, ARIA attributes
 - [X] T095 Follow quickstart.md validation steps in specs/002-new-version-ui/quickstart.md
 - [X] T096 Update CHANGELOG or release notes with new feature description
-- [ ] T097 Create pull request with reference to specs/002-new-version-ui/spec.md
+- [X] T097 Create pull request with reference to specs/002-new-version-ui/spec.md
 
 ---
 

@@ -274,6 +274,11 @@ export const CreateDocumentForm = ({ onSuccess, onCancel }: CreateDocumentFormPr
         Create New Document
       </h2>
 
+      <div className="create-document-form__info">
+        <strong>Tip:</strong> This form is for brand-new type/name combinations. To change an existing
+        document, open it and create a new version instead of creating another document.
+      </div>
+
       {/* General error message */}
       {errors.general && (
         <div className="create-document-form__general-error" role="alert">
@@ -416,6 +421,16 @@ export const CreateDocumentForm = ({ onSuccess, onCancel }: CreateDocumentFormPr
           font-size: var(--font-size-xl, 1.25rem);
           font-weight: 600;
           color: var(--color-text-primary, #1a1a1a);
+        }
+
+        .create-document-form__info {
+          margin: 0;
+          padding: var(--space-sm, 0.75rem);
+          background: var(--color-bg-subtle, #f5f0eb);
+          border: 1px solid var(--color-border, #e5e7eb);
+          border-radius: var(--radius-md, 0.375rem);
+          color: var(--color-text-secondary, #4b5563);
+          line-height: 1.4;
         }
 
         .create-document-form__general-error {

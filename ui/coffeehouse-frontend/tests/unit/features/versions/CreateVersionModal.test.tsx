@@ -3,14 +3,21 @@ import { vi, describe, it, expect, beforeAll } from 'vitest'
 import '@testing-library/jest-dom'
 import { CreateVersionModal } from '../../../../src/features/versions/components/CreateVersionModal'
 
-// Mock NewVersionForm
+// Mock NewVersionForm to capture props
+let capturedProps: any = null
 vi.mock('../../../../src/features/versions/forms/NewVersionForm', () => ({
-  default: ({ onSuccess, onCancel }: any) => (
-    <div data-testid="new-version-form">
-      <button onClick={onSuccess}>Success</button>
-      <button onClick={onCancel}>Cancel</button>
-    </div>
-  ),
+  default: (props: any) => {
+    capturedProps = props
+    return (
+      <div data-testid="new-version-form">
+        <button onClick={props.onSuccess}>Success</button>
+        <button onClick={props.onCancel}>Cancel</button>
+        {props.initialPayload && (
+          <div data-testid="initial-payload">{JSON.stringify(props.initialPayload)}</div>
+        )}
+      </div>
+    )
+  },
 }))
 
 describe('CreateVersionModal', () => {
@@ -62,5 +69,25 @@ describe('CreateVersionModal', () => {
     render(<CreateVersionModal {...defaultProps} />)
     fireEvent.click(screen.getByText('Success'))
     expect(defaultProps.onClose).toHaveBeenCalled()
+  })
+
+  // User Story 3: Pre-populate with Active Version
+  it('should pass initialPayload to NewVersionForm when provided', () => {
+    const initialPayload = { key: 'value', nested: { data: true } }
+    render(<CreateVersionModal {...defaultProps} initialPayload={initialPayload} />)
+    expect(screen.getByTestId('initial-payload')).toHaveTextContent(JSON.stringify(initialPayload))
+    expect(capturedProps.initialPayload).toEqual(initialPayload)
+  })
+
+  it('should not pass initialPayload when undefined', () => {
+    render(<CreateVersionModal {...defaultProps} initialPayload={undefined} />)
+    expect(screen.queryByTestId('initial-payload')).not.toBeInTheDocument()
+    expect(capturedProps.initialPayload).toBeUndefined()
+  })
+
+  it('should render correctly when no initialPayload is provided', () => {
+    render(<CreateVersionModal {...defaultProps} />)
+    expect(screen.getByTestId('new-version-form')).toBeInTheDocument()
+    expect(screen.queryByTestId('initial-payload')).not.toBeInTheDocument()
   })
 })

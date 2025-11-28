@@ -1,7 +1,8 @@
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useMemo, useRef, useState } from 'react'
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
 import { httpClient } from '@services/api/httpClient'
+import { ErrorBoundary } from '@app/components'
 import { useVersionHistory } from '@features/versions/api/useVersionHistory'
 import {
   VersionHistoryTable,
@@ -60,6 +61,7 @@ const DocumentRoute = () => {
   const { type, name } = useParams<{ type: string; name: string }>()
   const documentId = type && name ? `${type}/${name}` : undefined
   const [searchParams, setSearchParams] = useSearchParams()
+  const createVersionBtnRef = useRef<HTMLButtonElement>(null)
 
   // Sorting state
   const [sortBy, setSortBy] = useState<SortColumn>('createdAt')
@@ -255,6 +257,7 @@ const DocumentRoute = () => {
             )}
           </div>
           <button
+            ref={createVersionBtnRef}
             type="button"
             className="btn btn--primary"
             onClick={handleOpenCreateModal}
@@ -299,11 +302,15 @@ const DocumentRoute = () => {
 
       {/* Create Version Modal */}
       {documentId && (
-        <CreateVersionModal
-          documentId={documentId}
-          isOpen={isCreateModalOpen}
-          onClose={handleCloseCreateModal}
-        />
+        <ErrorBoundary>
+          <CreateVersionModal
+            documentId={documentId}
+            isOpen={isCreateModalOpen}
+            onClose={handleCloseCreateModal}
+            initialPayload={activeVersion?.payload}
+            triggerRef={createVersionBtnRef}
+          />
+        </ErrorBoundary>
       )}
     </div>
   )

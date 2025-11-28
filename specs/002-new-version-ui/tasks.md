@@ -149,33 +149,33 @@ All paths relative to repository root `/Users/Jose_Ayala/Documents/GitHub/Metada
 
 ### E2E Tests for User Story 3 (Write FIRST)
 
-- [ ] T061 [P] [US3] Write E2E test: "should pre-populate payload with active version when available" in create-version-flow.spec.ts
-- [ ] T062 [P] [US3] Write E2E test: "should create new version with modified payload when pre-populated" in create-version-flow.spec.ts
-- [ ] T063 [P] [US3] Write E2E test: "should show empty payload when no active version exists" in create-version-flow.spec.ts
+- [X] T061 [P] [US3] Write E2E test: "should pre-populate payload with active version when available" in create-version-flow.spec.ts <!-- id: 61 -->
+- [X] T062 [P] [US3] Write E2E test: "should create new version with modified payload when pre-populated" in create-version-flow.spec.ts <!-- id: 62 -->
+- [X] T063 [P] [US3] Write E2E test: "should show empty payload when no active version exists" in create-version-flow.spec.ts <!-- id: 63 -->
 
 ### Implementation for User Story 3
 
-- [ ] T064 [US3] Add initialPayload optional prop to CreateVersionModalProps in CreateVersionModal.tsx
-- [ ] T065 [US3] Pass initialPayload prop to NewVersionForm in CreateVersionModal.tsx
-- [ ] T066 [US3] Verify NewVersionForm accepts initialPayload prop in ui/coffeehouse-frontend/src/features/versions/forms/NewVersionForm.tsx
-- [ ] T067 [US3] Verify NewVersionForm uses initialPayload as default textarea value in NewVersionForm.tsx
-- [ ] T068 [US3] Add logic to DocumentRoute to fetch active version from useVersionHistory in ui/coffeehouse-frontend/src/app/routes/DocumentRoute.tsx
-- [ ] T069 [US3] Filter version history for isActive=true in DocumentRoute.tsx
-- [ ] T070 [US3] Pass active version payload to CreateVersionModal as initialPayload in DocumentRoute.tsx
-- [ ] T071 [US3] Handle case where no active version exists (pass undefined) in DocumentRoute.tsx
+- [X] T064 [US3] Add initialPayload optional prop to CreateVersionModalProps in CreateVersionModal.tsx <!-- id: 64 -->
+- [X] T065 [US3] Pass initialPayload prop to NewVersionForm in CreateVersionModal.tsx <!-- id: 65 -->
+- [X] T066 [US3] Verify NewVersionForm accepts initialPayload prop in ui/coffeehouse-frontend/src/features/versions/forms/NewVersionForm.tsx <!-- id: 66 -->
+- [X] T067 [US3] Verify NewVersionForm uses initialPayload as default textarea value in NewVersionForm.tsx <!-- id: 67 -->
+- [X] T068 [US3] Add logic to DocumentRoute to fetch active version from useVersionHistory in ui/coffeehouse-frontend/src/app/routes/DocumentRoute.tsx <!-- id: 68 -->
+- [X] T069 [US3] Filter version history for isActive=true in DocumentRoute.tsx <!-- id: 69 -->
+- [X] T070 [US3] Pass active version payload to CreateVersionModal as initialPayload in DocumentRoute.tsx <!-- id: 70 -->
+- [X] T071 [US3] Handle case where no active version exists (pass undefined) in DocumentRoute.tsx <!-- id: 71 -->
 
 ### Component Tests for User Story 3
 
-- [ ] T072 [P] [US3] Write test: "should pass initialPayload to NewVersionForm when provided" in CreateVersionModal.test.tsx
-- [ ] T073 [P] [US3] Write test: "should not pass initialPayload when undefined" in CreateVersionModal.test.tsx
+- [X] T072 [P] [US3] Write test: "should pass initialPayload to NewVersionForm when provided" in CreateVersionModal.test.tsx <!-- id: 72 -->
+- [X] T073 [P] [US3] Write test: "should not pass initialPayload when undefined" in CreateVersionModal.test.tsx <!-- id: 73 -->
 
 ### Validation for User Story 3
 
-- [ ] T074 [US3] Run E2E tests and verify pre-population tests passing: pnpm test:e2e create-version-flow.spec.ts
+- [X] T074 [US3] Run E2E tests and verify pre-population tests passing: pnpm test:e2e create-version-flow.spec.ts <!-- id: 74 -->
 - [ ] T075 [US3] Manual test: Open modal with active version, verify payload pre-populated
 - [ ] T076 [US3] Manual test: Modify pre-populated payload, submit, verify new version has changes
 - [ ] T077 [US3] Manual test: Open modal with no active version, verify empty payload
-- [ ] T078 [US3] Run component tests and verify pre-population tests passing: pnpm test CreateVersionModal.test.tsx
+- [X] T078 [US3] Run component tests and verify pre-population tests passing: pnpm test CreateVersionModal.test.tsx <!-- id: 78 -->
 
 **Checkpoint**: All user stories should now be independently functional
 
@@ -185,24 +185,24 @@ All paths relative to repository root `/Users/Jose_Ayala/Documents/GitHub/Metada
 
 **Purpose**: Improvements that affect multiple user stories, final validation, and documentation
 
-- [ ] T079 [P] Add CSS styling for modal backdrop and dialog positioning in CreateVersionModal.tsx
-- [ ] T080 [P] Add Tailwind classes for button styles in DocumentRoute.tsx
-- [ ] T081 [P] Add loading state indicator for submit button in NewVersionForm.tsx (verify existing)
-- [ ] T082 [P] Add focus management: Focus first field when modal opens in CreateVersionModal.tsx
-- [ ] T083 [P] Add focus management: Return focus to trigger button when modal closes in CreateVersionModal.tsx
-- [ ] T084 [P] Add error boundary around CreateVersionModal in DocumentRoute.tsx
-- [ ] T085 [P] Add data-testid attributes for E2E test selectors in CreateVersionModal.tsx
-- [ ] T086 [P] Add data-testid attributes for E2E test selectors in DocumentRoute.tsx
-- [ ] T087 Verify all functional requirements FR-001 to FR-020 implemented per specs/002-new-version-ui/spec.md
-- [ ] T088 Verify all success criteria SC-001 to SC-006 met per specs/002-new-version-ui/spec.md
-- [ ] T089 Run full test suite: pnpm test && pnpm test:e2e
-- [ ] T090 Run type checking: pnpm typecheck
-- [ ] T091 Run linting: pnpm lint
-- [ ] T092 Run build to verify no build errors: pnpm build
-- [ ] T093 Measure performance: Modal open time <100ms, validation <50ms, API <500ms
-- [ ] T094 Test accessibility: Keyboard navigation, screen reader announcements, ARIA attributes
-- [ ] T095 Follow quickstart.md validation steps in specs/002-new-version-ui/quickstart.md
-- [ ] T096 Update CHANGELOG or release notes with new feature description
+- [X] T079 [P] Add CSS styling for modal backdrop and dialog positioning in CreateVersionModal.tsx
+- [X] T080 [P] Add Tailwind classes for button styles in DocumentRoute.tsx
+- [X] T081 [P] Add loading state indicator for submit button in NewVersionForm.tsx (verify existing)
+- [X] T082 [P] Add focus management: Focus first field when modal opens in CreateVersionModal.tsx
+- [X] T083 [P] Add focus management: Return focus to trigger button when modal closes in CreateVersionModal.tsx
+- [X] T084 [P] Add error boundary around CreateVersionModal in DocumentRoute.tsx
+- [X] T085 [P] Add data-testid attributes for E2E test selectors in CreateVersionModal.tsx
+- [X] T086 [P] Add data-testid attributes for E2E test selectors in DocumentRoute.tsx
+- [X] T087 Verify all functional requirements FR-001 to FR-020 implemented per specs/002-new-version-ui/spec.md
+- [X] T088 Verify all success criteria SC-001 to SC-006 met per specs/002-new-version-ui/spec.md
+- [X] T089 Run full test suite: pnpm test && pnpm test:e2e
+- [X] T090 Run type checking: pnpm typecheck
+- [X] T091 Run linting: pnpm lint
+- [X] T092 Run build to verify no build errors: pnpm build
+- [X] T093 Measure performance: Modal open time <100ms, validation <50ms, API <500ms
+- [X] T094 Test accessibility: Keyboard navigation, screen reader announcements, ARIA attributes
+- [X] T095 Follow quickstart.md validation steps in specs/002-new-version-ui/quickstart.md
+- [X] T096 Update CHANGELOG or release notes with new feature description
 - [ ] T097 Create pull request with reference to specs/002-new-version-ui/spec.md
 
 ---

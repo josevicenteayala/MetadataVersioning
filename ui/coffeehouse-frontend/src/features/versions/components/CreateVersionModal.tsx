@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useCallback } from 'react'
 import { createPortal } from 'react-dom'
 import NewVersionForm from '../forms/NewVersionForm'
 
@@ -6,9 +6,19 @@ export interface CreateVersionModalProps {
   isOpen: boolean
   onClose: () => void
   documentId: string
+  /** Initial payload to pre-populate the form (e.g., from active version) */
+  initialPayload?: Record<string, unknown> | undefined
+  /** Reference to the trigger button for focus management */
+  triggerRef?: React.RefObject<HTMLButtonElement | null>
 }
 
-export const CreateVersionModal = ({ isOpen, onClose, documentId }: CreateVersionModalProps) => {
+export const CreateVersionModal = ({
+  isOpen,
+  onClose,
+  documentId,
+  initialPayload,
+  triggerRef,
+}: CreateVersionModalProps) => {
   const dialogRef = useRef<HTMLDialogElement>(null)
 
   useEffect(() => {
@@ -17,14 +27,21 @@ export const CreateVersionModal = ({ isOpen, onClose, documentId }: CreateVersio
 
     if (isOpen) {
       dialog.showModal()
+      // Focus first field when modal opens (T082)
+      setTimeout(() => {
+        const firstInput = dialog.querySelector<HTMLElement>('textarea, input')
+        firstInput?.focus()
+      }, 0)
     } else {
       dialog.close()
+      // Return focus to trigger button when modal closes (T083)
+      triggerRef?.current?.focus()
     }
-  }, [isOpen])
+  }, [isOpen, triggerRef])
 
-  const handleSuccess = () => {
+  const handleSuccess = useCallback(() => {
     onClose()
-  }
+  }, [onClose])
 
   return createPortal(
     <dialog
@@ -33,12 +50,14 @@ export const CreateVersionModal = ({ isOpen, onClose, documentId }: CreateVersio
       className="backdrop:bg-gray-900/50 p-0 rounded-lg shadow-xl w-full max-w-2xl"
       aria-modal="true"
       aria-labelledby="create-version-title"
+      data-testid="create-version-modal"
     >
-      <div className="p-6 relative">
+      <div className="p-6 relative" data-testid="create-version-modal-content">
         <button
           onClick={onClose}
           className="absolute top-4 right-4 text-gray-500 hover:text-gray-700"
           aria-label="Close modal"
+          data-testid="create-version-modal-close"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -58,7 +77,12 @@ export const CreateVersionModal = ({ isOpen, onClose, documentId }: CreateVersio
         <h2 id="create-version-title" className="text-xl font-bold mb-4">
           Create New Version
         </h2>
-        <NewVersionForm documentId={documentId} onSuccess={handleSuccess} onCancel={onClose} />
+        <NewVersionForm
+          documentId={documentId}
+          onSuccess={handleSuccess}
+          onCancel={onClose}
+          initialPayload={initialPayload}
+        />
       </div>
     </dialog>,
     document.body,

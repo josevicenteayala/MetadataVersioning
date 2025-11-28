@@ -25,11 +25,11 @@ All paths relative to repository root `/Users/Jose_Ayala/Documents/GitHub/Metada
 
 **Purpose**: Verify existing infrastructure and prepare for implementation
 
-- [ ] T001 Verify TypeScript strict mode enabled in ui/coffeehouse-frontend/tsconfig.json
-- [ ] T002 [P] Verify React 19.2, TanStack Query 5.90, Zustand 5.0 installed in ui/coffeehouse-frontend/package.json
-- [ ] T003 [P] Verify existing NewVersionForm component at ui/coffeehouse-frontend/src/features/versions/forms/NewVersionForm.tsx
-- [ ] T004 [P] Verify existing useCreateVersion hook at ui/coffeehouse-frontend/src/features/versions/api/useCreateVersion.ts
-- [ ] T005 [P] Verify backend API running at http://localhost:8080 with POST /api/v1/metadata/{type}/{name}/versions endpoint
+- [X] T001 Verify TypeScript strict mode enabled in ui/coffeehouse-frontend/tsconfig.json
+- [X] T002 [P] Verify React 19.2, TanStack Query 5.90, Zustand 5.0 installed in ui/coffeehouse-frontend/package.json
+- [X] T003 [P] Verify existing NewVersionForm component at ui/coffeehouse-frontend/src/features/versions/forms/NewVersionForm.tsx
+- [X] T004 [P] Verify existing useCreateVersion hook at ui/coffeehouse-frontend/src/features/versions/api/useCreateVersion.ts
+- [X] T005 [P] Verify backend API running at http://localhost:8080 with POST /api/v1/metadata/{type}/{name}/versions endpoint
 
 ---
 
@@ -39,10 +39,10 @@ All paths relative to repository root `/Users/Jose_Ayala/Documents/GitHub/Metada
 
 **⚠️ CRITICAL**: No user story work can begin until this phase is complete
 
-- [ ] T006 Create CreateVersionModal component skeleton at ui/coffeehouse-frontend/src/features/versions/components/CreateVersionModal.tsx
-- [ ] T007 Implement dialog element with React Portal in CreateVersionModal.tsx
-- [ ] T008 Add TypeScript interface CreateVersionModalProps in CreateVersionModal.tsx
-- [ ] T009 Export CreateVersionModal from ui/coffeehouse-frontend/src/features/versions/index.ts
+- [X] T006 Create CreateVersionModal component skeleton at ui/coffeehouse-frontend/src/features/versions/components/CreateVersionModal.tsx <!-- id: 6 -->
+- [X] T007 Implement dialog element with React Portal in CreateVersionModal.tsx <!-- id: 7 -->
+- [X] T008 Add TypeScript interface CreateVersionModalProps <!-- id: 8 -->
+- [X] T009 Export CreateVersionModal from ui/coffeehouse-frontend/src/features/versions/index.ts <!-- id: 9 -->
 
 **Checkpoint**: Foundation ready - user story implementation can now begin
 
@@ -56,43 +56,43 @@ All paths relative to repository root `/Users/Jose_Ayala/Documents/GitHub/Metada
 
 ### E2E Tests for User Story 1 (Write FIRST)
 
-- [ ] T010 [P] [US1] Create E2E test file at ui/coffeehouse-frontend/tests/e2e/create-version-flow.spec.ts
-- [ ] T011 [P] [US1] Write E2E test: "should open modal when Create New Version button clicked" in create-version-flow.spec.ts
-- [ ] T012 [P] [US1] Write E2E test: "should create version with valid JSON and display success" in create-version-flow.spec.ts
-- [ ] T013 [P] [US1] Write E2E test: "should show validation error for invalid JSON syntax" in create-version-flow.spec.ts
-- [ ] T014 [P] [US1] Write E2E test: "should close modal without creating version when cancel clicked" in create-version-flow.spec.ts
-- [ ] T015 [P] [US1] Write E2E test: "should refresh version history within 1s after successful creation" in create-version-flow.spec.ts
+- [X] T010 Create E2E test file ui/coffeehouse-frontend/tests/e2e/versions/create-version.spec.ts with initial test cases <!-- id: 10 -->
+- [X] T011 [P] [US1] Write E2E test: "should open modal when Create New Version button clicked" in create-version-flow.spec.ts <!-- id: 11 -->
+- [X] T012 [P] [US1] Write E2E test: "should create version with valid JSON and display success" in create-version-flow.spec.ts <!-- id: 12 -->
+- [X] T013 [P] [US1] Write E2E test: "should show validation error for invalid JSON syntax" in create-version-flow.spec.ts <!-- id: 13 -->
+- [X] T014 [P] [US1] Write E2E test: "should close modal without creating version when cancel clicked" in create-version-flow.spec.ts <!-- id: 14 -->
+- [X] T015 [P] [US1] Write E2E test: "should refresh version history within 1s after successful creation" in create-version-flow.spec.ts <!-- id: 15 -->
 
 ### Implementation for User Story 1
 
-- [ ] T016 [US1] Implement CreateVersionModal component props handling (isOpen, onClose, documentId) in CreateVersionModal.tsx
-- [ ] T017 [US1] Implement dialog open/close logic with useEffect in CreateVersionModal.tsx
-- [ ] T018 [US1] Render NewVersionForm inside dialog in CreateVersionModal.tsx
-- [ ] T019 [US1] Wire onSuccess callback to close modal in CreateVersionModal.tsx
-- [ ] T020 [US1] Wire onCancel callback to close modal in CreateVersionModal.tsx
-- [ ] T021 [US1] Add "Create New Version" button to DocumentRoute header at ui/coffeehouse-frontend/src/app/routes/DocumentRoute.tsx
-- [ ] T022 [US1] Add isCreateModalOpen state to DocumentRoute at ui/coffeehouse-frontend/src/app/routes/DocumentRoute.tsx
-- [ ] T023 [US1] Add handleOpenCreateModal handler to DocumentRoute at ui/coffeehouse-frontend/src/app/routes/DocumentRoute.tsx
-- [ ] T024 [US1] Add handleCloseCreateModal handler to DocumentRoute at ui/coffeehouse-frontend/src/app/routes/DocumentRoute.tsx
-- [ ] T025 [US1] Render CreateVersionModal at end of DocumentRoute component at ui/coffeehouse-frontend/src/app/routes/DocumentRoute.tsx
-- [ ] T026 [US1] Add aria-modal and aria-labelledby attributes to dialog in CreateVersionModal.tsx
-- [ ] T027 [US1] Add Escape key handler to close modal in CreateVersionModal.tsx
-- [ ] T028 [US1] Add close button (X) in top-right corner of modal in CreateVersionModal.tsx
+- [X] T016 [US1] Implement CreateVersionModal component props handling (isOpen, onClose, documentId) in CreateVersionModal.tsx <!-- id: 16 -->
+- [X] T017 [US1] Implement dialog open/close logic with useEffect in CreateVersionModal.tsx <!-- id: 17 -->
+- [X] T018 [US1] Render NewVersionForm inside dialog in CreateVersionModal.tsx <!-- id: 18 -->
+- [X] T019 [US1] Wire onSuccess callback to close modal in CreateVersionModal.tsx <!-- id: 19 -->
+- [X] T020 [US1] Wire onCancel callback to close modal in CreateVersionModal.tsx <!-- id: 20 -->
+- [X] T021 [US1] Add "Create New Version" button to DocumentRoute header at ui/coffeehouse-frontend/src/app/routes/DocumentRoute.tsx <!-- id: 21 -->
+- [X] T022 [US1] Add isCreateModalOpen state to DocumentRoute at ui/coffeehouse-frontend/src/app/routes/DocumentRoute.tsx <!-- id: 22 -->
+- [X] T023 [US1] Add handleOpenCreateModal handler to DocumentRoute at ui/coffeehouse-frontend/src/app/routes/DocumentRoute.tsx <!-- id: 23 -->
+- [X] T024 [US1] Add handleCloseCreateModal handler to DocumentRoute at ui/coffeehouse-frontend/src/app/routes/DocumentRoute.tsx <!-- id: 24 -->
+- [X] T025 [US1] Render CreateVersionModal at end of DocumentRoute component at ui/coffeehouse-frontend/src/app/routes/DocumentRoute.tsx <!-- id: 25 -->
+- [X] T026 [US1] Add aria-modal and aria-labelledby attributes to dialog in CreateVersionModal.tsx <!-- id: 26 -->
+- [X] T027 [US1] Add Escape key handler to close modal in CreateVersionModal.tsx <!-- id: 27 -->
+- [X] T028 [US1] Add close button (X) in top-right corner of modal in CreateVersionModal.tsx <!-- id: 28 -->
 
 ### Component Tests for User Story 1
 
-- [ ] T029 [P] [US1] Create component test file at ui/coffeehouse-frontend/tests/unit/features/versions/CreateVersionModal.test.tsx
-- [ ] T030 [P] [US1] Write test: "should render dialog when isOpen is true" in CreateVersionModal.test.tsx
-- [ ] T031 [P] [US1] Write test: "should not render dialog when isOpen is false" in CreateVersionModal.test.tsx
-- [ ] T032 [P] [US1] Write test: "should call onClose when cancel button clicked" in CreateVersionModal.test.tsx
-- [ ] T033 [P] [US1] Write test: "should call onClose when Escape key pressed" in CreateVersionModal.test.tsx
-- [ ] T034 [P] [US1] Write test: "should pass documentId to NewVersionForm" in CreateVersionModal.test.tsx
-- [ ] T035 [P] [US1] Write test: "should call onClose when form submission succeeds" in CreateVersionModal.test.tsx
+- [X] T029 [P] [US1] Create component test file at ui/coffeehouse-frontend/tests/unit/features/versions/CreateVersionModal.test.tsx <!-- id: 29 -->
+- [X] T030 [P] [US1] Write test: "should render dialog when isOpen is true" in CreateVersionModal.test.tsx <!-- id: 30 -->
+- [X] T031 [P] [US1] Write test: "should not render dialog when isOpen is false" in CreateVersionModal.test.tsx <!-- id: 31 -->
+- [X] T032 [P] [US1] Write test: "should call onClose when cancel button clicked" in CreateVersionModal.test.tsx <!-- id: 32 -->
+- [X] T033 [P] [US1] Write test: "should call onClose when Escape key pressed" in CreateVersionModal.test.tsx <!-- id: 33 -->
+- [X] T034 [P] [US1] Write test: "should pass documentId to NewVersionForm" in CreateVersionModal.test.tsx <!-- id: 34 -->
+- [X] T035 [P] [US1] Write test: "should call onClose when form submission succeeds" in CreateVersionModal.test.tsx <!-- id: 35 -->
 
 ### Validation for User Story 1
 
-- [ ] T036 [US1] Run E2E tests and verify all passing: pnpm test:e2e create-version-flow.spec.ts
-- [ ] T037 [US1] Run component tests and verify all passing: pnpm test CreateVersionModal.test.tsx
+- [X] T036 [US1] Run E2E tests and verify all passing: pnpm test:e2e create-version-flow.spec.ts <!-- id: 36 -->
+- [X] T037 [US1] Run component tests and verify all passing: pnpm test CreateVersionModal.test.tsx <!-- id: 37 -->
 - [ ] T038 [US1] Manual test: Navigate to document detail page, create version, verify success
 - [ ] T039 [US1] Manual test: Verify modal opens in <100ms (performance target)
 - [ ] T040 [US1] Manual test: Verify version history updates within 1s after creation
@@ -112,25 +112,25 @@ All paths relative to repository root `/Users/Jose_Ayala/Documents/GitHub/Metada
 
 ### E2E Tests for User Story 2 (Write FIRST)
 
-- [ ] T043 [P] [US2] Write E2E test: "should show inline error when JSON syntax invalid" in create-version-flow.spec.ts
-- [ ] T044 [P] [US2] Write E2E test: "should auto-format JSON when Format button clicked" in create-version-flow.spec.ts
-- [ ] T045 [P] [US2] Write E2E test: "should show error when payload is empty" in create-version-flow.spec.ts
-- [ ] T046 [P] [US2] Write E2E test: "should show error when payload is array not object" in create-version-flow.spec.ts
-- [ ] T047 [P] [US2] Write E2E test: "should clear error when user starts typing after validation error" in create-version-flow.spec.ts
+- [X] T043 [P] [US2] Write E2E test: "should show inline error when JSON syntax invalid" in create-version-flow.spec.ts <!-- id: 43 -->
+- [X] T044 [P] [US2] Write E2E test: "should auto-format JSON when Format button clicked" in create-version-flow.spec.ts <!-- id: 44 -->
+- [X] T045 [P] [US2] Write E2E test: "should show error when payload is empty" in create-version-flow.spec.ts <!-- id: 45 -->
+- [X] T046 [P] [US2] Write E2E test: "should show error when payload is array not object" in create-version-flow.spec.ts <!-- id: 46 -->
+- [X] T047 [P] [US2] Write E2E test: "should clear error when user starts typing after validation error" in create-version-flow.spec.ts <!-- id: 47 -->
 
 ### Implementation for User Story 2
 
-- [ ] T048 [US2] Verify NewVersionForm implements validateJsonPayload function in ui/coffeehouse-frontend/src/features/versions/forms/NewVersionForm.tsx
-- [ ] T049 [US2] Verify NewVersionForm implements validateSummary function in ui/coffeehouse-frontend/src/features/versions/forms/NewVersionForm.tsx
-- [ ] T050 [US2] Verify NewVersionForm implements "Format JSON" button in ui/coffeehouse-frontend/src/features/versions/forms/NewVersionForm.tsx
-- [ ] T051 [US2] Verify inline error messages display for payload field in NewVersionForm.tsx
-- [ ] T052 [US2] Verify inline error messages display for changeSummary field in NewVersionForm.tsx
-- [ ] T053 [US2] Verify error clears onChange in NewVersionForm.tsx
-- [ ] T054 [US2] Add validation timing test: Verify validation completes in <50ms in create-version-flow.spec.ts
+- [X] T048 [US2] Verify NewVersionForm implements validateJsonPayload function in ui/coffeehouse-frontend/src/features/versions/forms/NewVersionForm.tsx <!-- id: 48 -->
+- [X] T049 [US2] Verify NewVersionForm implements validateSummary function in ui/coffeehouse-frontend/src/features/versions/forms/NewVersionForm.tsx <!-- id: 49 -->
+- [X] T050 [US2] Verify NewVersionForm implements "Format JSON" button in ui/coffeehouse-frontend/src/features/versions/forms/NewVersionForm.tsx <!-- id: 50 -->
+- [X] T051 [US2] Verify inline error messages display for payload field in NewVersionForm.tsx <!-- id: 51 -->
+- [X] T052 [US2] Verify inline error messages display for changeSummary field in NewVersionForm.tsx <!-- id: 52 -->
+- [X] T053 [US2] Verify error clears onChange in NewVersionForm.tsx <!-- id: 53 -->
+- [X] T054 [US2] Add validation timing test: Verify validation completes in <50ms in create-version-flow.spec.ts <!-- id: 54 -->
 
 ### Validation for User Story 2
 
-- [ ] T055 [US2] Run E2E tests and verify validation tests passing: pnpm test:e2e create-version-flow.spec.ts
+- [X] T055 [US2] Run E2E tests and verify validation tests passing: pnpm test:e2e create-version-flow.spec.ts <!-- id: 55 -->
 - [ ] T056 [US2] Manual test: Type invalid JSON, verify error appears on blur
 - [ ] T057 [US2] Manual test: Click Format JSON with messy JSON, verify proper indentation
 - [ ] T058 [US2] Manual test: Submit with empty payload, verify "Payload is required" error

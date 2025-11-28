@@ -121,6 +121,7 @@ export const CreateDocumentModal = ({ isOpen, onClose }: CreateDocumentModalProp
   return (
     <div
       className="create-document-modal__backdrop"
+      data-testid="modal-backdrop"
       onClick={handleBackdropClick}
       role="dialog"
       aria-modal="true"

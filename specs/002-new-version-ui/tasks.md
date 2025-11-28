@@ -93,12 +93,12 @@ All paths relative to repository root `/Users/Jose_Ayala/Documents/GitHub/Metada
 
 - [X] T036 [US1] Run E2E tests and verify all passing: pnpm test:e2e create-version-flow.spec.ts <!-- id: 36 -->
 - [X] T037 [US1] Run component tests and verify all passing: pnpm test CreateVersionModal.test.tsx <!-- id: 37 -->
-- [ ] T038 [US1] Manual test: Navigate to document detail page, create version, verify success
-- [ ] T039 [US1] Manual test: Verify modal opens in <100ms (performance target)
-- [ ] T040 [US1] Manual test: Verify version history updates within 1s after creation
-- [ ] T041 [US1] Manual test: Verify validation error shown for invalid JSON
-- [ ] T042 [US1] Manual test: Verify cancel button closes modal without API call
-- [ ] T042a [US1] Manual test: Verify focus moves to first error field on validation failure per FR-018
+- [X] T038 [US1] Manual test: Navigate to document detail page, create version, verify success
+- [X] T039 [US1] Manual test: Verify modal opens in <100ms (performance target)
+- [X] T040 [US1] Manual test: Verify version history updates within 1s after creation
+- [X] T041 [US1] Manual test: Verify validation error shown for invalid JSON
+- [X] T042 [US1] Manual test: Verify cancel button closes modal without API call
+- [X] T042a [US1] Manual test: Verify focus moves to first error field on validation failure per FR-018
 
 **Checkpoint**: At this point, User Story 1 should be fully functional and testable independently
 
@@ -131,11 +131,11 @@ All paths relative to repository root `/Users/Jose_Ayala/Documents/GitHub/Metada
 ### Validation for User Story 2
 
 - [X] T055 [US2] Run E2E tests and verify validation tests passing: pnpm test:e2e create-version-flow.spec.ts <!-- id: 55 -->
-- [ ] T056 [US2] Manual test: Type invalid JSON, verify error appears on blur
-- [ ] T057 [US2] Manual test: Click Format JSON with messy JSON, verify proper indentation
-- [ ] T058 [US2] Manual test: Submit with empty payload, verify "Payload is required" error
-- [ ] T059 [US2] Manual test: Submit with array payload, verify "Payload must be a JSON object" error
-- [ ] T060 [US2] Manual test: Verify validation feedback appears in <50ms (performance target)
+- [X] T056 [US2] Manual test: Type invalid JSON, verify error appears on blur
+- [X] T057 [US2] Manual test: Click Format JSON with messy JSON, verify proper indentation
+- [X] T058 [US2] Manual test: Submit with empty payload, verify "Payload is required" error
+- [X] T059 [US2] Manual test: Submit with array payload, verify "Payload must be a JSON object" error
+- [X] T060 [US2] Manual test: Verify validation feedback appears in <50ms (performance target)
 
 **Checkpoint**: At this point, User Stories 1 AND 2 should both work independently
 
@@ -172,9 +172,9 @@ All paths relative to repository root `/Users/Jose_Ayala/Documents/GitHub/Metada
 ### Validation for User Story 3
 
 - [X] T074 [US3] Run E2E tests and verify pre-population tests passing: pnpm test:e2e create-version-flow.spec.ts <!-- id: 74 -->
-- [ ] T075 [US3] Manual test: Open modal with active version, verify payload pre-populated
-- [ ] T076 [US3] Manual test: Modify pre-populated payload, submit, verify new version has changes
-- [ ] T077 [US3] Manual test: Open modal with no active version, verify empty payload
+- [X] T075 [US3] Manual test: Open modal with active version, verify payload pre-populated
+- [X] T076 [US3] Manual test: Modify pre-populated payload, submit, verify new version has changes
+- [X] T077 [US3] Manual test: Open modal with no active version, verify empty payload
 - [X] T078 [US3] Run component tests and verify pre-population tests passing: pnpm test CreateVersionModal.test.tsx <!-- id: 78 -->
 
 **Checkpoint**: All user stories should now be independently functional

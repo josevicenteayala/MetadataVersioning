@@ -1,78 +1,45 @@
 # Implementation Plan: New Version UI
 
-**Branch**: `002-new-version-ui` | **Date**: November 27, 2025 | **Spec**: [spec.md](spec.md)
+**Branch**: `002-new-version-ui` | **Date**: November 28, 2025 | **Spec**: [spec.md](./spec.md)  
 **Input**: Feature specification from `/specs/002-new-version-ui/spec.md`
 
 ## Summary
 
-Enable business users to create new versions of existing metadata documents through an integrated UI form on the document detail page. Users can enter JSON payload data with real-time validation, optional auto-formatting, and automatic version history refresh upon successful creation. The feature integrates the existing `NewVersionForm` component into `DocumentRoute` with proper modal presentation, error handling, and cache invalidation.
+Implement a "Create New Version" UI feature that allows business users to create new document versions from the document detail page. The feature uses a React Portal-based modal with native `<dialog>` element, integrating the existing `NewVersionForm` component. Key technical decisions:
 
-**Technical Approach**: Frontend-only integration leveraging existing backend API (`POST /api/v1/metadata/{type}/{name}/versions`), existing `useCreateVersion` hook, and existing `NewVersionForm` component. No new backend code required - this is a UI wiring task.
+- Native `<dialog>` for accessibility (focus trap, ESC key handling)
+- Self-contained form state (modal only controls visibility)
+- React Query cache invalidation for automatic history refresh
+- Optional pre-population from active version (P3 feature)
 
 ## Technical Context
 
-**Language/Version**: TypeScript 5.4 (strict mode enabled)
-**Primary Dependencies**: React 19.2, React Router 7.9, TanStack Query 5.90, Zustand 5.0, Vite 5
-**Storage**: Browser localStorage for session state only (no persistent storage for form data)
-**Testing**: Vitest (unit), Playwright (E2E), React Testing Library (component)
-**Target Platform**: Modern web browsers (Chrome 90+, Firefox 88+, Safari 14+, Edge 90+)
-**Project Type**: Single-page application (SPA) with React
-**Performance Goals**: 
-- Form modal opens in <100ms
-- JSON validation provides feedback in <50ms
-- Version creation API call completes in <500ms
-- Version history refresh completes in <1s after successful creation
-**Constraints**:
-- Must work with existing `NewVersionForm` component (no rewrite)
-- Must preserve existing modal/dialog patterns used elsewhere in app
-- Must maintain consistency with activation button and version history UI
-- JSON payload validation must happen client-side before API submission
-**Scale/Scope**: 
-- Single feature affecting 1 route component (DocumentRoute)
-- ~3-5 new integration components (modal wrapper, trigger button, success handlers)
-- Estimated 200-300 lines of new code
-- Reuses 273-line `NewVersionForm` component
+**Language/Version**: TypeScript 5.4 (strict mode enabled)  
+**Primary Dependencies**: React 19.2, React Router 7.9, TanStack Query 5.90, Zustand 5.0, Vite 5  
+**Storage**: Browser localStorage for session state only (no persistent form data)  
+**Testing**: Vitest (unit), Playwright (E2E), React Testing Library (component)  
+**Target Platform**: Web - Chrome 90+, Firefox 88+, Safari 14+, Edge 90+ (screen widths 768px-2560px)  
+**Project Type**: Web application (frontend SPA)  
+**Performance Goals**: Modal <100ms open, JSON validation <50ms, API <500ms P95  
+**Constraints**: Max 1MB payload, max 500 char summary, 100 level JSON nesting limit  
+**Scale/Scope**: Single document detail page enhancement, ~500 lines new code
 
 ## Constitution Check
 
-*GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
+**GATE: ✅ PASSED** - All principles satisfied
 
-### I. Code Quality & Architecture ✅
-- **Hexagonal Architecture**: ✅ **ADAPTED** - React SPA follows component-based architecture aligned with hexagonal principles:
-  - Domain: Feature modules (versions, documents) contain business logic and validation
-  - Application: React hooks abstract API calls (useCreateVersion, useVersionHistory)
-  - Adapters: API clients (Axios), React Router, TanStack Query, Zustand stores
-  - Note: Frontend uses React best practices; full hexagonal pattern with port/adapter interfaces applies primarily to backend Java application
-- **SOLID Principles**: ✅ Will follow:
-  - Single Responsibility: Form handles input, route handles integration, hook handles API
-  - Open/Closed: Component composition for extensibility
-  - Interface Segregation: Props interfaces define narrow contracts
-  - Dependency Inversion: useCreateVersion hook abstracts API details
-- **Type Safety**: ✅ TypeScript strict mode already enabled, all new code will have explicit types
-
-### II. Testing Standards ✅
-- **TDD**: ✅ Will write E2E test scenarios first (Playwright), then component tests (RTL), then implementation
-- **Coverage Thresholds**: ✅ Targeting:
-  - New components: 90%+ (integration code)
-  - Form integration: 85%+ (UI flows)
-  - E2E scenarios: Cover all P1 acceptance criteria
-- **Test Pyramid**: ✅ Will maintain:
-  - Unit: Form validation logic, utility functions
-  - Integration: Component rendering, hook behavior, cache invalidation
-  - E2E: Complete user flow from button click to version history refresh
-
-### III. User Experience Consistency ✅
-- **Dual Interfaces**: ✅ Backend API already supports POST endpoint; UI will provide guided experience
-- **Validation Feedback**: ✅ Inline validation with clear error messages ("Payload must be a JSON object")
-- **Terminology**: ✅ Uses "version", "payload", "activate" consistently with existing UI
-
-### IV. Performance Requirements ✅
-- **Response Times**: ✅ Targets align with constitution (<500ms CRUD, <1s list)
-- **Scalability**: ✅ Stateless frontend; React Query handles caching and invalidation
-- **Resource Efficiency**: ✅ Pagination already implemented in version history
-- **Observability**: ✅ Correlation IDs already supported; telemetry hooks will track form metrics
-
-**GATE STATUS**: ✅ **PASS** - All principles satisfied, no violations to justify
+| Principle | Status | Evidence |
+|-----------|--------|----------|
+| **I. Hexagonal Architecture** | ✅ PASS | Component boundaries maintain separation: CreateVersionModal (presentation adapter), NewVersionForm (form logic), useCreateVersion (API port) |
+| **I. SOLID Principles** | ✅ PASS | SRP: Modal handles presentation, Form handles data; OCP: Optional props for extension; DIP: Components depend on props interfaces |
+| **I. Type Safety** | ✅ PASS | TypeScript strict mode, explicit interfaces for all props (CreateVersionModalProps, NewVersionFormProps), no `any` types |
+| **II. TDD** | ✅ PASS | Tasks structured Red-Green-Refactor: E2E tests written first (T010-T015), then implementation, then component tests |
+| **II. Test Coverage** | ✅ PASS | Target 80%+ adapter coverage via 203 unit tests, E2E tests for critical paths |
+| **II. Test Pyramid** | ✅ PASS | Unit (70%): NewVersionForm tests; Integration (20%): API hooks; E2E (10%): create-version flow |
+| **III. UX Consistency** | ✅ PASS | Dual interface maintained (API + UI), inline validation with specific error messages, 2-space JSON formatting |
+| **III. Validation Feedback** | ✅ PASS | FR-013, FR-014, FR-031-040: Specific errors with correlation IDs, field paths, actionable guidance |
+| **III. Accessibility** | ✅ PASS | FR-021-030, NFR-001-005: WCAG 2.1 AA, focus management, ARIA attributes, keyboard navigation |
+| **IV. Performance** | ✅ PASS | PT-001-004: Modal <100ms, validation <50ms, API <500ms, formatting <100ms |
 
 ## Project Structure
 
@@ -80,230 +47,102 @@ Enable business users to create new versions of existing metadata documents thro
 
 ```text
 specs/002-new-version-ui/
-├── plan.md              # This file (/speckit.plan command output)
-├── research.md          # Phase 0 output (/speckit.plan command)
-├── data-model.md        # Phase 1 output (/speckit.plan command)
-├── quickstart.md        # Phase 1 output (/speckit.plan command)
-├── contracts/           # Phase 1 output (/speckit.plan command)
-│   └── create-version-integration.yaml
-├── checklists/
-│   └── requirements.md  # Already created
-└── tasks.md             # Phase 2 output (/speckit.tasks command - NOT created by /speckit.plan)
+├── plan.md              # This file
+├── research.md          # Phase 0: Modal pattern, state management, cache strategy
+├── data-model.md        # Phase 1: Component models, props interfaces, state flow
+├── quickstart.md        # Phase 1: Step-by-step implementation guide
+├── contracts/           # Phase 1: API contracts (OpenAPI reference)
+├── tasks.md             # Phase 2: 97 tasks across 6 phases
+├── checklists/          # Quality validation
+│   └── comprehensive.md # 85-item checklist (all complete)
+├── gap-analysis-remediation.md  # Edge case documentation
+└── spec.md              # Feature specification (40 FRs, 34 edge cases, 13 NFRs)
 ```
 
-### Source Code (repository root)
+### Source Code
 
 ```text
 ui/coffeehouse-frontend/
 ├── src/
 │   ├── app/
 │   │   └── routes/
-│   │       └── DocumentRoute.tsx          # MODIFY: Add "Create New Version" button + modal integration
+│   │       └── DocumentRoute.tsx      # Modified: Add Create New Version button + modal
 │   ├── features/
-│   │   ├── versions/
-│   │   │   ├── api/
-│   │   │   │   └── useCreateVersion.ts    # EXISTS: Already implemented
-│   │   │   ├── components/
-│   │   │   │   └── CreateVersionModal.tsx # NEW: Modal wrapper for NewVersionForm
-│   │   │   ├── forms/
-│   │   │   │   └── NewVersionForm.tsx     # EXISTS: Already implemented (273 lines)
-│   │   │   └── index.ts                   # MODIFY: Export CreateVersionModal
-│   │   └── documents/
-│   │       └── components/
-│   │           └── DocumentHeader.tsx     # NEW: Extract header with create button from DocumentRoute
-│   └── services/
-│       └── feedback/
-│           └── toastBus.ts               # EXISTS: Already handles success/error toasts
-├── tests/
-│   ├── e2e/
-│   │   └── create-version-flow.spec.ts   # NEW: E2E test for complete flow
-│   └── unit/
-│       └── features/
-│           └── versions/
-│               └── CreateVersionModal.test.tsx  # NEW: Component integration test
-└── package.json
+│   │   └── versions/
+│   │       ├── components/
+│   │       │   └── CreateVersionModal.tsx  # New: Modal wrapper for form
+│   │       ├── forms/
+│   │       │   └── NewVersionForm.tsx      # Modified: Add initialPayload prop
+│   │       └── hooks/
+│   │           └── useCreateVersion.ts     # Existing: API mutation hook
+│   └── shared/
+│       └── services/
+│           └── toastBus.ts                 # Existing: Toast notifications
+└── tests/
+    ├── unit/
+    │   └── features/
+    │       └── versions/
+    │           └── CreateVersionModal.test.tsx  # Component tests
+    └── e2e/
+        └── versions/
+            └── create-version.spec.ts           # E2E flow tests
 ```
 
-**Structure Decision**: Using existing `ui/coffeehouse-frontend` structure established by feature 001-coffeehouse-frontend. All new code follows established patterns: features organized by domain (versions, documents), components separated from API hooks, tests mirror source structure. No new directories needed beyond adding one component.
+**Structure Decision**: Web application structure with feature-based organization. Frontend follows hexagonal pattern adapted for React SPA:
+
+- **Adapters (inbound)**: Route components (DocumentRoute)
+- **Application**: Hooks (useCreateVersion, useVersionHistory)
+- **Presentation**: Components (CreateVersionModal, NewVersionForm)
+
+## Implementation Phases
+
+### Phase 1: Setup (Tasks T001-T005)
+
+Verify prerequisites: backend API, existing hooks, NewVersionForm component, toast service
+
+### Phase 2: Foundational (Tasks T006-T009)
+
+Create CreateVersionModal component skeleton, ErrorBoundary wrapper
+
+### Phase 3: User Story 1 - Core Create (Tasks T010-T042)
+
+E2E tests → Modal implementation → DocumentRoute integration → Success/error flows
+
+### Phase 4: User Story 2 - Validation (Tasks T043-T060)
+
+Enhanced inline validation, Format JSON button, character counter
+
+### Phase 5: User Story 3 - Pre-population (Tasks T061-T078)
+
+initialPayload prop, active version detection, P3 feature
+
+### Phase 6: Polish (Tasks T079-T097)
+
+Accessibility audit, performance optimization, documentation, PR
 
 ## Complexity Tracking
 
-> **Fill ONLY if Constitution Check has violations that must be justified**
+*No constitution violations requiring justification.*
 
-*No violations detected - gate passed cleanly.*
+| Decision | Rationale | Alternatives Rejected |
+|----------|-----------|----------------------|
+| Native `<dialog>` | Built-in focus trap, ESC handling, accessibility | react-modal (50KB+), custom modal (complexity) |
+| Self-contained form state | Testability, encapsulation | Lifted state (couples DocumentRoute to form internals) |
+| React Portal | Prevents z-index issues with version table | Inline modal (z-index conflicts) |
 
-## Phase 0: Research & Design Decisions
+## Generated Artifacts
 
-### Research Tasks
+| Artifact | Status | Path |
+|----------|--------|------|
+| research.md | ✅ Complete | specs/002-new-version-ui/research.md |
+| data-model.md | ✅ Complete | specs/002-new-version-ui/data-model.md |
+| quickstart.md | ✅ Complete | specs/002-new-version-ui/quickstart.md |
+| contracts/ | ✅ Complete | specs/002-new-version-ui/contracts/ |
+| tasks.md | ✅ Complete | specs/002-new-version-ui/tasks.md |
 
-**R1: Modal Component Pattern** ✅ RESOLVED
-- **Decision**: Use existing dialog/modal pattern from activation button feature
-- **Rationale**: DocumentRoute already uses modals for activation confirmation; maintain consistency
-- **Implementation**: Check if shared Modal component exists, otherwise create lightweight wrapper using browser dialog element or React Portal
-- **Evidence Required**: Scan codebase for existing modal implementations
+## Next Steps
 
-**R2: Form State Management Strategy** ✅ RESOLVED
-- **Decision**: Let NewVersionForm manage its own state (already does); parent only handles open/close
-- **Rationale**: NewVersionForm is self-contained with validation, submit, error handling
-- **Implementation**: CreateVersionModal passes documentId + callbacks, renders NewVersionForm
-- **Trade-off**: Could lift state to parent for more control, but increases coupling
-
-**R3: Cache Invalidation Scope** ✅ RESOLVED
-- **Decision**: useCreateVersion already invalidates correct queries; verify in testing
-- **Rationale**: Hook invalidates `versionHistoryKeys.byDocument(documentId)` and `['document', documentId]`
-- **Verification**: Confirm version history table auto-updates after creation in E2E test
-- **Fallback**: If auto-update fails, add explicit refetch in modal onSuccess callback
-
-**R4: Pre-population Data Source (P3 Feature)** ✅ RESOLVED
-- **Decision**: Fetch active version from useVersionHistory results or separate useActiveVersion hook
-- **Rationale**: Document route already has access to version history; filter for `isActive: true`
-- **Implementation**: Pass `initialPayload` prop to NewVersionForm; form uses it as textarea default value
-- **Deferred**: Implement in separate subtask after P1 working; requires conditional prop handling
-
-### Best Practices
-
-**BP1: React Query Integration**
-- Use mutation hooks for write operations (already done in useCreateVersion)
-- Invalidate queries optimistically for better UX
-- Handle loading, error, success states explicitly in UI
-- Provide retry mechanism for failed requests
-
-**BP2: Form Validation**
-- Validate on blur for non-intrusive feedback
-- Clear errors onChange to provide immediate positive feedback
-- Focus first error field on submit for accessibility
-- Use semantic HTML5 validation attributes where possible
-
-**BP3: E2E Testing Strategy**
-- Test happy path first (valid JSON → success toast → history refresh)
-- Test validation errors second (empty payload, invalid JSON, non-object)
-- Test error recovery (network failure → retry button)
-- Use data-testid for stable selectors (not text content or classes)
-
-**BP4: Accessibility**
-- Modal must trap focus (Tab cycles within modal)
-- ESC key closes modal
-- Focus returns to trigger button on close
-- Error messages associated with form fields via aria-describedby
-- Submit button disabled during loading with aria-busy
-
-## Phase 1: Data Model & Contracts
-
-### Entities
-
-**CreateVersionModal** (New Component)
-- Purpose: Wraps NewVersionForm in modal presentation
-- Props:
-  - `isOpen: boolean` - Controls modal visibility
-  - `onClose: () => void` - Callback to close modal
-  - `documentId: string` - Format: "{type}/{name}"
-  - `initialPayload?: Record<string, unknown>` - Pre-fill for P3 feature
-- State: Manages open/close only; delegates form state to NewVersionForm
-- Behavior:
-  - Renders Modal container + NewVersionForm
-  - Calls onClose when NewVersionForm succeeds or user cancels
-  - Passes success/error callbacks to NewVersionForm
-
-**DocumentHeader** (New Component - Optional Extraction)
-- Purpose: Encapsulate document header with create button
-- Props:
-  - `documentType: string`
-  - `documentName: string`
-  - `onCreateVersion: () => void`
-- Alternative: Keep inline in DocumentRoute if <20 lines
-
-**Modified DocumentRoute**
-- New State:
-  - `isCreateModalOpen: boolean` - Controls CreateVersionModal visibility
-- New Handlers:
-  - `handleOpenCreateModal()` - Sets isCreateModalOpen = true
-  - `handleCloseCreateModal()` - Sets isCreateModalOpen = false
-  - `handleCreateSuccess(version)` - Shows toast, closes modal (already handled by useCreateVersion)
-- New Render:
-  - Add "Create New Version" button in header
-  - Render <CreateVersionModal> conditionally
-
-### API Contracts
-
-**POST /api/v1/metadata/{type}/{name}/versions** (Existing - Reference Only)
-
-Request:
-```json
-{
-  "payload": {
-    "key": "value"
-  },
-  "changeSummary": "Description of changes"
-}
-```
-
-Response (201 Created):
-```json
-{
-  "type": "loyalty-program",
-  "name": "spring-bonus",
-  "versionNumber": 3,
-  "content": { "key": "value" },
-  "author": "user@example.com",
-  "createdAt": "2025-11-27T20:00:00Z",
-  "changeSummary": "Description of changes",
-  "publishingState": "DRAFT",
-  "isActive": false
-}
-```
-
-Error Response (400 Bad Request):
-```json
-{
-  "error": "VALIDATION_ERROR",
-  "message": "Invalid payload",
-  "status": 400,
-  "timestamp": "2025-11-27T20:00:00Z"
-}
-```
-
-### Component Contracts
-
-**NewVersionForm Interface** (Existing - Reference)
-```typescript
-interface NewVersionFormProps {
-  documentId: string
-  onSuccess?: (version: CreateVersionResponse) => void
-  onCancel?: () => void
-  initialPayload?: Record<string, unknown>  // P3 feature
-}
-```
-
-**CreateVersionModal Interface** (New)
-```typescript
-interface CreateVersionModalProps {
-  isOpen: boolean
-  onClose: () => void
-  documentId: string
-  initialPayload?: Record<string, unknown>  // P3 feature
-}
-```
-
-## Phase 2: Implementation Tasks
-
-*Tasks will be generated by `/speckit.tasks` command - not part of this plan output*
-
-Next steps:
-1. ✅ Research complete (Phase 0)
-2. ✅ Data model defined (Phase 1)
-3. ✅ Contracts documented (Phase 1)
-4. ⏭️ Run `/speckit.tasks` to generate detailed implementation tasks (Phase 2)
-5. ⏭️ Execute tasks following TDD workflow (Phase 3)
-
-## Success Criteria Validation
-
-All success criteria from spec.md mapped to implementation:
-
-- **SC-001** (< 30s to create version): Modal opens instantly, form validation is immediate, API call <500ms
-- **SC-002** (95% success rate): Client-side validation catches errors before API submission
-- **SC-003** (Version history updates <1s): React Query invalidation triggers immediate refetch
-- **SC-004** (One-click format): NewVersionForm already implements "Format JSON" button
-- **SC-005** (80% fewer failed API calls): Inline validation prevents bad requests
-- **SC-006** (Clear error messages): NewVersionForm provides user-friendly error text
-
-All acceptance criteria from spec.md will be covered by E2E tests in Phase 2.
+1. ✅ Phase 0: Research complete
+2. ✅ Phase 1: Design complete
+3. ✅ Phase 2-6: Implementation complete (83/97 tasks)
+4. ⏳ Remaining: Manual testing tasks + T097 (Create PR)

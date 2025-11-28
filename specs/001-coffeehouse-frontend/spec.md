@@ -161,7 +161,9 @@ Metadata stewards create new metadata documents directly from the dashboard usin
 - **FR-016**: Malformed API responses MUST trigger error toasts with correlation-id and manual retry guidance.
 - **FR-017**: The dashboard MUST provide CTAs to create new metadata documents from both the empty state view and the header section when documents exist.
 - **FR-018**: The document creation form MUST collect document name, type, JSON payload, and optional change summary before submission.
-- **FR-019**: Document name and type inputs MUST validate kebab-case format (pattern: `^[a-z0-9]+(-[a-z0-9]+)*$`) with immediate inline error feedback.
+- **FR-019**: Document name and type inputs MUST validate kebab-case format with immediate inline error feedback:
+    - Document name: `^[a-z0-9]+(-[a-z0-9]+)*$` (letters and numbers, kebab-case)
+    - Document type: `^[a-z]+(-[a-z]+)*$` (letters only, kebab-case)
 - **FR-020**: The JSON payload editor MUST validate syntax on blur and display line/character position for syntax errors.
 - **FR-021**: The create document CTA MUST be disabled during form submission and display a loading indicator.
 - **FR-022**: Upon successful document creation (201 Created), the UI MUST navigate to the new document detail page and display a success toast with correlation-id.

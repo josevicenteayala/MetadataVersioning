@@ -92,7 +92,7 @@ export const CreateDocumentModal = ({ isOpen, onClose }: CreateDocumentModalProp
       onClose()
 
       // Navigate to the new document detail page
-      void navigate(`/documents/${document.type}/${document.name}`)
+      void navigate(`/documents/${encodeURIComponent(document.type)}/${encodeURIComponent(document.name)}`)
 
       emitToast({
         intent: 'success',
@@ -121,6 +121,7 @@ export const CreateDocumentModal = ({ isOpen, onClose }: CreateDocumentModalProp
   return (
     <div
       className="create-document-modal__backdrop"
+      data-testid="modal-backdrop"
       onClick={handleBackdropClick}
       role="dialog"
       aria-modal="true"
@@ -139,7 +140,11 @@ export const CreateDocumentModal = ({ isOpen, onClose }: CreateDocumentModalProp
 
         {/* Form or Auth Warning */}
         {hasCredentials ? (
-          <CreateDocumentForm onSuccess={handleSuccess} onCancel={onClose} />
+          <CreateDocumentForm
+            onSuccess={handleSuccess}
+            onCancel={onClose}
+            titleId="create-document-modal-title"
+          />
         ) : (
           <div className="create-document-modal__auth-warning">
             <h2 className="create-document-modal__title">Authentication Required</h2>

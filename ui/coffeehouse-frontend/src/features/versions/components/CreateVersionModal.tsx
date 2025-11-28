@@ -8,11 +8,7 @@ export interface CreateVersionModalProps {
   documentId: string
 }
 
-export const CreateVersionModal = ({
-  isOpen,
-  onClose,
-  documentId,
-}: CreateVersionModalProps) => {
+export const CreateVersionModal = ({ isOpen, onClose, documentId }: CreateVersionModalProps) => {
   const dialogRef = useRef<HTMLDialogElement>(null)
 
   useEffect(() => {
@@ -62,14 +58,10 @@ export const CreateVersionModal = ({
         <h2 id="create-version-title" className="text-xl font-bold mb-4">
           Create New Version
         </h2>
-        <NewVersionForm
-          documentId={documentId}
-          onSuccess={handleSuccess}
-          onCancel={onClose}
-        />
+        <NewVersionForm documentId={documentId} onSuccess={handleSuccess} onCancel={onClose} />
       </div>
     </dialog>,
-    document.body
+    document.body,
   )
 }
 

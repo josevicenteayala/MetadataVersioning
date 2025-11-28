@@ -3,7 +3,11 @@ import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
 import { httpClient } from '@services/api/httpClient'
 import { useVersionHistory } from '@features/versions/api/useVersionHistory'
-import { VersionHistoryTable, VersionDetailDrawer, CreateVersionModal } from '@features/versions/components'
+import {
+  VersionHistoryTable,
+  VersionDetailDrawer,
+  CreateVersionModal,
+} from '@features/versions/components'
 import type { MetadataVersion, SortColumn, SortDirection } from '@features/versions/types'
 import type { MetadataDocumentResponse } from '@services/generated/models/MetadataDocumentResponse'
 

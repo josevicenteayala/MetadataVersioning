@@ -136,7 +136,7 @@ A business user creating a new version often wants to start with the current act
 - **D-001**: Backend API must be running and accessible at the correct endpoint
 - **D-002**: User must be authenticated with valid session credentials
 - **D-003**: Document must exist in the system before versions can be created
-- **D-004**: React Query (TanStack Query) must be configured for cache management
+- **D-004**: Data caching and synchronization system must be configured for cache management
 - **D-005**: Toast notification service must be initialized and functional
 
 ## Out of Scope *(mandatory)*

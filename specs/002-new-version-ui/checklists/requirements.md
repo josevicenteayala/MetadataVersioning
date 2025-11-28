@@ -49,7 +49,7 @@
 - ✅ Acceptance scenarios follow Given-When-Then format with clear outcomes
 - ✅ Edge cases cover error scenarios, validation, network issues, permissions
 - ✅ Out of Scope section clearly defines what's not included
-- ✅ Dependencies explicitly list backend API, authentication, React Query config
+- ❌ Dependencies list includes "React Query config" (implementation detail) – violates technology-agnostic criteria (see line 48)
 
 ### Feature Readiness Review
 

@@ -81,7 +81,7 @@ A business user creating a new version often wants to start with the current act
 - **FR-006**: System MUST validate that payload is a JSON object (not array or primitive)
 - **FR-007**: System MUST validate that change summary is not empty and under 500 characters
 - **FR-008**: System MUST call POST \`/api/v1/metadata/{type}/{name}/versions\` endpoint to create version
-- **FR-009**: System MUST send payload as \`payload\` field and summary as \`changeSummary\` field in request body
+- **FR-009**: System MUST send JSON payload as \`content\` field and summary as \`changeSummary\` field in request body (backend API contract uses \`content\` not \`payload\`)
 - **FR-010**: System MUST display success toast notification when version is created successfully
 - **FR-011**: System MUST invalidate and refresh version history query cache after successful creation
 - **FR-012**: System MUST close the form modal after successful version creation
@@ -112,7 +112,7 @@ A business user creating a new version often wants to start with the current act
 ### Measurable Outcomes
 
 - **SC-001**: Users can create a new document version in under 30 seconds from opening the form to seeing success confirmation
-- **SC-002**: 95% of version creation attempts with valid JSON succeed on first try (without validation errors)
+- **SC-002**: 95% of version creation attempts with valid JSON succeed on first try (without validation errors) - Measured over 100+ test submissions across 3+ user cohorts during acceptance testing; excludes intentional error scenario testing
 - **SC-003**: Version history table updates within 1 second after successful version creation
 - **SC-004**: Users can format messy JSON payload with one button click, reducing manual formatting time
 - **SC-005**: Inline validation catches JSON syntax errors before submission, reducing failed API calls by 80%

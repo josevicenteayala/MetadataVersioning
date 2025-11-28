@@ -386,6 +386,12 @@ export const CreateDocumentForm = ({ onSuccess, onCancel }: CreateDocumentFormPr
             Optional description of this version (max 500 characters)
           </div>
         )}
+        <div
+          className="create-document-form__charcount text-xs text-gray-500 mt-1"
+          aria-live="polite"
+        >
+          {formState.changeSummary.length} / 500
+        </div>
       </div>
 
       {/* Form Actions */}

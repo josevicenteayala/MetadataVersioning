@@ -275,8 +275,8 @@ export const CreateDocumentForm = ({ onSuccess, onCancel }: CreateDocumentFormPr
       </h2>
 
       <div className="create-document-form__info">
-        <strong>Tip:</strong> This form is for brand-new type/name combinations. To change an existing
-        document, open it and create a new version instead of creating another document.
+        <strong>Tip:</strong> This form is for brand-new type/name combinations. To change an
+        existing document, open it and create a new version instead of creating another document.
       </div>
 
       {/* General error message */}

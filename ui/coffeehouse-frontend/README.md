@@ -197,7 +197,28 @@ See [docs/accessibility.md](./docs/accessibility.md) for the full audit.
 | `pnpm typecheck`     | TypeScript check      |
 | `pnpm generate:api`  | Generate API client   |
 
+## Documentation
+
+Comprehensive documentation is available in the `/docs` directory:
+
+- **[Architecture Guide](./docs/ARCHITECTURE.md)** - Frontend architecture, design patterns, and best practices
+- **[API Integration Guide](./docs/API_INTEGRATION.md)** - How to integrate with the Metadata Versioning API
+- **[Contributing Guide](./docs/CONTRIBUTING.md)** - Development workflow, code standards, and PR process
+- **[Troubleshooting Guide](./docs/TROUBLESHOOTING.md)** - Common issues and solutions
+- **[Accessibility Guide](./docs/accessibility.md)** - WCAG 2.1 compliance and accessibility features
+- **[Telemetry Documentation](./docs/telemetry.md)** - Analytics and monitoring
+
 ## Contributing
+
+Please read our [Contributing Guide](./docs/CONTRIBUTING.md) for details on:
+
+- Development workflow and branch strategy
+- Code standards and style guidelines
+- Testing requirements
+- Pull request process
+- Commit message conventions
+
+Quick start:
 
 1. Create feature branch from `main`
 2. Write tests first (TDD)

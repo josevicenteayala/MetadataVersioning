@@ -21,7 +21,7 @@ const createVersion = async (request: CreateVersionRequest): Promise<CreateVersi
   const response = await httpClient.post<CreateVersionResponse>(
     `/api/v1/metadata/${request.documentId}/versions`,
     {
-      payload: request.payload,
+      content: request.payload,
       changeSummary: request.changeSummary,
     },
   )
@@ -29,10 +29,7 @@ const createVersion = async (request: CreateVersionRequest): Promise<CreateVersi
   // Extract correlation ID from response headers
   const correlationId = response.headers['x-correlation-id'] as string | undefined
 
-  return {
-    ...response.data,
-    correlationId,
-  }
+  return correlationId ? { ...response.data, correlationId } : response.data
 }
 
 export interface UseCreateVersionOptions {
@@ -86,7 +83,7 @@ export const useCreateVersion = (options?: UseCreateVersionOptions) => {
         intent: 'success',
         title: 'Version created',
         message: `Draft v${data.versionNumber} created successfully`,
-        correlationId: data.correlationId,
+        ...(data.correlationId && { correlationId: data.correlationId }),
       })
 
       options?.onSuccess?.(data)
@@ -100,7 +97,7 @@ export const useCreateVersion = (options?: UseCreateVersionOptions) => {
         intent: 'error',
         title: 'Failed to create version',
         message: error.message,
-        correlationId,
+        ...(correlationId && { correlationId }),
       })
 
       options?.onError?.(error)

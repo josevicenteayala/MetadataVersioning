@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/prefer-nullish-coalescing */
@@ -7,7 +6,17 @@
  * Performance instrumentation for version comparison (SC-003)
  */
 
-import { telemetry } from '@services/telemetry'
+// TODO: Implement telemetry service
+// import { telemetry } from '@services/telemetry'
+
+// Stub telemetry for now
+const telemetry = {
+  track: (event: string, data: Record<string, unknown>) => {
+    if (import.meta.env.DEV) {
+      console.debug('[Telemetry]', event, data)
+    }
+  },
+}
 
 /**
  * Telemetry event names for diff operations

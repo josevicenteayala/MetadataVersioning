@@ -1,5 +1,6 @@
 package com.metadata.versioning.adapter.out.persistence.entity;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import io.hypersistence.utils.hibernate.type.json.JsonBinaryType;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -34,7 +35,7 @@ public class VersionEntity {
 
     @Type(JsonBinaryType.class)
     @Column(name = "content", nullable = false, columnDefinition = "jsonb")
-    private String content;
+    private JsonNode content;
 
     @Column(nullable = false, length = 255)
     private String author;
@@ -56,7 +57,7 @@ public class VersionEntity {
     protected VersionEntity() {
     }
 
-    public VersionEntity(Integer versionNumber, String content, String author, String changeSummary) {
+    public VersionEntity(Integer versionNumber, JsonNode content, String author, String changeSummary) {
         this.versionNumber = versionNumber;
         this.content = content;
         this.author = author;
@@ -88,11 +89,11 @@ public class VersionEntity {
         this.versionNumber = versionNumber;
     }
 
-    public String getContent() {
+    public JsonNode getContent() {
         return content;
     }
 
-    public void setContent(String content) {
+    public void setContent(JsonNode content) {
         this.content = content;
     }
 

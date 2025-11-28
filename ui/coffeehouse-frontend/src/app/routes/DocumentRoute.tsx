@@ -7,8 +7,10 @@ import { VersionHistoryTable, VersionDetailDrawer } from '@features/versions/com
 import type { MetadataVersion, SortColumn, SortDirection } from '@features/versions/types'
 import type { MetadataDocumentResponse } from '@services/generated/models/MetadataDocumentResponse'
 
-const fetchDocument = async (documentId: string): Promise<MetadataDocumentResponse> => {
-  const response = await httpClient.get<MetadataDocumentResponse>(`/api/v1/metadata/${documentId}`)
+const fetchDocument = async (type: string, name: string): Promise<MetadataDocumentResponse> => {
+  const response = await httpClient.get<MetadataDocumentResponse>(
+    `/api/v1/metadata/${type}/${name}`,
+  )
   return response.data
 }
 
@@ -51,7 +53,8 @@ const sortVersions = (
 
 const DocumentRoute = () => {
   const navigate = useNavigate()
-  const { documentId } = useParams<{ documentId: string }>()
+  const { type, name } = useParams<{ type: string; name: string }>()
+  const documentId = type && name ? `${type}/${name}` : undefined
   const [searchParams, setSearchParams] = useSearchParams()
 
   // Sorting state
@@ -69,9 +72,9 @@ const DocumentRoute = () => {
     isError: isDocumentError,
     error: documentError,
   } = useQuery({
-    queryKey: ['document', documentId],
-    queryFn: () => fetchDocument(documentId!),
-    enabled: Boolean(documentId),
+    queryKey: ['document', type, name],
+    queryFn: () => fetchDocument(type!, name!),
+    enabled: Boolean(type && name),
   })
 
   // Fetch version history
@@ -102,6 +105,8 @@ const DocumentRoute = () => {
 
   // Use linked version as initial selection when drawer is closed
   const effectiveSelectedVersion = selectedVersion ?? linkedVersion
+  const activeVersion = versions.find((v) => v.status === 'active')
+  const activeVersionNumber = document?.activeVersion ?? activeVersion?.versionNumber ?? null
 
   // Handle sort
   const handleSort = useCallback(
@@ -134,6 +139,21 @@ const DocumentRoute = () => {
     setSearchParams({})
     setCorrelationId(null)
   }, [setSearchParams])
+
+  const navigateToCompare = useCallback(
+    (version: MetadataVersion) => {
+      if (!documentId || !activeVersionNumber) {
+        return
+      }
+      const params = new URLSearchParams({
+        documentId,
+        left: activeVersionNumber.toString(),
+        right: version.versionNumber.toString(),
+      })
+      void navigate(`/compare?${params.toString()}`)
+    },
+    [activeVersionNumber, documentId, navigate],
+  )
 
   // Navigate back to dashboard
   const handleBackToDashboard = useCallback(() => {
@@ -236,7 +256,7 @@ const DocumentRoute = () => {
           onSort={handleSort}
           sortBy={sortBy}
           sortDir={sortDir}
-          highlightedVersionId={linkedVersionId ?? undefined}
+          {...(linkedVersionId && { highlightedVersionId: linkedVersionId })}
         />
       </section>
 
@@ -246,6 +266,8 @@ const DocumentRoute = () => {
         isOpen={effectiveSelectedVersion !== null}
         onClose={handleCloseDrawer}
         correlationId={correlationId}
+        onCompare={navigateToCompare}
+        hasActiveVersion={Boolean(activeVersionNumber)}
       />
     </div>
   )

@@ -4,7 +4,8 @@
 /* eslint-disable */
 import axios from 'axios'
 import type { AxiosError, AxiosRequestConfig, AxiosResponse, AxiosInstance } from 'axios'
-import FormData from 'form-data'
+// Browser environment uses native FormData
+// import FormData from 'form-data'
 
 import { ApiError } from './ApiError'
 import type { ApiRequestOptions } from './ApiRequestOptions'
@@ -152,7 +153,7 @@ export const resolve = async <T>(
 export const getHeaders = async (
   config: OpenAPIConfig,
   options: ApiRequestOptions,
-  formData?: FormData,
+  _formData?: FormData,
 ): Promise<Record<string, string>> => {
   const [token, username, password, additionalHeaders] = await Promise.all([
     resolve(options, config.TOKEN),
@@ -161,7 +162,8 @@ export const getHeaders = async (
     resolve(options, config.HEADERS),
   ])
 
-  const formHeaders = (typeof formData?.getHeaders === 'function' && formData?.getHeaders()) || {}
+  // Native browser FormData doesn't have getHeaders method (that's Node.js specific)
+  const formHeaders = {}
 
   const headers = Object.entries({
     Accept: 'application/json',

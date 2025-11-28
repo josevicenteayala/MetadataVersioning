@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { httpClient } from '@services/api/httpClient'
 import { emitToast } from '@services/feedback/toastBus'
-import { sessionStore } from '@services/auth/sessionStore'
+import { sessionStore, useSessionStore } from '@services/auth/sessionStore'
 import { versionHistoryKeys } from './useVersionHistory'
 
 export interface ActivateVersionRequest {
@@ -23,16 +23,19 @@ export interface ActivateVersionResponse {
 const activateVersion = async (
   request: ActivateVersionRequest,
 ): Promise<ActivateVersionResponse> => {
+  // Split documentId (e.g., "config/app-settings") into type and name
+  const [type, name] = request.documentId.split('/')
+  if (!type || !name) {
+    throw new Error(`Invalid documentId format: ${request.documentId}. Expected format: type/name`)
+  }
+
   const response = await httpClient.post<ActivateVersionResponse>(
-    `/api/v1/metadata/${request.documentId}/versions/${request.versionId}/activate`,
+    `/api/v1/metadata/${type}/${name}/versions/${request.versionId}/activate`,
   )
 
   const correlationId = response.headers['x-correlation-id'] as string | undefined
 
-  return {
-    ...response.data,
-    correlationId,
-  }
+  return correlationId ? { ...response.data, correlationId } : response.data
 }
 
 export interface UseActivateVersionOptions {
@@ -65,8 +68,14 @@ export const useActivateVersion = (options?: UseActivateVersionOptions) => {
     mutationFn: async (request: ActivateVersionRequest) => {
       // Check role before making request
       const role = sessionStore.getState().role
-      if (role !== 'admin') {
+      if (role && role !== 'admin') {
         throw new Error('Only administrators can activate versions')
+      }
+
+      // Require credentials for activation (backend enforces auth)
+      const credentials = sessionStore.getState().credentials
+      if (!credentials) {
+        throw new Error('Credentials are required to activate versions. Add them in Settings.')
       }
 
       return activateVersion(request)
@@ -95,7 +104,7 @@ export const useActivateVersion = (options?: UseActivateVersionOptions) => {
         message: data.previousActiveVersionId
           ? `Version activated. Previous active version has been demoted.`
           : 'Version is now active.',
-        correlationId: data.correlationId,
+        ...(data.correlationId && { correlationId: data.correlationId }),
       })
 
       options?.onSuccess?.(data)
@@ -108,7 +117,7 @@ export const useActivateVersion = (options?: UseActivateVersionOptions) => {
         intent: 'error',
         title: 'Activation failed',
         message: error.message,
-        correlationId,
+        ...(correlationId && { correlationId }),
       })
 
       options?.onError?.(error)
@@ -120,7 +129,11 @@ export const useActivateVersion = (options?: UseActivateVersionOptions) => {
  * Checks if the current user can activate versions.
  */
 export const useCanActivate = (): boolean => {
-  const role = sessionStore.getState().role
+  const role = useSessionStore((state) => state.role)
+  if (!role) {
+    // If role has not been validated yet, allow and let API enforce permissions
+    return true
+  }
   return role === 'admin'
 }
 

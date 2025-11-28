@@ -14,6 +14,8 @@ import com.metadata.versioning.domain.validator.JsonStructureValidator;
 import com.metadata.versioning.domain.validator.SchemaValidator;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
 
 import java.util.List;
 
@@ -50,10 +52,14 @@ public class VersionManagementService implements CreateVersionUseCase, GetVersio
         }
 
         // Create first version
+        String summary = command.changeSummary() != null && !command.changeSummary().isBlank()
+                ? command.changeSummary()
+                : "Initial version";
+
         Version firstVersion = Version.createFirst(
                 command.content(),
                 command.author(),
-                "Initial version"
+                summary
         );
 
         // Create document with first version
@@ -134,6 +140,14 @@ public class VersionManagementService implements CreateVersionUseCase, GetVersio
 
     @Override
     public void activateVersion(String type, String name, Integer versionNumber) {
+        // Ensure no other documents of the same type remain active (FR-006 cross-document guard)
+        repository.findAllByType(type, PageRequest.of(0, Integer.MAX_VALUE)).forEach(doc -> {
+            if (!doc.getName().equals(name)) {
+                doc.deactivateActiveVersions();
+                repository.update(doc);
+            }
+        });
+
         // Find document
         MetadataDocument document = repository.findByTypeAndName(type, name)
                 .orElseThrow(() -> new VersionNotFoundException(type, name));

@@ -38,6 +38,8 @@ export interface VersionDetailDrawerProps {
   isOpen: boolean
   onClose: () => void
   correlationId?: string | null
+  onCompare?: (version: MetadataVersion) => void
+  hasActiveVersion?: boolean
 }
 
 export interface ActivationEligibility {

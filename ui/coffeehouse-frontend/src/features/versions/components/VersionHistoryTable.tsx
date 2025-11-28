@@ -173,37 +173,37 @@ const VersionHistoryTable = ({
             <SortableHeader
               column="versionNumber"
               label="Version"
-              currentSort={sortBy}
-              currentDir={sortDir}
-              onSort={onSort}
+              {...(sortBy && { currentSort: sortBy })}
+              {...(sortDir && { currentDir: sortDir })}
+              {...(onSort && { onSort })}
             />
             <SortableHeader
               column="status"
               label="Status"
-              currentSort={sortBy}
-              currentDir={sortDir}
-              onSort={onSort}
+              {...(sortBy && { currentSort: sortBy })}
+              {...(sortDir && { currentDir: sortDir })}
+              {...(onSort && { onSort })}
             />
             <SortableHeader
               column="createdBy"
               label="Author"
-              currentSort={sortBy}
-              currentDir={sortDir}
-              onSort={onSort}
+              {...(sortBy && { currentSort: sortBy })}
+              {...(sortDir && { currentDir: sortDir })}
+              {...(onSort && { onSort })}
             />
             <SortableHeader
               column="createdAt"
               label="Created"
-              currentSort={sortBy}
-              currentDir={sortDir}
-              onSort={onSort}
+              {...(sortBy && { currentSort: sortBy })}
+              {...(sortDir && { currentDir: sortDir })}
+              {...(onSort && { onSort })}
             />
             <SortableHeader
               column="activatedAt"
               label="Activated"
-              currentSort={sortBy}
-              currentDir={sortDir}
-              onSort={onSort}
+              {...(sortBy && { currentSort: sortBy })}
+              {...(sortDir && { currentDir: sortDir })}
+              {...(onSort && { onSort })}
             />
             <th scope="col">Summary</th>
           </tr>

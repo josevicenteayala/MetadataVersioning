@@ -1,25 +1,41 @@
-import { useCallback, useState } from 'react'
+import { useCallback, useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import DashboardHero from '@features/dashboard/components/DashboardHero'
 import DocumentsTable from '@features/documents/components/DocumentsTable'
+import CreateDocumentModal from '@features/documents/components/CreateDocumentModal'
 import { useDocumentsPage } from '@features/documents/api/useDocumentsPage'
 import type { MetadataDocumentResponse } from '@services/generated/models/MetadataDocumentResponse'
 
 const DashboardRoute = () => {
   const navigate = useNavigate()
-  const [cursor, setCursor] = useState<string | null>(null)
-  const { data, isLoading, isFetching } = useDocumentsPage({ limit: 20, cursor })
+  const [page, setPage] = useState(0)
+  const [searchTerm, setSearchTerm] = useState('')
+  const [debouncedSearch, setDebouncedSearch] = useState('')
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false)
+
+  // Debounce search input
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearch(searchTerm)
+      setPage(0) // Reset to first page on new search
+    }, 300)
+    return () => clearTimeout(timer)
+  }, [searchTerm])
+
+  const { data, isLoading, isFetching } = useDocumentsPage({
+    page,
+    size: 20,
+    search: debouncedSearch,
+  })
 
   const handleNext = () => {
-    if (data?.hasMore && data.cursor) {
-      setCursor(data.cursor)
+    if (data?.hasMore) {
+      setPage((p) => p + 1)
     }
   }
 
   const handlePrev = () => {
-    // Cursor-based APIs typically don't support backward navigation
-    // For a real implementation, track page stack or switch to offset pagination
-    setCursor(null)
+    setPage((p) => Math.max(0, p - 1))
   }
 
   const handleRowClick = useCallback(
@@ -29,9 +45,21 @@ const DashboardRoute = () => {
     [navigate],
   )
 
+  const handleOpenCreateModal = useCallback(() => {
+    setIsCreateModalOpen(true)
+  }, [])
+
+  const handleCloseCreateModal = useCallback(() => {
+    setIsCreateModalOpen(false)
+  }, [])
+
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(e.target.value)
+  }
+
   return (
     <div className="dashboard-route">
-      <DashboardHero />
+      <DashboardHero onCreateDocument={handleOpenCreateModal} />
 
       <section className="dashboard-route__list">
         <header className="dashboard-route__list-header">
@@ -41,7 +69,8 @@ const DashboardRoute = () => {
             placeholder="Search documents…"
             className="dashboard-route__search"
             aria-label="Search documents"
-            disabled // Search wiring pending
+            value={searchTerm}
+            onChange={handleSearchChange}
           />
         </header>
 
@@ -52,11 +81,11 @@ const DashboardRoute = () => {
         />
 
         <nav className="dashboard-route__pagination" aria-label="Pagination">
-          <button type="button" onClick={handlePrev} disabled={!cursor || isFetching}>
+          <button type="button" onClick={handlePrev} disabled={page === 0 || isFetching}>
             Previous
           </button>
           <span data-testid="pagination-info">
-            {isFetching ? 'Loading…' : `${data?.documents.length ?? 0} shown`}
+            {isFetching ? 'Loading…' : `${data?.totalElements ?? 0} documents`}
           </span>
           <button
             type="button"
@@ -68,6 +97,9 @@ const DashboardRoute = () => {
           </button>
         </nav>
       </section>
+
+      {/* Create Document Modal */}
+      <CreateDocumentModal isOpen={isCreateModalOpen} onClose={handleCloseCreateModal} />
     </div>
   )
 }

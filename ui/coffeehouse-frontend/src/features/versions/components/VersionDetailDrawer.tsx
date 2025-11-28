@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react'
 import type { MetadataVersion, VersionDetailDrawerProps } from '../types'
 import { getActivationEligibility } from '../types'
+import ActivationControls from './ActivationControls'
 
 const formatDateTime = (iso: string): string => {
   return new Date(iso).toLocaleString('en-US', {
@@ -70,6 +71,8 @@ const VersionDetailDrawer = ({
   isOpen,
   onClose,
   correlationId,
+  onCompare,
+  hasActiveVersion = false,
 }: VersionDetailDrawerProps) => {
   const drawerRef = useRef<HTMLDivElement>(null)
   const closeButtonRef = useRef<HTMLButtonElement>(null)
@@ -191,12 +194,14 @@ const VersionDetailDrawer = ({
 
         {/* Footer with actions */}
         <footer className="version-detail-drawer__footer">
-          {version.status !== 'active' && version.status !== 'archived' && (
-            <button type="button" className="btn btn--primary">
-              Activate Version
-            </button>
-          )}
-          <button type="button" className="btn btn--outline">
+          <ActivationControls version={version} onActivated={onClose} />
+          <button
+            type="button"
+            className="btn btn--outline"
+            onClick={() => onCompare?.(version)}
+            disabled={!onCompare || !hasActiveVersion}
+            title={!hasActiveVersion ? 'No active version to compare against' : undefined}
+          >
             Compare with Active
           </button>
           <button type="button" className="btn btn--ghost" onClick={onClose}>

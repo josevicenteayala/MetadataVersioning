@@ -3,7 +3,12 @@ import { useDashboardStats } from '@features/dashboard/api/useDashboardStats'
 
 const formatNumber = (value: number) => new Intl.NumberFormat('en-US').format(value)
 
-const DashboardHero = () => {
+export interface DashboardHeroProps {
+  /** Callback invoked when user clicks the create document CTA */
+  onCreateDocument?: () => void
+}
+
+const DashboardHero = ({ onCreateDocument }: DashboardHeroProps) => {
   const { data, isLoading } = useDashboardStats()
   const hasDocuments = (data?.totalDocuments ?? 0) > 0
 
@@ -49,7 +54,12 @@ const DashboardHero = () => {
           <p className="eyebrow">Dashboard</p>
           <h2>No metadata documents yet</h2>
           <p>Share credentials and create your first metadata draft to light up this view.</p>
-          <button type="button" className="dashboard-hero__cta">
+          <button
+            type="button"
+            className="dashboard-hero__cta"
+            onClick={onCreateDocument}
+            aria-label="Add first metadata document"
+          >
             Add first metadata document
           </button>
         </div>
@@ -69,7 +79,12 @@ const DashboardHero = () => {
             </p>
           ) : null}
         </div>
-        <button type="button" className="dashboard-hero__cta">
+        <button
+          type="button"
+          className="dashboard-hero__cta"
+          onClick={onCreateDocument}
+          aria-label="Create metadata draft"
+        >
           Create metadata draft
         </button>
       </header>

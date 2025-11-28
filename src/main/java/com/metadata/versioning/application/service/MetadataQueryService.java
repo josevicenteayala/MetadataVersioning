@@ -53,4 +53,18 @@ public class MetadataQueryService implements GetActiveVersionUseCase {
     public Page<MetadataDocument> listDocumentsByType(String type, Pageable pageable) {
         return repository.findAllByType(type, pageable);
     }
+
+    /**
+     * List metadata documents filtered by name (case insensitive) with pagination.
+     */
+    public Page<MetadataDocument> listDocumentsByName(String name, Pageable pageable) {
+        return repository.findAllByNameContainingIgnoreCase(name, pageable);
+    }
+
+    /**
+     * Get metadata document by type and name.
+     */
+    public Optional<MetadataDocument> getMetadataDocument(String type, String name) {
+        return repository.findByTypeAndName(type, name);
+    }
 }

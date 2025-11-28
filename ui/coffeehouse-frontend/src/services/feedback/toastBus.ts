@@ -31,10 +31,13 @@ class ToastBus {
 export const toastBus = new ToastBus()
 
 const buildPayload = (input: Omit<ToastPayload, 'id' | 'createdAt'>): ToastPayload => ({
-  ...input,
   id: crypto.randomUUID(),
   createdAt: new Date().toISOString(),
-  autoDismissMs: input.autoDismissMs ?? 6000,
+  title: input.title,
+  message: input.message,
+  intent: input.intent,
+  ...(input.correlationId && { correlationId: input.correlationId }),
+  ...(input.autoDismissMs !== undefined && { autoDismissMs: input.autoDismissMs }),
 })
 
 export const emitToast = (input: {
@@ -48,15 +51,20 @@ export const emitToast = (input: {
     title: input.title,
     message: input.message,
     intent: input.intent ?? 'info',
-    correlationId: input.correlationId,
-    autoDismissMs: input.autoDismissMs,
+    ...(input.correlationId && { correlationId: input.correlationId }),
+    ...(input.autoDismissMs && { autoDismissMs: input.autoDismissMs }),
   })
   toastBus.publish(payload)
   return payload.id
 }
 
 export const emitErrorToast = (message: string, correlationId?: string) =>
-  emitToast({ title: 'Something went wrong', message, correlationId, intent: 'error' })
+  emitToast({
+    title: 'Something went wrong',
+    message,
+    intent: 'error',
+    ...(correlationId && { correlationId }),
+  })
 
 // T039: Diff-specific toast helpers
 
@@ -73,7 +81,7 @@ export const emitDiffBreakingChangeWarning = (details: {
     title: 'Breaking Change Detected',
     message: `Field "${details.path}" changed type from ${details.oldType} to ${details.newType}. This may cause compatibility issues.`,
     intent: 'warning',
-    correlationId: details.correlationId,
+    ...(details.correlationId && { correlationId: details.correlationId }),
     autoDismissMs: 10000, // Longer for important warnings
   })
 
@@ -85,7 +93,7 @@ export const emitDiffPayloadWarning = (sizeKb: number, correlationId?: string) =
     title: 'Large Payload',
     message: `Version payload is ${sizeKb.toFixed(1)}KB. Diff computation may be slow.`,
     intent: 'warning',
-    correlationId,
+    ...(correlationId && { correlationId }),
     autoDismissMs: 8000,
   })
 
@@ -97,7 +105,7 @@ export const emitDiffErrorToast = (errorCode: string, message: string, correlati
     title: `Diff Error: ${errorCode}`,
     message,
     intent: 'error',
-    correlationId,
+    ...(correlationId && { correlationId }),
     autoDismissMs: 10000,
   })
 

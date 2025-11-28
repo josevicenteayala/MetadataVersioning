@@ -136,6 +136,26 @@ public class MetadataDocument {
     }
 
     /**
+     * Deactivate any active versions in this document.
+     */
+    public void deactivateActiveVersions() {
+        if (getActiveVersion().isEmpty()) {
+            return;
+        }
+        List<Version> updatedVersions = new ArrayList<>();
+        for (Version v : versions) {
+            if (v.isActive()) {
+                updatedVersions.add(v.withActiveStatus(false));
+            } else {
+                updatedVersions.add(v);
+            }
+        }
+        versions.clear();
+        versions.addAll(updatedVersions);
+        this.updatedAt = Instant.now();
+    }
+
+    /**
      * Get all versions ordered by version number (FR-009).
      */
     public List<Version> getAllVersions() {

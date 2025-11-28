@@ -75,7 +75,8 @@ class MetadataVersioningE2ETest {
         CreateMetadataRequest createRequest = new CreateMetadataRequest(
                 "loyalty-program",
                 "spring-rewards-2024",
-                objectMapper.readTree(initialContent)
+                objectMapper.readTree(initialContent),
+                "Initial version"
         );
 
         mockMvc.perform(post("/api/v1/metadata")
@@ -248,7 +249,8 @@ class MetadataVersioningE2ETest {
             CreateMetadataRequest request = new CreateMetadataRequest(
                     "campaign",
                     campaign,
-                    objectMapper.readTree(content)
+                    objectMapper.readTree(content),
+                    "Initial version"
             );
 
             mockMvc.perform(post("/api/v1/metadata")
@@ -285,7 +287,8 @@ class MetadataVersioningE2ETest {
         CreateMetadataRequest validRequest = new CreateMetadataRequest(
                 "large-data",
                 "size-limit-test",
-                objectMapper.readTree(largeContent.toString())
+                objectMapper.readTree(largeContent.toString()),
+                "Initial version"
         );
 
         // Should succeed
@@ -305,7 +308,8 @@ class MetadataVersioningE2ETest {
         CreateMetadataRequest oversizedRequest = new CreateMetadataRequest(
                 "large-data",
                 "oversized-test",
-                objectMapper.readTree(oversizedContent.toString())
+                objectMapper.readTree(oversizedContent.toString()),
+                "Initial version"
         );
 
         // Should fail
@@ -351,7 +355,8 @@ class MetadataVersioningE2ETest {
         CreateMetadataRequest createRequest = new CreateMetadataRequest(
                 "campaign",
                 campaignName,
-                objectMapper.readTree(initialCampaign)
+                objectMapper.readTree(initialCampaign),
+                "Initial version"
         );
 
         mockMvc.perform(post("/api/v1/metadata")
@@ -491,7 +496,8 @@ class MetadataVersioningE2ETest {
         CreateMetadataRequest createRequest = new CreateMetadataRequest(
                 "pricing-config",
                 "standard-plan",
-                objectMapper.readTree(v1Content)
+                objectMapper.readTree(v1Content),
+                "Initial version"
         );
 
         mockMvc.perform(post("/api/v1/metadata")

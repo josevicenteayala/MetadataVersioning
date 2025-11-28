@@ -46,8 +46,9 @@ const readCorrelationId = (response?: AxiosResponse): string | undefined => {
     return undefined
   }
 
-  const headers = AxiosHeaders.from(response.headers)
-  return headers.get(correlationHeaderName) ?? undefined
+  const headers = new AxiosHeaders(response.headers as Record<string, string>)
+  const value = headers.get(correlationHeaderName)
+  return typeof value === 'string' ? value : undefined
 }
 
 const setCorrelationId = (response?: AxiosResponse): void => {
@@ -119,7 +120,7 @@ client.interceptors.response.use(
         intent: 'error',
         title: 'Invalid server response',
         message: 'The server returned an unexpected response. Please try again or contact support.',
-        correlationId,
+        ...(correlationId && { correlationId }),
       })
       return Promise.reject(error)
     }
@@ -134,7 +135,7 @@ client.interceptors.response.use(
         intent: 'warning',
         title: 'Session expired',
         message: 'Credentials cleared after unauthorized response. Please re-enter in Settings.',
-        correlationId,
+        ...(correlationId && { correlationId }),
       })
 
       // T045: Invoke registered callback for credential prompt
@@ -152,7 +153,7 @@ client.interceptors.response.use(
         title: 'Permission denied',
         message:
           'You do not have permission to perform this action. Contact your administrator for access.',
-        correlationId,
+        ...(correlationId && { correlationId }),
       })
 
       if (onForbiddenCallback) {
@@ -169,7 +170,7 @@ client.interceptors.response.use(
         title: 'Server error',
         message:
           'A server error occurred. Please try again using the refresh button or reload the page.',
-        correlationId,
+        ...(correlationId && { correlationId }),
       })
     }
 

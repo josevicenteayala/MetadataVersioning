@@ -67,7 +67,7 @@ async function computeDiff(left: unknown, right: unknown): Promise<unknown> {
 
 async function fetchVersion(documentId: string, versionId: string): Promise<VersionResponse> {
   const response = await apiClient.get<VersionResponse>(
-    `/api/v1/documents/${documentId}/versions/${versionId}`,
+    `/api/v1/metadata/${documentId}/versions/${versionId}`,
   )
   return response.data
 }
@@ -89,14 +89,14 @@ async function fetchVersionDiff(
   ])
 
   // Calculate payload sizes
-  const leftPayloadSize = getPayloadSize(leftVersion.payload)
-  const rightPayloadSize = getPayloadSize(rightVersion.payload)
+  const leftPayloadSize = getPayloadSize(leftVersion.content)
+  const rightPayloadSize = getPayloadSize(rightVersion.content)
   const exceedsLimit = leftPayloadSize > MAX_PAYLOAD_SIZE || rightPayloadSize > MAX_PAYLOAD_SIZE
 
   // Compute diff (skip if payload too large)
   let delta: unknown = null
   if (!exceedsLimit) {
-    delta = await computeDiff(leftVersion.payload, rightVersion.payload)
+    delta = await computeDiff(leftVersion.content, rightVersion.content)
   }
 
   const diffComputeTime = performance.now() - startTime

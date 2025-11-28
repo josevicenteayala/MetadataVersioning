@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import { httpClient } from '@services/api/httpClient'
-import type { MetadataVersion, VersionHistoryResult } from '../types'
+import type { VersionResponse } from '@services/generated/models/VersionResponse'
+import type { MetadataVersion, VersionHistoryResult, VersionStatus } from '../types'
 
 /**
  * Query key factory for version history queries.
@@ -11,15 +12,36 @@ export const versionHistoryKeys = {
   byDocument: (documentId: string) => [...versionHistoryKeys.all, 'document', documentId] as const,
 }
 
+const mapToMetadataVersion = (v: VersionResponse): MetadataVersion => {
+  let status: VersionStatus = 'draft'
+  if (v.isActive) {
+    status = 'active'
+  } else if (v.publishingState) {
+    status = v.publishingState.toLowerCase() as VersionStatus
+  }
+
+  return {
+    versionId: v.id?.toString() ?? `v${v.versionNumber}`,
+    documentId: `${v.type}/${v.name}`,
+    versionNumber: v.versionNumber ?? 0,
+    status,
+    createdBy: v.author ?? 'Unknown',
+    createdAt: v.createdAt ?? new Date().toISOString(),
+    activatedAt: null, // Not provided by backend yet
+    changeSummary: v.changeSummary ?? '',
+    payload: v.content ?? {},
+  }
+}
+
 /**
  * Fetches version history for a specific document.
  * Results are cached per document ID.
  */
 const fetchVersionHistory = async (documentId: string): Promise<MetadataVersion[]> => {
-  const response = await httpClient.get<MetadataVersion[]>(
+  const response = await httpClient.get<VersionResponse[]>(
     `/api/v1/metadata/${documentId}/versions`,
   )
-  return response.data
+  return response.data.map(mapToMetadataVersion)
 }
 
 export interface UseVersionHistoryOptions {

@@ -3,6 +3,7 @@ package com.metadata.versioning.adapter.in.rest;
 import com.metadata.versioning.adapter.in.rest.dto.CreateMetadataRequest;
 import com.metadata.versioning.adapter.in.rest.dto.CreateVersionRequest;
 import com.metadata.versioning.adapter.in.rest.dto.VersionResponse;
+import com.metadata.versioning.application.port.in.ActivateVersionUseCase;
 import com.metadata.versioning.application.port.in.CreateVersionUseCase;
 import com.metadata.versioning.application.port.in.GetActiveVersionUseCase;
 import com.metadata.versioning.application.port.in.GetVersionHistoryUseCase;
@@ -34,15 +35,18 @@ public class MetadataController {
     private final CreateVersionUseCase createVersionUseCase;
     private final GetVersionHistoryUseCase getVersionHistoryUseCase;
     private final GetActiveVersionUseCase getActiveVersionUseCase;
+    private final ActivateVersionUseCase activateVersionUseCase;
     private final MetadataQueryService metadataQueryService;
 
     public MetadataController(CreateVersionUseCase createVersionUseCase,
                              GetVersionHistoryUseCase getVersionHistoryUseCase,
                              GetActiveVersionUseCase getActiveVersionUseCase,
+                             ActivateVersionUseCase activateVersionUseCase,
                              MetadataQueryService metadataQueryService) {
         this.createVersionUseCase = createVersionUseCase;
         this.getVersionHistoryUseCase = getVersionHistoryUseCase;
         this.getActiveVersionUseCase = getActiveVersionUseCase;
+        this.activateVersionUseCase = activateVersionUseCase;
         this.metadataQueryService = metadataQueryService;
     }
 
@@ -71,7 +75,8 @@ public class MetadataController {
                         request.type(),
                         request.name(),
                         request.content(),
-                        author
+                        author,
+                        request.changeSummary()
                 );
 
         Version version = createVersionUseCase.createFirstVersion(command);
@@ -120,6 +125,38 @@ public class MetadataController {
         VersionResponse response = VersionResponse.fromDomain(version, type, name);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+
+    /**
+     * Activate a specific version (FR-006).
+     * Requires authentication.
+     */
+    @PostMapping("/{type}/{name}/versions/{versionNumber}/activate")
+    @Operation(
+        summary = "Activate a version",
+        description = "Make a specific version the active one",
+        security = @SecurityRequirement(name = "BasicAuth")
+    )
+    @ApiResponse(responseCode = "200", description = "Version activated")
+    @ApiResponse(responseCode = "404", description = "Version or document not found")
+    @ApiResponse(responseCode = "401", description = "Authentication required")
+    public ResponseEntity<ActivateVersionResponse> activateVersion(
+            @PathVariable String type,
+            @PathVariable String name,
+            @PathVariable Integer versionNumber) {
+
+        activateVersionUseCase.activateVersion(type, name, versionNumber);
+        
+        ActivateVersionResponse response = new ActivateVersionResponse(
+            type + "/" + name,
+            "v" + versionNumber,
+            null,
+            java.util.UUID.randomUUID().toString()
+        );
+        
+        return ResponseEntity.ok()
+                .header("X-Correlation-ID", response.correlationId())
+                .body(response);
     }
 
     /**
@@ -220,6 +257,32 @@ public class MetadataController {
     }
 
     /**
+     * Get metadata document details.
+     */
+    @GetMapping("/{type}/{name}")
+    @Operation(summary = "Get metadata document details")
+    @ApiResponse(responseCode = "200", description = "Document details")
+    @ApiResponse(responseCode = "404", description = "Document not found")
+    public ResponseEntity<MetadataDocumentSummary> getMetadataDocument(
+            @PathVariable String type,
+            @PathVariable String name) {
+
+        return metadataQueryService.getMetadataDocument(type, name)
+                .map(doc -> new MetadataDocumentSummary(
+                    doc.getType() + "/" + doc.getName(),
+                    doc.getType(),
+                    doc.getName(),
+                    doc.getVersionCount(),
+                    doc.getActiveVersion().map(com.metadata.versioning.domain.model.Version::versionNumber).orElse(null),
+                    doc.getActiveVersion().isPresent(),
+                    doc.getCreatedAt(),
+                    doc.getUpdatedAt()
+                ))
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    /**
      * List all metadata documents with pagination (FR-015).
      * Public access - no authentication required (FR-026).
      */
@@ -232,24 +295,30 @@ public class MetadataController {
     public ResponseEntity<org.springframework.data.domain.Page<MetadataDocumentSummary>> listDocuments(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "20") int size,
-            @RequestParam(required = false) String type) {
+            @RequestParam(required = false) String type,
+            @RequestParam(required = false) String search) {
 
         org.springframework.data.domain.Pageable pageable =
-                org.springframework.data.domain.PageRequest.of(page, size);
+                org.springframework.data.domain.PageRequest.of(page, size, 
+                    org.springframework.data.domain.Sort.by("createdAt").descending());
 
         org.springframework.data.domain.Page<MetadataDocument> documents;
         if (type != null && !type.isBlank()) {
             documents = metadataQueryService.listDocumentsByType(type, pageable);
+        } else if (search != null && !search.isBlank()) {
+            documents = metadataQueryService.listDocumentsByName(search, pageable);
         } else {
             documents = metadataQueryService.listDocuments(pageable);
         }
 
         org.springframework.data.domain.Page<MetadataDocumentSummary> response =
                 documents.map(doc -> new MetadataDocumentSummary(
+                    doc.getType() + "/" + doc.getName(),
                     doc.getType(),
                     doc.getName(),
                     doc.getVersionCount(),
-                    doc.hasActiveVersion(),
+                    doc.getActiveVersion().map(com.metadata.versioning.domain.model.Version::versionNumber).orElse(null),
+                    doc.getActiveVersion().isPresent(),
                     doc.getCreatedAt(),
                     doc.getUpdatedAt()
                 ));
@@ -261,11 +330,23 @@ public class MetadataController {
      * DTO for document list summary.
      */
     public record MetadataDocumentSummary(
+            String id,
             String type,
             String name,
             int versionCount,
+            Integer activeVersion,
             boolean hasActiveVersion,
             java.time.Instant createdAt,
             java.time.Instant updatedAt
+    ) {}
+
+    /**
+     * DTO for activation response.
+     */
+    public record ActivateVersionResponse(
+        String documentId,
+        String activatedVersionId,
+        String previousActiveVersionId,
+        String correlationId
     ) {}
 }

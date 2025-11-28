@@ -162,11 +162,37 @@
 
 ---
 
+## Phase 10: User Story 6 – Create metadata document (Priority: P1) 🎯 Core Flow
+
+**Goal**: Enable users to create new metadata documents from the dashboard via a modal/drawer form with full validation, error handling, and navigation.
+**Independent Test**: From empty dashboard, click CTA, complete form with valid data, submit, and verify navigation to document detail with refreshed stats.
+
+### Tests (write first)
+- [x] T071 [P] [US6] Create Vitest spec `ui/coffeehouse-frontend/tests/unit/documents/createDocumentForm.test.tsx` covering field validation, JSON syntax errors, and submit state management. ✅
+- [x] T072 [P] [US6] Create Vitest spec `ui/coffeehouse-frontend/tests/unit/documents/createDocumentMutation.test.tsx` covering 201/400/409/5xx response handling and cache invalidation. ✅
+- [x] T073 [P] [US6] Add Playwright journey `ui/coffeehouse-frontend/tests/e2e/create-document.spec.ts` covering happy path from dashboard CTA → form → submit → detail page navigation. ✅
+- [x] T074 [P] [US6] Add Playwright scenario `ui/coffeehouse-frontend/tests/e2e/create-document-errors.spec.ts` covering validation errors, conflict errors, and network failure recovery. ✅
+
+### Implementation
+- [x] T075 [P] [US6] Implement create document mutation hook `ui/coffeehouse-frontend/src/features/documents/api/useCreateDocument.ts` with TanStack Query mutation and dashboard stats invalidation. ✅
+- [x] T076 [US6] Create kebab-case validation utility `ui/coffeehouse-frontend/src/features/documents/utils/kebabCaseValidator.ts` with pattern matching and error messages. ✅
+- [x] T077 [US6] Build JSON payload editor component `ui/coffeehouse-frontend/src/features/documents/components/JsonPayloadEditor.tsx` with syntax validation, line numbers, and error highlighting. ✅
+- [x] T078 [US6] Implement create document form component `ui/coffeehouse-frontend/src/features/documents/forms/CreateDocumentForm.tsx` with all fields, validation states, and submit handling. ✅
+- [x] T079 [US6] Build create document modal wrapper `ui/coffeehouse-frontend/src/features/documents/components/CreateDocumentModal.tsx` with open/close state and auth guard. ✅
+- [x] T080 [US6] Wire dashboard CTAs (`DashboardHero.tsx`) to open create document modal via prop callback. ✅
+- [x] T081 [US6] Implement success navigation to `/documents/{type}/{name}` route with success toast via toast bus integration. ✅
+- [x] T082 [US6] Add auth guard check in create document modal to redirect unauthenticated users to Settings/Auth page with guidance toast. ✅
+- [x] T083 [US6] Create error mapper utility `ui/coffeehouse-frontend/src/features/documents/utils/apiErrorMapper.ts` to convert 400/409 API errors to inline form field errors. ✅
+- [x] T084 [US6] Wire cache invalidation in `ui/coffeehouse-frontend/src/features/documents/utils/cacheInvalidation.ts` to refresh dashboard stats after successful creation. ✅
+- [x] T085 [US6] Execute `pnpm lint && pnpm test` to validate all US6 unit tests pass. ✅ (194 unit tests passing)
+
+---
+
 ## Dependencies & Execution Order
 
 1. **Phase 1 → Phase 2**: Setup must finish before foundational infra.
 2. **Phase 2 → Stories**: All user stories depend on API client, auth store, toast bus, and query provider.
-3. **User Story sequencing**: Stories can begin once Phase 2 completes but should prioritize P1 (US1, US2) before P2 (US3, US4) and P3 (US5).
+3. **User Story sequencing**: Stories can begin once Phase 2 completes but should prioritize P1 (US1, US2, US6) before P2 (US3, US4) and P3 (US5).
 4. **Polish** runs after desired stories land; can start once MVP (US1) stabilizes if team capacity allows.
 
 ### Story Dependency Graph
@@ -175,24 +201,28 @@
 - US3 needs US2 history data to display new draft immediately; rely on shared cache utilities.
 - US4 requires US2 (version selections) but not US3.
 - US5 independent aside from foundational auth store.
+- US6 depends on US1 (dashboard CTAs), US2 (document detail route), US5 (auth credentials) for full flow.
 
 ### Parallel Opportunities
 - Tasks marked [P] can run concurrently (distinct files) such as lint setup vs Tailwind config.
 - After Phase 2, different developers can own US1/US2 in parallel, then US3/US4 once respective data hooks exist.
 - Test authoring tasks (Vitest/Playwright) can execute alongside component work once fixtures are ready.
+- US6 tests (T071-T074) can run in parallel with implementation tasks (T076-T084).
 
 ## Implementation Strategy
 
 1. **MVP First**: Deliver Phase 1 → Phase 2 → US1 to unblock demos of dashboard and list. Validate via T013–T019 tests.
 2. **Incremental Delivery**: Layer US2 (history) next for compliance traceability, then US3/US4 to unlock lifecycle + diff flows, finishing with US5 settings.
-3. **Parallel Team Plan**: Post-foundation, assign owners per story (e.g., Developer A: US1, Developer B: US2). Use [P] tasks to coordinate without merge conflicts.
-4. **Quality Gates**: Every story includes failing tests before implementation plus final lint/test/build sweep (T050).
+3. **Core Flow Addition**: US6 (create document) can begin after US1/US2/US5 complete to wire dashboard CTAs to the full creation flow.
+4. **Parallel Team Plan**: Post-foundation, assign owners per story (e.g., Developer A: US1, Developer B: US2). Use [P] tasks to coordinate without merge conflicts.
+5. **Quality Gates**: Every story includes failing tests before implementation plus final lint/test/build sweep (T050, T085).
 
 ## Summary
-- Total tasks: 70
-- Task counts per story: US1 (9), US2 (6), US3 (8), US4 (11), US5 (8) — remaining tasks cover setup, foundation, polish, and release readiness.
-- Parallel opportunities: 32 tasks marked [P] across setup, foundation, tests, and story implementations.
+- Total tasks: 85 (70 Phases 1-9 complete + 15 Phase 10 complete) ✅
+- Task counts per story: US1 (9), US2 (6), US3 (8), US4 (11), US5 (8), US6 (15) — remaining tasks cover setup, foundation, polish, and release readiness.
+- Parallel opportunities: 36 tasks marked [P] across setup, foundation, tests, and story implementations.
 - Independent Test Criteria: Each story lists explicit validation scenarios ensuring standalone verification.
 - Suggested MVP Scope: Complete through Phase 3 (US1). Subsequent phases extend functionality without blocking prior flows.
 - Release Readiness: Phase 9 (T063-T070) validates spec completeness, error handling coverage, and documentation.
-- Test Coverage: 150 unit tests passing, 8 e2e test files.
+- Test Coverage: 194 unit tests passing, E2E tests complete for US6.
+- Phase 10 Status: 15/15 tasks complete. ✅

@@ -99,6 +99,29 @@ Users provide and test Basic Auth credentials once per session, ensuring all API
 1. **Given** no credentials are stored, **When** the user opens Settings, **Then** they see inputs for username/password, a test connection button, and contextual guidance.
 2. **Given** credentials are saved, **When** the token expires or a call fails with 401, **Then** the UI prompts the user to re-authenticate and surfaces the latest correlation-id.
 
+---
+
+### User Story 6 - Create metadata document (Priority: P1)
+
+Metadata stewards create new metadata documents directly from the dashboard using a streamlined form experience that captures document name, type, JSON payload, and optional change summary.
+
+**Why this priority**: Document creation is the foundational action that populates the system—without it, users cannot begin managing metadata versions at all.
+
+**Independent Test**: From an empty dashboard, click the CTA, complete the form with valid data, submit, and verify navigation to the new document detail page with refreshed dashboard stats.
+
+**Acceptance Scenarios**:
+
+1. **Given** valid Basic Auth credentials are stored, **When** the user clicks "Add first metadata document" (empty state) or "Create metadata draft" (header CTA), **Then** a creation modal/drawer opens with fields for document name (kebab-case), type (kebab-case), JSON payload editor, and optional change summary.
+2. **Given** the creation form is open, **When** the user enters an invalid document name or type (not kebab-case), **Then** inline validation errors appear immediately without submitting to the server.
+3. **Given** the creation form is open, **When** the user enters invalid JSON in the payload editor, **Then** inline validation highlights the syntax error with line/character position guidance.
+4. **Given** all fields are valid, **When** the user clicks "Create Document", **Then** the CTA button becomes disabled, shows a loading indicator, and the form cannot be resubmitted until the request completes.
+5. **Given** a successful POST to /api/v1/metadata, **When** the server responds with 201 Created, **Then** the UI closes the form, navigates to the new document detail page at `/documents/{type}/{name}`, and displays a success toast with the correlation-id.
+6. **Given** a successful creation, **When** the user returns to the dashboard, **Then** the dashboard stats (total documents, drafts awaiting review) reflect the new document immediately.
+7. **Given** the server returns 409 Conflict (document already exists), **When** the response arrives, **Then** an inline error message appears on the name/type fields indicating the document already exists.
+8. **Given** the server returns 400 Bad Request (validation errors), **When** the response arrives, **Then** inline error messages appear on the relevant fields with human-readable guidance.
+9. **Given** a network failure or 5xx error occurs during submission, **When** the error is detected, **Then** an error toast appears with the correlation-id (if available) and retry guidance, the form remains open with user data intact, and the submit button re-enables.
+10. **Given** no credentials are stored, **When** the user attempts to open the creation form, **Then** they are redirected to the Settings/Auth page with guidance to authenticate first.
+
 ### Edge Cases
 
 - Empty states when no documents exist or filters remove all rows should still render the layout with guidance cards.
@@ -110,6 +133,11 @@ Users provide and test Basic Auth credentials once per session, ensuring all API
 - 403 Forbidden responses MUST display a permission denied message with guidance to contact an administrator for access.
 - When the API returns malformed or unparseable JSON responses, display a technical error toast with correlation-id and retry guidance.
 - Transient 5xx errors do not auto-retry; users must manually retry via UI controls (refresh button or page reload).
+- Document creation form must preserve user input on validation errors and network failures to prevent data loss.
+- Document name and type fields must enforce kebab-case format (lowercase letters, numbers, hyphens only, no leading/trailing hyphens).
+- JSON payload editor must handle large payloads (up to 200 KB) without performance degradation during editing.
+- Form submission must be idempotent-safe: if user double-clicks submit, only one request should be sent.
+- When navigating away from an unsaved creation form, warn users about losing their input via browser beforeunload event.
 
 ## Requirements *(mandatory)*
 
@@ -131,6 +159,18 @@ Users provide and test Basic Auth credentials once per session, ensuring all API
 - **FR-014**: Role permissions MUST ensure contributor-level users can create drafts while only admin-level users can activate or deactivate versions.
 - **FR-015**: 403 Forbidden responses MUST display a permission denied message with guidance to contact an administrator.
 - **FR-016**: Malformed API responses MUST trigger error toasts with correlation-id and manual retry guidance.
+- **FR-017**: The dashboard MUST provide CTAs to create new metadata documents from both the empty state view and the header section when documents exist.
+- **FR-018**: The document creation form MUST collect document name, type, JSON payload, and optional change summary before submission.
+- **FR-019**: Document name and type inputs MUST validate kebab-case format with immediate inline error feedback:
+    - Document name: `^[a-z0-9]+(-[a-z0-9]+)*$` (letters and numbers, kebab-case)
+    - Document type: `^[a-z]+(-[a-z]+)*$` (letters only, kebab-case)
+- **FR-020**: The JSON payload editor MUST validate syntax on blur and display line/character position for syntax errors.
+- **FR-021**: The create document CTA MUST be disabled during form submission and display a loading indicator.
+- **FR-022**: Upon successful document creation (201 Created), the UI MUST navigate to the new document detail page and display a success toast with correlation-id.
+- **FR-023**: Dashboard stats MUST refresh after successful document creation to reflect the new totals.
+- **FR-024**: The creation form MUST display inline error messages for 400 Bad Request responses, mapping API field errors to form fields.
+- **FR-025**: The creation form MUST display inline conflict messages for 409 Conflict responses indicating the document already exists.
+- **FR-026**: Network failures or 5xx errors during creation MUST preserve form data, display error toasts, and re-enable the submit button.
 
 ### Key Entities *(include if feature involves data)*
 
@@ -138,6 +178,7 @@ Users provide and test Basic Auth credentials once per session, ensuring all API
 - **MetadataVersion**: Captures version id, document id, status, author, created timestamp, activation timestamp, change summary, and JSON payload reference used in history, activation, and diff features.
 - **SessionCredentials**: Holds in-memory Basic Auth username/password plus last validation timestamp, scoped to the browser session and never persisted to storage.
 - **DiffResult**: Describes the comparison between two versions including added/removed/changed paths, textual annotations, and metadata (compare timestamp, user who initiated compare).
+- **CreateDocumentFormData**: Transient form state holding document name, type, JSON payload string, and optional change summary with validation status for each field.
 
 ### Assumptions & Constraints
 
@@ -160,5 +201,7 @@ Users provide and test Basic Auth credentials once per session, ensuring all API
 - **SC-001**: 90% of users can locate a specific document and view its history within 2 minutes of landing on the dashboard during usability tests.
 - **SC-002**: Creating and activating a new version requires no more than 3 user-facing steps post-authentication and completes successfully in 95% of monitored sessions.
 - **SC-003**: Diff comparisons render within 3 seconds for payloads up to 200 KB while highlighting every changed path, as measured in staged environments.
-- **SC-004**: Support inquiries related to “What changed between versions?” decrease by 50% within one quarter of launch, indicating adoption of the comparison experience.
-- **SC-005**: At least 85% of surveyed users describe the look and feel as “on brand” or “delightful,” confirming the coffeehouse-inspired UI direction.
+- **SC-004**: Support inquiries related to "What changed between versions?" decrease by 50% within one quarter of launch, indicating adoption of the comparison experience.
+- **SC-005**: At least 85% of surveyed users describe the look and feel as "on brand" or "delightful," confirming the coffeehouse-inspired UI direction.
+- **SC-006**: Users can create a new metadata document from the dashboard in under 60 seconds during usability tests, including form completion and navigation to the detail page.
+- **SC-007**: Document creation form validation errors are resolved by users without support assistance in 95% of monitored sessions.

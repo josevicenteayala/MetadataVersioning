@@ -40,29 +40,81 @@ const base64Encode = (value: string) => {
 }
 
 export const sessionStore = create<SessionState>((set, get) => ({
-  credentials: undefined,
-  role: undefined,
-  correlationId: undefined,
-  validatedAt: undefined,
   setCredentials: (credentials) => set({ credentials }),
   clearCredentials: () =>
-    set({
-      credentials: undefined,
-      role: undefined,
-      correlationId: undefined,
-      validatedAt: undefined,
-    }),
-  setRole: (role) => set({ role }),
-  setCorrelationId: (correlationId) => set({ correlationId: correlationId ?? undefined }),
+    set(
+      (state) => ({
+        setCredentials: state.setCredentials,
+        clearCredentials: state.clearCredentials,
+        setRole: state.setRole,
+        setCorrelationId: state.setCorrelationId,
+        markValidated: state.markValidated,
+        handleUnauthorized: state.handleUnauthorized,
+      }),
+      true, // replace: true to completely replace the state
+    ),
+  setRole: (role) => {
+    if (role === undefined) {
+      set((state) => {
+        const {
+          setCredentials,
+          clearCredentials,
+          setRole,
+          setCorrelationId,
+          markValidated,
+          handleUnauthorized,
+        } = state
+        return {
+          setCredentials,
+          clearCredentials,
+          setRole,
+          setCorrelationId,
+          markValidated,
+          handleUnauthorized,
+        }
+      }, true)
+    } else {
+      set({ role })
+    }
+  },
+  setCorrelationId: (correlationId) => {
+    if (correlationId === undefined) {
+      set((state) => {
+        const {
+          setCredentials,
+          clearCredentials,
+          setRole,
+          setCorrelationId,
+          markValidated,
+          handleUnauthorized,
+        } = state
+        return {
+          setCredentials,
+          clearCredentials,
+          setRole,
+          setCorrelationId,
+          markValidated,
+          handleUnauthorized,
+        }
+      }, true)
+    } else {
+      set({ correlationId })
+    }
+  },
   markValidated: () => set({ validatedAt: new Date().toISOString() }),
   handleUnauthorized: () => {
     const previous = get().credentials
-    set({
-      credentials: undefined,
-      role: undefined,
-      correlationId: undefined,
-      validatedAt: undefined,
-    })
+    set(
+      (state) => ({
+        setCredentials: state.setCredentials,
+        clearCredentials: state.clearCredentials,
+        setRole: state.setRole,
+        setCorrelationId: state.setCorrelationId,
+        markValidated: state.markValidated,
+        handleUnauthorized: state.handleUnauthorized,
+      }),
+      true, // replace: true to completely replace the state
+    )
     if (previous) {
       console.info('[session] Cleared credentials due to unauthorized response')
     }

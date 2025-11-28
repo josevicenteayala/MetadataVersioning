@@ -17,6 +17,8 @@ export interface CreateDocumentFormProps {
   onSuccess?: (document: CreateDocumentResponse) => void
   /** Callback when user cancels */
   onCancel?: () => void
+  /** Optional ID for the form title (used for aria-labelledby) */
+  titleId?: string
 }
 
 interface FormState {
@@ -74,8 +76,9 @@ const initialTouched: TouchedFields = {
  * />
  * ```
  */
-export const CreateDocumentForm = ({ onSuccess, onCancel }: CreateDocumentFormProps) => {
+export const CreateDocumentForm = ({ onSuccess, onCancel, titleId }: CreateDocumentFormProps) => {
   const formId = useId()
+  const resolvedTitleId = titleId ?? `${formId}-title`
 
   const [formState, setFormState] = useState<FormState>(initialFormState)
   const [errors, setErrors] = useState<FormErrors>({})
@@ -268,9 +271,9 @@ export const CreateDocumentForm = ({ onSuccess, onCancel }: CreateDocumentFormPr
     <form
       onSubmit={handleSubmit}
       className="create-document-form"
-      aria-labelledby={`${formId}-title`}
+      aria-labelledby={resolvedTitleId}
     >
-      <h2 id={`${formId}-title`} className="create-document-form__title">
+      <h2 id={resolvedTitleId} className="create-document-form__title">
         Create New Document
       </h2>
 

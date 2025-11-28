@@ -140,7 +140,11 @@ export const CreateDocumentModal = ({ isOpen, onClose }: CreateDocumentModalProp
 
         {/* Form or Auth Warning */}
         {hasCredentials ? (
-          <CreateDocumentForm onSuccess={handleSuccess} onCancel={onClose} />
+          <CreateDocumentForm
+            onSuccess={handleSuccess}
+            onCancel={onClose}
+            titleId="create-document-modal-title"
+          />
         ) : (
           <div className="create-document-modal__auth-warning">
             <h2 className="create-document-modal__title">Authentication Required</h2>

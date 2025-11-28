@@ -21,7 +21,7 @@ const createVersion = async (request: CreateVersionRequest): Promise<CreateVersi
   const response = await httpClient.post<CreateVersionResponse>(
     `/api/v1/metadata/${request.documentId}/versions`,
     {
-      payload: request.payload,
+      content: request.payload,
       changeSummary: request.changeSummary,
     },
   )

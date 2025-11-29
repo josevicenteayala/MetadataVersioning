@@ -92,7 +92,9 @@ export const CreateDocumentModal = ({ isOpen, onClose }: CreateDocumentModalProp
       onClose()
 
       // Navigate to the new document detail page
-      void navigate(`/documents/${encodeURIComponent(document.type)}/${encodeURIComponent(document.name)}`)
+      void navigate(
+        `/documents/${encodeURIComponent(document.type)}/${encodeURIComponent(document.name)}`,
+      )
 
       emitToast({
         intent: 'success',

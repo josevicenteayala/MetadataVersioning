@@ -28,10 +28,10 @@ export const CreateVersionModal = ({
     if (isOpen) {
       dialog.showModal()
       // Focus first field when modal opens (T082)
-      setTimeout(() => {
+      requestAnimationFrame(() => {
         const firstInput = dialog.querySelector<HTMLElement>('textarea, input')
         firstInput?.focus()
-      }, 0)
+      })
     } else {
       dialog.close()
       // Return focus to trigger button when modal closes (T083)

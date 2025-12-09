@@ -6,6 +6,8 @@ export interface NewVersionFormProps {
   documentId: string
   onSuccess?: (version: CreateVersionResponse) => void
   onCancel?: () => void
+  /** Initial payload to pre-populate the form (e.g., from active version) */
+  initialPayload?: Record<string, unknown>
 }
 
 interface FormErrors {
@@ -38,12 +40,19 @@ const validateJsonPayload = (
   }
 }
 
-const NewVersionForm = ({ documentId, onSuccess, onCancel }: NewVersionFormProps) => {
+const NewVersionForm = ({
+  documentId,
+  onSuccess,
+  onCancel,
+  initialPayload,
+}: NewVersionFormProps) => {
   const formId = useId()
   const payloadRef = useRef<HTMLTextAreaElement>(null)
   const summaryRef = useRef<HTMLTextAreaElement>(null)
 
-  const [payload, setPayload] = useState('')
+  const [payload, setPayload] = useState(
+    initialPayload ? JSON.stringify(initialPayload, null, 2) : '',
+  )
   const [changeSummary, setChangeSummary] = useState('')
   const [errors, setErrors] = useState<FormErrors>({})
   const [submitError, setSubmitError] = useState<string | null>(null)

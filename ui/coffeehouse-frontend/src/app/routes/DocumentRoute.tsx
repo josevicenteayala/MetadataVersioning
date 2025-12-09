@@ -1,9 +1,14 @@
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useMemo, useRef, useState } from 'react'
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
 import { httpClient } from '@services/api/httpClient'
+import { ErrorBoundary } from '@app/components'
 import { useVersionHistory } from '@features/versions/api/useVersionHistory'
-import { VersionHistoryTable, VersionDetailDrawer } from '@features/versions/components'
+import {
+  VersionHistoryTable,
+  VersionDetailDrawer,
+  CreateVersionModal,
+} from '@features/versions/components'
 import type { MetadataVersion, SortColumn, SortDirection } from '@features/versions/types'
 import type { MetadataDocumentResponse } from '@services/generated/models/MetadataDocumentResponse'
 
@@ -56,6 +61,7 @@ const DocumentRoute = () => {
   const { type, name } = useParams<{ type: string; name: string }>()
   const documentId = type && name ? `${type}/${name}` : undefined
   const [searchParams, setSearchParams] = useSearchParams()
+  const createVersionBtnRef = useRef<HTMLButtonElement>(null)
 
   // Sorting state
   const [sortBy, setSortBy] = useState<SortColumn>('createdAt')
@@ -64,6 +70,7 @@ const DocumentRoute = () => {
   // Drawer state
   const [selectedVersion, setSelectedVersion] = useState<MetadataVersion | null>(null)
   const [correlationId, setCorrelationId] = useState<string | null>(null)
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false)
 
   // Fetch document details
   const {
@@ -136,9 +143,21 @@ const DocumentRoute = () => {
   // Handle drawer close
   const handleCloseDrawer = useCallback(() => {
     setSelectedVersion(null)
-    setSearchParams({})
-    setCorrelationId(null)
+    // Remove version from URL when closing drawer
+    setSearchParams((prev) => {
+      const newParams = new URLSearchParams(prev)
+      newParams.delete('version')
+      return newParams
+    })
   }, [setSearchParams])
+
+  const handleOpenCreateModal = useCallback(() => {
+    setIsCreateModalOpen(true)
+  }, [])
+
+  const handleCloseCreateModal = useCallback(() => {
+    setIsCreateModalOpen(false)
+  }, [])
 
   const navigateToCompare = useCallback(
     (version: MetadataVersion) => {
@@ -229,12 +248,23 @@ const DocumentRoute = () => {
       {/* Header */}
       <header className="document-route__header">
         <div className="document-route__title-row">
-          <h1>{document.name}</h1>
-          {document.activeVersion !== null && (
-            <span className="active-version-badge" data-testid="active-version-badge">
-              v{document.activeVersion}
-            </span>
-          )}
+          <div className="flex items-center gap-4">
+            <h1>{document.name}</h1>
+            {document.activeVersion !== null && (
+              <span className="active-version-badge" data-testid="active-version-badge">
+                v{document.activeVersion}
+              </span>
+            )}
+          </div>
+          <button
+            ref={createVersionBtnRef}
+            type="button"
+            className="btn btn--primary"
+            onClick={handleOpenCreateModal}
+            data-testid="create-version-btn"
+          >
+            Create New Version
+          </button>
         </div>
         <div className="document-route__meta">
           <span className="document-route__type" data-testid="document-type">
@@ -269,6 +299,19 @@ const DocumentRoute = () => {
         onCompare={navigateToCompare}
         hasActiveVersion={Boolean(activeVersionNumber)}
       />
+
+      {/* Create Version Modal */}
+      {documentId && (
+        <ErrorBoundary>
+          <CreateVersionModal
+            documentId={documentId}
+            isOpen={isCreateModalOpen}
+            onClose={handleCloseCreateModal}
+            initialPayload={activeVersion?.payload}
+            triggerRef={createVersionBtnRef}
+          />
+        </ErrorBoundary>
+      )}
     </div>
   )
 }

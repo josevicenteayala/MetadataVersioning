@@ -8,6 +8,8 @@ Auto-generated from all feature plans. Last updated: 2025-11-24
 - TypeScript 5.4 (strict mode enabled) + React 19.2, React Router 7.9, TanStack Query 5.90, Zustand 5.0, Vite 5 (002-new-version-ui)
 - Browser localStorage for session state only (no persistent storage for form data) (002-new-version-ui)
 - Browser localStorage for session state only (no persistent form data) (002-new-version-ui)
+- TypeScript 5.9 (strict mode) + React 19.2, Tailwind CSS, Vite 7, TanStack Query 5.90 (003-warm-ui-theme)
+- N/A (frontend-only, no storage changes) (003-warm-ui-theme)
 
 - Java 21 LTS + Spring Boot 3.3+, Spring Data JPA, Spring Web, Jackson, Hibernate Validator (001-metadata-version-api)
 
@@ -30,6 +32,7 @@ mvn spring-boot:run  # Run application
 Java 21 LTS: Follow standard conventions, leverage modern Java features (Records, Sealed Classes, Pattern Matching)
 
 ## Recent Changes
+- 003-warm-ui-theme: Added TypeScript 5.9 (strict mode) + React 19.2, Tailwind CSS, Vite 7, TanStack Query 5.90
 - 002-new-version-ui: Added TypeScript 5.4 (strict mode enabled) + React 19.2, React Router 7.9, TanStack Query 5.90, Zustand 5.0, Vite 5
 - 002-new-version-ui: Added [if applicable, e.g., PostgreSQL, CoreData, files or N/A]
 

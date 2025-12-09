@@ -2,11 +2,11 @@ import { render, screen, fireEvent } from '@testing-library/react'
 import { vi, describe, it, expect, beforeAll } from 'vitest'
 import '@testing-library/jest-dom'
 import { CreateVersionModal } from '../../../../src/features/versions/components/CreateVersionModal'
-
+import type { NewVersionFormProps } from '../../../../src/features/versions/forms/NewVersionForm'
 // Mock NewVersionForm to capture props
-let capturedProps: any = null
+let capturedProps: Partial<NewVersionFormProps> | null = null
 vi.mock('../../../../src/features/versions/forms/NewVersionForm', () => ({
-  default: (props: any) => {
+  default: (props: NewVersionFormProps) => {
     capturedProps = props
     return (
       <div data-testid="new-version-form">

@@ -32,7 +32,6 @@ Java 21 LTS: Follow standard conventions, leverage modern Java features (Records
 ## Recent Changes
 - 002-new-version-ui: Added TypeScript 5.4 (strict mode enabled) + React 19.2, React Router 7.9, TanStack Query 5.90, Zustand 5.0, Vite 5
 - 002-new-version-ui: Added [if applicable, e.g., PostgreSQL, CoreData, files or N/A]
-- 002-new-version-ui: Added TypeScript 5.4 (strict mode enabled) + React 19.2, React Router 7.9, TanStack Query 5.90, Zustand 5.0, Vite 5
 
 
 <!-- MANUAL ADDITIONS START -->

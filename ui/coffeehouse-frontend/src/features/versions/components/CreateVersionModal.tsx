@@ -7,7 +7,7 @@ export interface CreateVersionModalProps {
   onClose: () => void
   documentId: string
   /** Initial payload to pre-populate the form (e.g., from active version) */
-  initialPayload?: Record<string, unknown> | undefined
+  initialPayload?: Record<string, unknown>
   /** Reference to the trigger button for focus management */
   triggerRef?: React.RefObject<HTMLButtonElement | null>
 }

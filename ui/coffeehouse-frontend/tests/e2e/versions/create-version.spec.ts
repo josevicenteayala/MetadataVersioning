@@ -170,7 +170,6 @@ test.describe('Create Version Modal', () => {
 
     // Get current value - if empty, the test passes
     // If not empty, skip this test as it indicates active version exists
-    const payloadValue = await payloadInput.inputValue()
     // This is a soft test - just verifying the field exists and is accessible
     expect(payloadInput).toBeTruthy()
   })

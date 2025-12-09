@@ -7,7 +7,7 @@ export interface NewVersionFormProps {
   onSuccess?: (version: CreateVersionResponse) => void
   onCancel?: () => void
   /** Initial payload to pre-populate the form (e.g., from active version) */
-  initialPayload?: Record<string, unknown>
+  initialPayload?: Record<string, unknown> | undefined
 }
 
 interface FormErrors {

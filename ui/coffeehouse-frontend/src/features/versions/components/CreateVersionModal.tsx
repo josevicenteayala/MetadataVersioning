@@ -1,16 +1,24 @@
 import { useEffect, useRef, useCallback } from 'react'
 import { createPortal } from 'react-dom'
 import NewVersionForm from '../forms/NewVersionForm'
+import { StepIndicator } from '../../shared/components/StepIndicator'
 
 export interface CreateVersionModalProps {
   isOpen: boolean
   onClose: () => void
   documentId: string
   /** Initial payload to pre-populate the form (e.g., from active version) */
-  initialPayload?: Record<string, unknown>
+  initialPayload?: Record<string, unknown> | undefined
   /** Reference to the trigger button for focus management */
   triggerRef?: React.RefObject<HTMLButtonElement | null>
 }
+
+// T036: Step definitions for version creation workflow
+const VERSION_CREATION_STEPS = [
+  { label: 'Enter Details', description: 'Add version summary and payload' },
+  { label: 'Review', description: 'Verify your changes' },
+  { label: 'Submit', description: 'Create the version' },
+]
 
 export const CreateVersionModal = ({
   isOpen,
@@ -47,7 +55,7 @@ export const CreateVersionModal = ({
     <dialog
       ref={dialogRef}
       onClose={onClose}
-      className="backdrop:bg-gray-900/50 p-0 rounded-lg shadow-xl w-full max-w-2xl"
+      className="create-version-modal backdrop:bg-gray-900/50 p-0 rounded-lg shadow-xl w-full max-w-2xl"
       aria-modal="true"
       aria-labelledby="create-version-title"
       data-testid="create-version-modal"
@@ -74,9 +82,15 @@ export const CreateVersionModal = ({
             />
           </svg>
         </button>
-        <h2 id="create-version-title" className="text-xl font-bold mb-4">
+        <h2 id="create-version-title" className="text-xl font-bold mb-4 warm-font-headline">
           Create New Version
         </h2>
+
+        {/* T036: Step Indicator for version creation workflow - currently shows first step */}
+        <div className="mb-6">
+          <StepIndicator steps={VERSION_CREATION_STEPS} currentStep={0} orientation="horizontal" />
+        </div>
+
         <NewVersionForm
           documentId={documentId}
           onSuccess={handleSuccess}

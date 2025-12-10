@@ -122,7 +122,66 @@ ui/coffeehouse-frontend/
 
 ## Design System
 
-The Coffeehouse theme uses a warm, inviting color palette:
+### Warm Coffeehouse Theme (003-warm-ui-theme)
+
+The updated warm coffeehouse theme provides a premium, inviting aesthetic:
+
+| Token                   | Value     | Use                           |
+| ----------------------- | --------- | ----------------------------- |
+| `--warm-header-bg`      | `#1E3932` | Dark green header background  |
+| `--warm-content-bg`     | `#F2F0EB` | Warm cream content background |
+| `--warm-card-bg`        | `#FFFFFF` | White card backgrounds        |
+| `--warm-accent-primary` | `#00704A` | Green primary buttons/links   |
+| `--warm-accent-hover`   | `#005C3B` | Hover state for accent        |
+| `--warm-accent-active`  | `#004D32` | Active/pressed state          |
+| `--warm-text-primary`   | `#1E1E1E` | Main text color               |
+| `--warm-text-secondary` | `#6B6B6B` | Secondary/muted text          |
+| `--warm-text-inverse`   | `#FFFFFF` | Text on dark backgrounds      |
+
+### Typography
+
+- **Headlines**: Lora (serif) - warm, premium feel
+- **Body Text**: Inter (sans-serif) - clean, readable
+- **Monospace**: JetBrains Mono - code and version numbers
+
+### Components
+
+#### StepIndicator
+
+Progress indicator for multi-step workflows:
+
+```tsx
+import { StepIndicator } from '@/features/shared/components'
+;<StepIndicator
+  steps={[
+    { label: 'Select', description: 'Choose document' },
+    { label: 'Configure', description: 'Enter details' },
+    { label: 'Review', description: 'Verify changes' },
+  ]}
+  currentStep={1}
+  orientation="horizontal"
+/>
+```
+
+#### Button Variants
+
+```css
+.btn-primary    /* Green background, white text */
+.btn-secondary  /* Green border, transparent bg */
+.btn-ghost      /* No border, subtle hover */
+```
+
+#### Card Layouts
+
+```css
+.warm-card        /* Standard card with shadow */
+.warm-card--elevated  /* Enhanced shadow */
+.glass-card       /* Slight transparency effect */
+```
+
+### Legacy Theme (Deprecated)
+
+The original coffee palette tokens remain available for migration:
 
 | Token    | Light     | Dark      | Use          |
 | -------- | --------- | --------- | ------------ |

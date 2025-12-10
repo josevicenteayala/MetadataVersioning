@@ -1,4 +1,5 @@
 :root {
+  /* ===== Legacy Coffee Theme (deprecated - will remove after warm theme migration) ===== */
   --coffee-font-sans: 'Inter', 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
   --coffee-font-brand: 'Playfair Display', 'Times New Roman', serif;
   --coffee-font-mono: 'JetBrains Mono', 'SFMono-Regular', 'Consolas', monospace;
@@ -17,6 +18,78 @@
   --coffee-radius-card: 24px;
   --coffee-radius-pill: 999px;
   --coffee-shadow-card: 0 10px 25px rgba(42, 18, 10, 0.08);
+
+  /* ===== Warm Coffeehouse Theme (003-warm-ui-theme) ===== */
+
+  /* T006: Warm Color Tokens */
+  --warm-header-bg: #1e3932;
+  --warm-content-bg: #f2f0eb;
+  --warm-card-bg: #ffffff;
+
+  --warm-accent-primary: #00704a;
+  --warm-accent-hover: #005c3b;
+  --warm-accent-active: #004d32;
+
+  --warm-text-primary: #1e1e1e;
+  --warm-text-secondary: #6b6b6b;
+  --warm-text-inverse: #ffffff;
+  --warm-text-accent: #00704a;
+
+  --warm-success: #00704a;
+  --warm-error: #d62828;
+  --warm-warning: #f4a100;
+  --warm-info: #1e3932;
+
+  --warm-border-light: rgba(30, 57, 50, 0.12);
+  --warm-border-medium: rgba(30, 57, 50, 0.24);
+
+  /* T007: Warm Typography Tokens */
+  --warm-font-headline: 'Lora', 'Georgia', serif;
+  --warm-font-body: 'Inter', 'Segoe UI', system-ui, sans-serif;
+  --warm-font-mono: 'JetBrains Mono', 'Consolas', monospace;
+
+  --warm-text-xs: 0.75rem;
+  --warm-text-sm: 0.875rem;
+  --warm-text-base: 1rem;
+  --warm-text-lg: 1.125rem;
+  --warm-text-xl: 1.25rem;
+  --warm-text-2xl: 1.5rem;
+  --warm-text-3xl: 1.875rem;
+  --warm-text-4xl: 2.25rem;
+
+  --warm-font-normal: 400;
+  --warm-font-medium: 500;
+  --warm-font-semibold: 600;
+  --warm-font-bold: 700;
+
+  --warm-leading-tight: 1.25;
+  --warm-leading-normal: 1.5;
+  --warm-leading-relaxed: 1.75;
+
+  /* T008: Warm Spacing Tokens */
+  --warm-space-1: 0.25rem;
+  --warm-space-2: 0.5rem;
+  --warm-space-3: 0.75rem;
+  --warm-space-4: 1rem;
+  --warm-space-5: 1.25rem;
+  --warm-space-6: 1.5rem;
+  --warm-space-8: 2rem;
+  --warm-space-10: 2.5rem;
+  --warm-space-12: 3rem;
+  --warm-space-16: 4rem;
+
+  /* T009: Warm Border Radius Tokens */
+  --warm-radius-sm: 4px;
+  --warm-radius-md: 8px;
+  --warm-radius-lg: 12px;
+  --warm-radius-xl: 16px;
+  --warm-radius-full: 9999px;
+
+  /* T010: Warm Shadow Tokens */
+  --warm-shadow-sm: 0 1px 2px rgba(30, 57, 50, 0.05);
+  --warm-shadow-md: 0 4px 6px rgba(30, 57, 50, 0.07);
+  --warm-shadow-lg: 0 10px 25px rgba(30, 57, 50, 0.08);
+  --warm-shadow-xl: 0 20px 40px rgba(30, 57, 50, 0.12);
 }
 
 [data-theme='dark'] {

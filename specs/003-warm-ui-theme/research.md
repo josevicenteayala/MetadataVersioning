@@ -117,7 +117,7 @@
 
 **Component API**:
 ```tsx
-<StepIndicator current={2} total={4}>
+<StepIndicator current={2}>
   <StepIndicator.Step number={1} label="Select Document" status="complete" />
   <StepIndicator.Step number={2} label="Edit Content" status="current" />
   <StepIndicator.Step number={3} label="Review Changes" status="upcoming" />

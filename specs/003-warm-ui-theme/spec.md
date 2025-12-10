@@ -112,7 +112,7 @@ A business user with visual impairments or color blindness can still effectively
 
 #### Typography
 
-- **FR-006**: System MUST use a serif font (e.g., Lora, Merriweather) for main page headlines
+- **FR-006**: System MUST use the "Lora" serif font for main page headlines
 - **FR-007**: System MUST use "Inter" as the primary clean sans-serif font for body text and UI elements, with "Open Sans" as a fallback.
 - **FR-008**: System MUST establish a clear typographic scale with distinct sizes for H1, H2, H3, body, and caption text
 - **FR-009**: System MUST maintain consistent line heights for optimal readability (1.5 for body text)

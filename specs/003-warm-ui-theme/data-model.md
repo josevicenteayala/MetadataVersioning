@@ -31,10 +31,10 @@ interface WarmColorTokens {
   textAccent: '#00704A';    // Green - links, highlighted text
   
   // Semantic colors
-  success: '#00704A';       // Green - success states
-  error: '#D62828';         // Warm red - error states
-  warning: '#F4A100';       // Amber/gold - warning states
-  info: '#1E3932';          // Dark green - info states
+  success: '#00704A';        // Green - success states
+  error: '#D62828';          // Warm red - error states
+  warning: '#F4A100';        // Amber/gold - warning states
+  info: '#1E3932';           // Dark green - info states
   
   // Border colors
   borderLight: 'rgba(30, 57, 50, 0.12)';  // Subtle green tint

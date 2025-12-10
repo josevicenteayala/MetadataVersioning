@@ -7,7 +7,6 @@ Auto-generated from all feature plans. Last updated: 2025-11-24
 - No persistent storage; in-memory stores for credentials and UI state only (001-coffeehouse-frontend)
 - TypeScript 5.4 (strict mode enabled) + React 19.2, React Router 7.9, TanStack Query 5.90, Zustand 5.0, Vite 5 (002-new-version-ui)
 - Browser localStorage for session state only (no persistent storage for form data) (002-new-version-ui)
-- Browser localStorage for session state only (no persistent form data) (002-new-version-ui)
 - TypeScript 5.9 (strict mode) + React 19.2, Tailwind CSS, Vite 7, TanStack Query 5.90 (003-warm-ui-theme)
 - N/A (frontend-only, no storage changes) (003-warm-ui-theme)
 

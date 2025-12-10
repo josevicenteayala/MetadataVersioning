@@ -15,30 +15,30 @@ This document defines the design token schema for the Warm Coffeehouse UI Theme.
 ```typescript
 interface WarmColorTokens {
   // Primary palette
-  'header-bg': '#1E3932';      // Dark green - header/navigation background
-  'content-bg': '#F2F0EB';     // Warm cream - main content background
-  'card-bg': '#FFFFFF';        // White - card backgrounds
+  headerBg: '#1E3932';      // Dark green - header/navigation background
+  contentBg: '#F2F0EB';     // Warm cream - main content background
+  cardBg: '#FFFFFF';        // White - card backgrounds
   
   // Accent colors
-  'accent-primary': '#00704A'; // Green - primary buttons, highlights
-  'accent-hover': '#005C3B';   // Darker green - hover states
-  'accent-active': '#004D32';  // Darkest green - active/pressed states
+  accentPrimary: '#00704A'; // Green - primary buttons, highlights
+  accentHover: '#005C3B';   // Darker green - hover states
+  accentActive: '#004D32';  // Darkest green - active/pressed states
   
   // Text colors
-  'text-primary': '#1E1E1E';   // Dark charcoal - main text
-  'text-secondary': '#6B6B6B'; // Medium gray - secondary text
-  'text-inverse': '#FFFFFF';   // White - text on dark backgrounds
-  'text-accent': '#00704A';    // Green - links, highlighted text
+  textPrimary: '#1E1E1E';   // Dark charcoal - main text
+  textSecondary: '#6B6B6B'; // Medium gray - secondary text
+  textInverse: '#FFFFFF';   // White - text on dark backgrounds
+  textAccent: '#00704A';    // Green - links, highlighted text
   
   // Semantic colors
-  'success': '#00704A';        // Green - success states
-  'error': '#D62828';          // Warm red - error states
-  'warning': '#F4A100';        // Amber/gold - warning states
-  'info': '#1E3932';           // Dark green - info states
+  success: '#00704A';       // Green - success states
+  error: '#D62828';         // Warm red - error states
+  warning: '#F4A100';       // Amber/gold - warning states
+  info: '#1E3932';          // Dark green - info states
   
   // Border colors
-  'border-light': 'rgba(30, 57, 50, 0.12)';  // Subtle green tint
-  'border-medium': 'rgba(30, 57, 50, 0.24)'; // Medium green tint
+  borderLight: 'rgba(30, 57, 50, 0.12)';  // Subtle green tint
+  borderMedium: 'rgba(30, 57, 50, 0.24)'; // Medium green tint
 }
 ```
 
@@ -47,30 +47,30 @@ interface WarmColorTokens {
 ```typescript
 interface WarmTypographyTokens {
   // Font families
-  'font-headline': '"Lora", "Georgia", serif';
-  'font-body': '"Inter", "Segoe UI", system-ui, sans-serif';
-  'font-mono': '"JetBrains Mono", "Consolas", monospace';
+  fontHeadline: '"Lora", "Georgia", serif';
+  fontBody: '"Inter", "Segoe UI", system-ui, sans-serif';
+  fontMono: '"JetBrains Mono", "Consolas", monospace';
   
   // Font sizes (rem)
-  'text-xs': '0.75rem';    // 12px
-  'text-sm': '0.875rem';   // 14px
-  'text-base': '1rem';     // 16px
-  'text-lg': '1.125rem';   // 18px
-  'text-xl': '1.25rem';    // 20px
-  'text-2xl': '1.5rem';    // 24px
-  'text-3xl': '1.875rem';  // 30px
-  'text-4xl': '2.25rem';   // 36px
+  textXs: '0.75rem';    // 12px
+  textSm: '0.875rem';   // 14px
+  textBase: '1rem';     // 16px
+  textLg: '1.125rem';   // 18px
+  textXl: '1.25rem';    // 20px
+  text2xl: '1.5rem';    // 24px
+  text3xl: '1.875rem';  // 30px
+  text4xl: '2.25rem';   // 36px
   
   // Font weights
-  'font-normal': 400;
-  'font-medium': 500;
-  'font-semibold': 600;
-  'font-bold': 700;
+  fontNormal: 400;
+  fontMedium: 500;
+  fontSemibold: 600;
+  fontBold: 700;
   
   // Line heights
-  'leading-tight': 1.25;
-  'leading-normal': 1.5;
-  'leading-relaxed': 1.75;
+  leadingTight: 1.25;
+  leadingNormal: 1.5;
+  leadingRelaxed: 1.75;
 }
 ```
 
@@ -79,16 +79,16 @@ interface WarmTypographyTokens {
 ```typescript
 interface WarmSpacingTokens {
   // Base unit: 8px
-  'space-1': '0.25rem';   // 4px
-  'space-2': '0.5rem';    // 8px
-  'space-3': '0.75rem';   // 12px
-  'space-4': '1rem';      // 16px
-  'space-5': '1.25rem';   // 20px
-  'space-6': '1.5rem';    // 24px
-  'space-8': '2rem';      // 32px
-  'space-10': '2.5rem';   // 40px
-  'space-12': '3rem';     // 48px
-  'space-16': '4rem';     // 64px
+  space1: '0.25rem';   // 4px
+  space2: '0.5rem';    // 8px
+  space3: '0.75rem';   // 12px
+  space4: '1rem';      // 16px
+  space5: '1.25rem';   // 20px
+  space6: '1.5rem';    // 24px
+  space8: '2rem';      // 32px
+  space10: '2.5rem';   // 40px
+  space12: '3rem';     // 48px
+  space16: '4rem';     // 64px
 }
 ```
 
@@ -97,17 +97,17 @@ interface WarmSpacingTokens {
 ```typescript
 interface WarmBorderTokens {
   // Border radius
-  'radius-sm': '4px';
-  'radius-md': '8px';     // Buttons
-  'radius-lg': '12px';    // Cards
-  'radius-xl': '16px';
-  'radius-full': '9999px'; // Pills
+  radiusSm: '4px';
+  radiusMd: '8px';     // Buttons
+  radiusLg: '12px';    // Cards
+  radiusXl: '16px';
+  radiusFull: '9999px'; // Pills
   
   // Box shadows
-  'shadow-sm': '0 1px 2px rgba(30, 57, 50, 0.05)';
-  'shadow-md': '0 4px 6px rgba(30, 57, 50, 0.07)';
-  'shadow-lg': '0 10px 25px rgba(30, 57, 50, 0.08)';
-  'shadow-xl': '0 20px 40px rgba(30, 57, 50, 0.12)';
+  shadowSm: '0 1px 2px rgba(30, 57, 50, 0.05)';
+  shadowMd: '0 4px 6px rgba(30, 57, 50, 0.07)';
+  shadowLg: '0 10px 25px rgba(30, 57, 50, 0.08)';
+  shadowXl: '0 20px 40px rgba(30, 57, 50, 0.12)';
 }
 ```
 
@@ -117,30 +117,30 @@ interface WarmBorderTokens {
 
 | Variant | Background | Text | Border | Hover BG |
 |---------|------------|------|--------|----------|
-| Primary | `accent-primary` | `text-inverse` | none | `accent-hover` |
-| Secondary | transparent | `accent-primary` | `accent-primary` | `rgba(0,112,74,0.08)` |
-| Ghost | transparent | `text-primary` | none | `rgba(30,30,30,0.05)` |
-| Danger | `error` | `text-inverse` | none | `#B82020` |
+| Primary | `accentPrimary` | `textInverse` | none | `accentHover` |
+| Secondary | transparent | `accentPrimary` | `accentPrimary` | `rgba(0,112,74,0.08)` |
+| Ghost | transparent | `textPrimary` | none | `rgba(30,30,30,0.05)` |
+| Danger | `error` | `textInverse` | none | `#B82020` |
 
 ### Card Component
 
 | Property | Token |
 |----------|-------|
-| Background | `card-bg` |
-| Border | `border-light` |
-| Border Radius | `radius-lg` (12px) |
-| Shadow | `shadow-lg` |
-| Padding | `space-6` (24px) |
+| Background | `cardBg` |
+| Border | `borderLight` |
+| Border Radius | `radiusLg` (12px) |
+| Shadow | `shadowLg` |
+| Padding | `space6` (24px) |
 
 ### Header Component
 
 | Property | Token |
 |----------|-------|
-| Background | `header-bg` |
-| Text | `text-inverse` |
-| Height | `space-16` (64px) |
-| Logo Font | `font-headline` |
-| Nav Font | `font-body` |
+| Background | `headerBg` |
+| Text | `textInverse` |
+| Height | `space16` (64px) |
+| Logo Font | `fontHeadline` |
+| Nav Font | `fontBody` |
 
 ### Step Indicator Component
 
@@ -153,27 +153,27 @@ interface StepIndicatorTokens {
   // Colors by state
   upcoming: {
     circleBg: 'transparent';
-    circleBorder: 'border-medium';
-    numberColor: 'text-secondary';
-    labelColor: 'text-secondary';
+    circleBorder: 'borderMedium';
+    numberColor: 'textSecondary';
+    labelColor: 'textSecondary';
   };
   current: {
-    circleBg: 'accent-primary';
-    circleBorder: 'accent-primary';
-    numberColor: 'text-inverse';
-    labelColor: 'text-primary';
+    circleBg: 'accentPrimary';
+    circleBorder: 'accentPrimary';
+    numberColor: 'textInverse';
+    labelColor: 'textPrimary';
   };
   complete: {
-    circleBg: 'accent-primary';
-    circleBorder: 'accent-primary';
-    numberColor: 'text-inverse';  // or checkmark icon
-    labelColor: 'text-primary';
+    circleBg: 'accentPrimary';
+    circleBorder: 'accentPrimary';
+    numberColor: 'textInverse';  // or checkmark icon
+    labelColor: 'textPrimary';
   };
   
   // Connector line
   lineHeight: '2px';
-  lineColor: 'border-medium';
-  lineCompleteColor: 'accent-primary';
+  lineColor: 'borderMedium';
+  lineCompleteColor: 'accentPrimary';
 }
 ```
 

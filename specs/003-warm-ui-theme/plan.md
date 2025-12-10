@@ -11,8 +11,8 @@ Transform the existing coffeehouse-themed frontend into a warmer, more inviting 
 
 ## Technical Context
 
-**Language/Version**: TypeScript 5.9 (strict mode)  
-**Primary Dependencies**: React 19.2, Tailwind CSS, Vite 7, TanStack Query 5.90  
+**Language/Version**: TypeScript 5.4 (strict mode)  
+**Primary Dependencies**: React 19.2, Tailwind CSS, Vite 5, TanStack Query 5.90  
 **Storage**: N/A (frontend-only, no storage changes)  
 **Testing**: Vitest + React Testing Library (unit), Playwright (E2E)  
 **Target Platform**: Web browsers (Chrome 90+, Firefox 88+, Safari 14+, Edge 90+)
